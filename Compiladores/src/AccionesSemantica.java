@@ -1,17 +1,9 @@
 public abstract class AccionesSemantica {
-    protected String Token;
+    //protected String Token;
     protected LectorDeTexto lector;
 
     public AccionesSemantica(LectorDeTexto lector) {
         this.lector = lector;
-    }
-
-    public String getToken() {
-        return this.Token;
-    }
-
-    public void reinicirToken() {
-        this.Token = "";
     }
 
     public abstract void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter);
@@ -81,7 +73,7 @@ public abstract class AccionesSemantica {
         }
     }
 
-    //TODO: QUEDO LIBRE PASAR LA ULTIMA AS ACA
+    //TODO: SE OCUPA CON EL ? creo
     public static class AS4 extends AccionesSemantica {
         private static AS4 instancia;
 
@@ -124,6 +116,7 @@ public abstract class AccionesSemantica {
                 int numero = Integer.parseInt(numeroEnCadena);
 
                 // Verificar si está dentro del rango de un int (-2^31 a 2^31 - 1)
+                //TODO: CREO QUE EL VERIFICAR NO ES ASI PORQUE NO TENEMOS EN CUENTA EL SIMBOLO A ESTA ALTURA, NUNCA VA A SER NEGATIVO
                 if (numero < Integer.MIN_VALUE || numero > Integer.MAX_VALUE) {
                     System.out.println("ERROR: Supera el limite indicado para los longint en la linea: "
                             + lector.getNroLinea() + " en la columna: " + lector.getColumna());
@@ -155,7 +148,10 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informa error ya que se esperaba un numero, inserta el caracter
+            System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+            lector.retrocederCaracter();
         }
+
     }
 
     public static class AS7 extends AccionesSemantica {
@@ -173,7 +169,29 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Implementación de AS7
+            // Convertir StringBuilder a String
+            String numeroEnCadena = cadena.toString();
+
+            try {
+                // Convertir la cadena a un número double
+                double numero = Double.parseDouble(numeroEnCadena);
+
+                // Verificar si está fuera del rango permitido o es 0.0
+                //TODO: CREO QUE EL VERIFICAR NO ES ASI PORQUE NO TENEMOS EN CUENTA EL SIMBOLO A ESTA ALTURA, NUNCA VA A SER NEGATIVO
+                if (!(numero > 2.2250738585072014e-308 && numero < 1.7976931348623157e308) &&
+                        !(numero < -2.2250738585072014e-308 && numero > -1.7976931348623157e308)) {
+                    // Fuera del rango o 0.0
+                    System.out.println("ERROR: Supera el límite indicado para los valores double en la línea: "
+                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                }
+            } catch (NumberFormatException e) {
+                // El número no es válido
+                System.out.println("ERROR: El número no es válido en la línea: " + lector.getNroLinea()
+                        + " en la columna: " + lector.getColumna());
+            }
+
+            // Retroceder un carácter
+            lector.retrocederCaracter();
         }
     }
 
@@ -192,7 +210,10 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Implementación de AS8
+            //se esperaba un numero o una letra A,B,C,D,E,F , y inserto en la linea
+            System.out.println("ERROR: Se esperaba un digito o una letra de la A-F en la linea: " + lector.getNroLinea()
+                                + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+            lector.retrocederCaracter();
         }
     }
 
@@ -211,7 +232,10 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Implementación de AS9
+            // se esperaba un # para comentario, pero no llego, inserta el ultimo caracter
+            System.out.println("ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
+                    + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+            lector.retrocederCaracter();
         }
     }
 
@@ -230,10 +254,38 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Implementación de AS10
+            //verificar el rango del hexadecimal y retroceder
+            // Convertir StringBuilder a String
+            String numeroEnHexadecimal = cadena.toString();
+
+            try {
+                // Verificar si es un número negativo
+                int numero;
+                if (numeroEnHexadecimal.startsWith("-")) {
+                    // Si es negativo, quitar el prefijo "-0x" y convertir a entero negativo
+                    numero = Integer.parseUnsignedInt(numeroEnHexadecimal.substring(3), 16) * -1;
+                } else {
+                    // Si es positivo, quitar el prefijo "0x" y convertir a entero
+                    numero = Integer.parseUnsignedInt(numeroEnHexadecimal.substring(2), 16);
+                }
+
+                // Verificar si el número está fuera del rango permitido para un entero con signo de 32 bits
+                if (numero < -2147483648 || numero > 2147483647) {
+                    System.out.println("ERROR: Supera el límite indicado para los valores hexadecimales en la línea: "
+                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                }
+            } catch (NumberFormatException e) {
+                // El número no es válido
+                System.out.println("ERROR: El número hexadecimal no es válido en la línea: " + lector.getNroLinea()
+                        + " en la columna: " + lector.getColumna());
+            }
+
+            // Retroceder un carácter
+            lector.retrocederCaracter();
         }
     }
-    }
+
+}
 
 
 /*public abstract class AccionesSemantica {
@@ -312,15 +364,6 @@ public abstract class AccionesSemantica {
         }
     }
 
-    public class AS12 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-        }
-    }
-
-    public class AS13 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-        }
-    }
 
 }
 */
