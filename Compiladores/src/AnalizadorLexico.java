@@ -168,7 +168,7 @@ public class AnalizadorLexico {
 
             System.out.println(cadena); //TODO: ver como conectar el cadena con el token de las acciones semanticas para que se guarde cuando se corta
             if (estado == -2) {
-                estado = estadoAnt; //TODO: estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
+                estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
             }
             //System.out.println("EstadoNuevo:" + estado);
             int accionSemantica = matrizSemantica[estadoAnt][valorChar];
@@ -184,7 +184,10 @@ public class AnalizadorLexico {
         }
          //pasar a Acciones semanticas
         System.out.println("cadena: " + cadena);
-        return tablaSimbolos.determinarTokenValor(cadena.toString());
+        int token = tablaSimbolos.determinarTokenValor(cadena.toString());
+        ParserVal yyval = new ParserVal(cadena); //ver si es necesario verificar que a los fijos no devuelva puntero
+
+        return token;
     }
     public static int[][] leerArchivoComoMatriz(String rutaArchivo) {
         int[][] matriz = null;

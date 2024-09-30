@@ -91,7 +91,7 @@ public class TablaSimbolos {
         } else if (caracter.equals(":=")){
             return obtenerToken("ASIGNACION");
         } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*$")) {
-            int identificador = obtenerToken("IDM");
+            int identificador = obtenerToken("ID");
             this.addToken(caracter, identificador);
             return identificador;
         } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*@$")){
