@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Compiladores">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Compiladores.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -21,7 +21,6 @@ public class AnalizadorLexico {
     }*/
 
     public int asignarValorChar(char caracter) {
-        //asignamos valores a los caracteres segun la codigo ASCII
         switch (caracter) {
             case '+':
             case '-':

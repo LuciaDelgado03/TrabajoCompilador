@@ -107,8 +107,8 @@ termino							: termino "*" factor
 
 factor							: ID
 							| DIGITO
-							| ID.ID //TODO: que sea solo de un tipo definido como struct
-							| "-" DIGITO //HAY QUE MULTIPLICARLO POR -1?
+							| ID "." ID /*TODO: que sea solo de un tipo definido como struct*/
+							| "-" DIGITO /*HAY QUE MULTIPLICARLO POR -1?*/
 							| HEXA
 							| "-" HEXA
 							;
@@ -127,7 +127,7 @@ lista_tipos						: lista_tipos "," tipo
 
 tipo		 					: LONGINT
 							| DOUBLE
-							| ID  //TODO: verificar que el use un tipo creado
+							| ID  /*TODO: verificar que el use un tipo creado*/
 							;
 
 comparador 					 	: "<"
