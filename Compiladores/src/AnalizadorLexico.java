@@ -11,13 +11,13 @@ public class AnalizadorLexico {
     private int[][] matrizSemantica;
 
     public AnalizadorLexico() {
-        String Path = "Compiladores/src/TablaSimbolos.txt";
+        String Path = "Compiladores/out/production/Compiladores/TablaSimbolos.txt";
         TablaSimbolos TS = new TablaSimbolos(Path);
         this.tablaSimbolos = TS;
-        String archEjecutable = "Compiladores/src/Ejecutable.txt";
+        String archEjecutable = "Compiladores/out/production/Compiladores/Ejecutable.txt";
         this.lector = new LectorDeTexto(archEjecutable);
-        String matrizTransiciones = "Compiladores/src/matrizTransicion.txt";
-        String matrizAccionesSemanticas = "Compiladores/src/MatrizDeAccionesSemanticas.txt";
+        String matrizTransiciones = "Compiladores/out/production/Compiladores/matrizTransicion.txt";
+        String matrizAccionesSemanticas = "Compiladores/out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
         this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
     }

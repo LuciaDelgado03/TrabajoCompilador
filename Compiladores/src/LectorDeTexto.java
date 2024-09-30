@@ -51,7 +51,7 @@ public class LectorDeTexto {
     public char nuevoCaracter() {
         if (columna >= linea.length()){
             if (this.hayLineas()) {
-                //System.out.println("nuevaLinea");
+                System.out.println("nuevaLinea");
                 this.getNuevaLinea();
                 this.columna = 0;
             } else {

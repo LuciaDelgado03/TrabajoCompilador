@@ -1,4 +1,3 @@
-prog programa
+programa
 BEGIN
-
 END

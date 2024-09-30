@@ -23,6 +23,7 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            System.out.println(caracter);
             cadena.append(caracter);
 
         }
