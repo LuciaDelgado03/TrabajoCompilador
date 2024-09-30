@@ -463,9 +463,11 @@ String yys;    //current token string
 //###############################################################
 int yylex(){
 
-
+  return 0;
   }
 
+
+  int 
 
   int yyparse()
 {

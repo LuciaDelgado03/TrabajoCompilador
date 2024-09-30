@@ -17,22 +17,18 @@ import java.io*;
 
 %%
 prog							: ID BEGIN cuerpo END
-							| ID cuerpo END {} /*TODO: notificar error FALTA BEGIN*/
-							| BEGIN END {} /* TODO: Notificar falta ID Y CUERPO*/
-							| ID BEGIN cuerpo {} /*TODO: falta end*/
-							| ID cuerpo {} /*TODO: falta begin y end*/
-							| BEGIN cuerpo  {}
+							/*| ID cuerpo END {} /*TODO: notificar error FALTA BEGIN*/
+							/*| BEGIN END {} /* TODO: Notificar falta ID Y CUERPO*/
+							/*| ID BEGIN cuerpo {} /*TODO: falta end*/
+							/*| ID cuerpo {} /*TODO: falta begin y end*/
+							/*| BEGIN cuerpo  {}*/
 							;
 
 cuerpo							: cuerpo sentencia
 							| sentencia
 							;
 
-sentencia						: sentencia sentencia_declaracion
-							| sentencia sentencia_funcion
-							| sentencia sentencia_ejecucion
-							| sentencia_funcion
-							| sentencia_declaracion
+sentencia					: sentencia_declaracion
 							| sentencia_ejecucion
 							| ETIQUETA
 							;
@@ -83,7 +79,7 @@ condicion_if 						: IF condicion THEN bloque_sentencia_ejecutable END_IF ";"
               						| IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"
               						%prec LOWER_THAN_ELSE;
 
-condicion						: expresion_aritmetica comparador expresion_aritmetica
+condicion						: "(" expresion_aritmetica comparador expresion_aritmetica ")"
 							;
 
 asignacion : lista_variables ASIGNACION lista_expresiones ';' /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
@@ -112,7 +108,9 @@ factor							: ID
 							| "-" HEXA
 							;
 
-lista_variables						: lista_variables "," ID
+lista_variables				: lista_variables "," ID
+							| lista_variables "," ID "." ID
+							| ID "." ID
 							| ID
 							;
 
