@@ -1,2 +1,3 @@
-valor = 10
-if (valor == 10) then
+valor = 1
+if (valor <= 10) then
+valor = valor + 1

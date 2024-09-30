@@ -6,13 +6,12 @@ public class AnalizadorLexico {
     private TablaSimbolos tablaSimbolos;
     private int[][] matrizTransicion;
     private int[][] matrizSemantica;
-    private ArrayList<AccionesSemantica> acciones;
-    public AnalizadorLexico(LectorDeTexto lector, TablaSimbolos tabla, int[][] matriz, int[][] matrizSemantica, ArrayList<AccionesSemantica> acciones) {
+
+    public AnalizadorLexico(LectorDeTexto lector, TablaSimbolos tabla, int[][] matriz, int[][] matrizSemantica) {
         this.lector = lector;
         this.tablaSimbolos = tabla;
         this.matrizTransicion = matriz;
         this.matrizSemantica = matrizSemantica;
-        this.acciones = acciones;
     }
 
 
@@ -96,44 +95,48 @@ public class AnalizadorLexico {
         }
     }
 
-        public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena,  Character caracter) {
-        AccionesSemantica accion; // Declaración de la variable
+    public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena,  Character caracter) {
 
         switch (accionSemantica) {
             case 1:
-                //accion = new AccionesSemantica.AS1(); // Crear nueva instancia de AS1
-
-                acciones.get(0).ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                AccionesSemantica.AS1 instanciaAS1 = AccionesSemantica.AS1.obtenerInstancia(lector);
+                instanciaAS1.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 2:
-                acciones.get(1).ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                AccionesSemantica.AS2 instanciaAS2 = AccionesSemantica.AS2.obtenerInstancia(lector);
+                instanciaAS2.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 3:
-                acciones.get(2).ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                AccionesSemantica.AS3 instanciaAS3 = AccionesSemantica.AS3.obtenerInstancia(lector);
+                instanciaAS3.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 4:
-                acciones.get(3).ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                AccionesSemantica.AS4 instanciaAS4 = AccionesSemantica.AS4.obtenerInstancia(lector);
+                instanciaAS4.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 5:
-                acciones.get(4).ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                AccionesSemantica.AS5 instanciaAS5 = AccionesSemantica.AS5.obtenerInstancia(lector);
+                instanciaAS5.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 6:
-
+                AccionesSemantica.AS6 instanciaAS6 = AccionesSemantica.AS6.obtenerInstancia(lector);
+                instanciaAS6.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 7:
-
+                AccionesSemantica.AS7 instanciaAS7 = AccionesSemantica.AS7.obtenerInstancia(lector);
+                instanciaAS7.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 8:
-
+                AccionesSemantica.AS8 instanciaAS8 = AccionesSemantica.AS8.obtenerInstancia(lector);
+                instanciaAS8.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 9:
-
+                AccionesSemantica.AS9 instanciaAS9 = AccionesSemantica.AS9.obtenerInstancia(lector);
+                instanciaAS9.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 10:
-
-                break;
-            case 11:
-
+                AccionesSemantica.AS10 instanciaAS10 = AccionesSemantica.AS10.obtenerInstancia(lector);
+                instanciaAS10.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 15:
                 System.out.println("hola no hago nd");
@@ -146,7 +149,7 @@ public class AnalizadorLexico {
     }
 
     //ver el tema que no se quede en el while si nos quedamos sin caracteres
-    public int sigToken() {
+    public int yylex() {
         int valorToken = -1;
         int estado = 0;
         int estadoAnt = 0;

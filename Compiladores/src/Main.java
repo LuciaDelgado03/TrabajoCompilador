@@ -64,7 +64,7 @@ public class Main {
         int[][] matrizAcciones = leerArchivoComoMatriz(matrizAccionesSemanticas);
         int[][] matrizTrans = leerArchivoComoMatriz(matrizTransiciones);
 
-
+        /*
         AccionesSemantica.AS1 instanciaAS1 = AccionesSemantica.AS1.obtenerInstancia(Lec);
         AccionesSemantica.AS2 instanciaAS2 = AccionesSemantica.AS2.obtenerInstancia(Lec);
         AccionesSemantica.AS3 instanciaAS3 = AccionesSemantica.AS3.obtenerInstancia(Lec);
@@ -76,18 +76,19 @@ public class Main {
         acciones.add(instanciaAS3);
         acciones.add(instanciaAS4);
         acciones.add(instanciaAS5);
+         */
 
-        AnalizadorLexico lex = new AnalizadorLexico(Lec, TS, matrizTrans, matrizAcciones, acciones);
-        Integer token = null;
+        AnalizadorLexico lex = new AnalizadorLexico(Lec, TS, matrizTrans, matrizAcciones);
+        /*Integer token = null;
         ArrayList<Integer> tiraTokens = new ArrayList<>();
-        token = lex.sigToken();
+        token = lex.yylex();
         System.out.println(token);
         int i = 0;
         while (token != 100) {
-            token = lex.sigToken();
+            token = lex.yylex();
             System.out.println("Token: "+token);
             tiraTokens.add(token);
-        }
+        }*/
         TS.imprimir();
 
         /*

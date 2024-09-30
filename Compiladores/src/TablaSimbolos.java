@@ -78,13 +78,25 @@ public class TablaSimbolos {
             int hexadecimal = obtenerToken("HEXA");
             this.addToken(caracter, hexadecimal);
             return hexadecimal;
-        } else if (caracter.matches("^^\\d+$")){
+        } else if (caracter.matches("^^\\d+$")) {
             int digito = obtenerToken("DIGITO");
             this.addToken(caracter, digito);
             return digito;
-        } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*$")){ //falta chequear si el primer elemento es una letra
+        } else if (caracter.equals("<=")){
+            return obtenerToken("MENOR_IGUAL");
+        } else if (caracter.equals(">=")){
+            return obtenerToken("MAYOR_IGUAL");
+        } else if (caracter.equals("!=")){
+            return obtenerToken("DISTINTO");
+        } else if (caracter.equals(":=")){
+            return obtenerToken("ASIGNACION");
+        } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*$")) { //falta chequear si el primer elemento es una letra
             int identificador = obtenerToken("IDM");
-            this.addToken(caracter,identificador);
+            this.addToken(caracter, identificador);
+            return identificador;
+        } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*@$")){
+            int identificador = obtenerToken("ETIQUETA");
+            this.addToken(caracter, identificador);
             return identificador;
         } else if (caracter.matches("[\\s\\S]*")){
             caracter = caracter.replaceAll("\\n", "");
