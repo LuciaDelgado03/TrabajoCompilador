@@ -19,9 +19,9 @@
 //#line 2 "gramatica.y"
 
 
-import accion_semantica.AccionSemantica;
 
-import java.io*;
+
+import java.io.*;
 //#line 23 "Parser.java"
 
 

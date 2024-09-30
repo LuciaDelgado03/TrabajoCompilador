@@ -37,8 +37,8 @@ sentencia						: sentencia sentencia_declaracion
 							| ETIQUETA
 							;
 
-sentencia_declaracion					: tipo lista_variables
-							| sentencia_funcion
+sentencia_declaracion		: tipo lista_variables
+							| declaracion_funcion
 							| TYPEDEF ID ASIGNACION tipo "{" subrango "}" ";"
 							| TYPEDEF STRUCT "<" lista_tipos ">" "{" lista_variables "}" ID ";"
 							;
@@ -47,14 +47,14 @@ subrango 						: DIGITO "," DIGITO	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
 							| DOUBLE "," DOUBLE	/*TODO: A.S CHEQUEAR VALOR CON TIPO*/
 							;
 
-sentencia_funcion					: tipo FUN ID "(" parametro ")" BEGIN cuerpo_funcion END
-							| tipo FUN ID "(" parametro ")" BEGIN cuerpo_funcion END
+declaracion_funcion			: tipo FUN ID "(" parametro ")" BEGIN cuerpo_funcion END
 							;
 
-sentencia_ejecucion					: asignacion
+sentencia_ejecucion			: asignacion
 					 		| condicion_if
 							| sentencia_print
-							| GOTO ETIQUETA "@"";"
+							| REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";"
+							| GOTO ETIQUETA ";"
 							;
 
 sentencia_print						: OUTF CML ";"
@@ -86,12 +86,12 @@ condicion_if 						: IF condicion THEN bloque_sentencia_ejecutable END_IF ";"
 condicion						: expresion_aritmetica comparador expresion_aritmetica
 							;
 
-asignacion						: ID ASIGNACION expresion_aritmetica ";"
-							| ID"."ID ASIGNACION expresion_aritmetica ";" /*TODO: que sea solo de un tipo definido como struct*/
-							;
+asignacion : lista_variables ASIGNACION lista_expresiones ';' /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
+           /*| estructura_asignacion ';'
+           ;
 
-asignacion_multiple					: lista_variables ASIGNACION  lista_expresiones ";" /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
-							;
+estructura_asignacion : ID '.' ID ASIGNACION expresion_aritmetica
+					  ;*/
 
 expresion						: expresion "+" termino
 							| expresion "-" termino

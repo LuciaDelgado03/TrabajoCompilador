@@ -1,3 +1,4 @@
-valor = 1
-if (valor <= 10) then
-valor = valor + 1
+prog programa
+BEGIN
+
+END

@@ -1,17 +1,25 @@
 import java.util.*;
 import java.util.Map.Entry;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 public class AnalizadorLexico {
     private LectorDeTexto lector;
     private TablaSimbolos tablaSimbolos;
     private int[][] matrizTransicion;
     private int[][] matrizSemantica;
 
-    public AnalizadorLexico(LectorDeTexto lector, TablaSimbolos tabla, int[][] matriz, int[][] matrizSemantica) {
-        this.lector = lector;
-        this.tablaSimbolos = tabla;
-        this.matrizTransicion = matriz;
-        this.matrizSemantica = matrizSemantica;
+    public AnalizadorLexico() {
+        String Path = "Compiladores/src/TablaSimbolos.txt";
+        TablaSimbolos TS = new TablaSimbolos(Path);
+        this.tablaSimbolos = TS;
+        String archEjecutable = "Compiladores/src/Ejecutable.txt";
+        this.lector = new LectorDeTexto(archEjecutable);
+        String matrizTransiciones = "Compiladores/src/matrizTransicion.txt";
+        String matrizAccionesSemanticas = "Compiladores/src/MatrizDeAccionesSemanticas.txt";
+        this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
+        this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
     }
 
     public int asignarValorChar(char caracter) {
@@ -177,5 +185,44 @@ public class AnalizadorLexico {
          //pasar a Acciones semanticas
         System.out.println("cadena: " + cadena);
         return tablaSimbolos.determinarTokenValor(cadena.toString());
+    }
+    public static int[][] leerArchivoComoMatriz(String rutaArchivo) {
+        int[][] matriz = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            // Leer todas las líneas del archivo
+            String linea;
+            int numFilas = 0;
+            int numColumnas = 0;
+
+            // Determinar el número de filas y columnas
+            while ((linea = br.readLine()) != null) {
+                numFilas++;
+                String[] columnas = linea.split("\\s+"); // Separar por espacios
+                numColumnas = columnas.length; // Suponer que todas las filas tienen el mismo número de columnas
+            }
+
+            // Inicializar la matriz
+            matriz = new int[numFilas][numColumnas];
+
+            // Volver al principio del archivo para llenar la matriz
+            br.close();
+            try (BufferedReader br2 = new BufferedReader(new FileReader(rutaArchivo))) {
+                int filaActual = 0;
+
+                while ((linea = br2.readLine()) != null) {
+                    String[] columnas = linea.split("\\s+");
+                    for (int columnaActual = 0; columnaActual < columnas.length; columnaActual++) {
+                        matriz[filaActual][columnaActual] = Integer.parseInt(columnas[columnaActual]);
+                    }
+                    filaActual++;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return matriz;
     }
 }
