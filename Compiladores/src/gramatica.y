@@ -10,7 +10,9 @@ import java.io*;
 
 %left '+' '-'
 %left '*' '/'
-
+%left ASIGNACION
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 %start prog
 
 %%
@@ -77,14 +79,11 @@ bloque_sentencia_ejecutable 				: BEGIN bloque_sentencia_ejecutable sentencia_ej
 					  		| BEGIN sentencia_ejecucion END
 					  		;
 
-condicion_if 						: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";"
-							| IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"
-							;
+condicion_if 						: IF condicion THEN bloque_sentencia_ejecutable END_IF ";"
+              						| IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"
+              						%prec LOWER_THAN_ELSE;
 
 condicion						: expresion_aritmetica comparador expresion_aritmetica
-							;
-
-repeat_while						: REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";"
 							;
 
 asignacion						: ID ASIGNACION expresion_aritmetica ";"
@@ -107,7 +106,7 @@ termino							: termino "*" factor
 
 factor							: ID
 							| DIGITO
-							| ID "." ID /*TODO: que sea solo de un tipo definido como struct*/
+							//| ID "." ID /*TODO: que sea solo de un tipo definido como struct*/
 							| "-" DIGITO /*HAY QUE MULTIPLICARLO POR -1?*/
 							| HEXA
 							| "-" HEXA
@@ -137,18 +136,3 @@ comparador 					 	: "<"
 							| "DISTINTO"
 							;
 %%
-/*Soluciones:
-
-  Revisa las reglas ambiguas. Los conflictos shift/reduce son comunes en estructuras como las condiciones if-then-else, donde el parser no sabe si debe continuar analizando (shift) o reducir la parte ya analizada.
-
-  Para if-then-else, una solución común es usar la directiva %prec (precedencia) para especificar la prioridad de las reducciones, de esta forma:
-
-  yacc
-  Copiar código
-  %nonassoc LOWER_THAN_ELSE
-  %nonassoc ELSE
-
-  condicion_if : IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";"
-              | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"
-              %prec LOWER_THAN_ELSE;
-*/

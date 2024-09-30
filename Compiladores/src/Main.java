@@ -57,29 +57,10 @@ public class Main {
         int valor = TS.obtenerToken("22");
         System.out.println("el valor es: " + valor);
         TS.imprimir();
-        String archEjecutable = "Compiladores/src/Ejecutable.txt";
-        LectorDeTexto Lec = new LectorDeTexto(archEjecutable);
-        String matrizTransiciones = "Compiladores/src/matrizTransicion.txt";
-        String matrizAccionesSemanticas = "Compiladores/src/MatrizDeAccionesSemanticas.txt";
-        int[][] matrizAcciones = leerArchivoComoMatriz(matrizAccionesSemanticas);
-        int[][] matrizTrans = leerArchivoComoMatriz(matrizTransiciones);
 
-        /*
-        AccionesSemantica.AS1 instanciaAS1 = AccionesSemantica.AS1.obtenerInstancia(Lec);
-        AccionesSemantica.AS2 instanciaAS2 = AccionesSemantica.AS2.obtenerInstancia(Lec);
-        AccionesSemantica.AS3 instanciaAS3 = AccionesSemantica.AS3.obtenerInstancia(Lec);
-        AccionesSemantica.AS4 instanciaAS4 = AccionesSemantica.AS4.obtenerInstancia(Lec);
-        AccionesSemantica.AS5 instanciaAS5 = AccionesSemantica.AS5.obtenerInstancia(Lec);
-        ArrayList<AccionesSemantica> acciones = new ArrayList<>();
-        acciones.add(instanciaAS1);
-        acciones.add(instanciaAS2);
-        acciones.add(instanciaAS3);
-        acciones.add(instanciaAS4);
-        acciones.add(instanciaAS5);
-         */
 
-        AnalizadorLexico lex = new AnalizadorLexico(Lec, TS, matrizTrans, matrizAcciones);
-        /*Integer token = null;
+        AnalizadorLexico lex = new AnalizadorLexico(Lec, TS);
+        Integer token = null;
         ArrayList<Integer> tiraTokens = new ArrayList<>();
         token = lex.yylex();
         System.out.println(token);
@@ -88,21 +69,7 @@ public class Main {
             token = lex.yylex();
             System.out.println("Token: "+token);
             tiraTokens.add(token);
-        }*/
-        TS.imprimir();
-
-        /*
-        int vvalor = TS.determinarTokenValor("0ola");
-        System.out.println("primero" + vvalor);
-        vvalor = TS.determinarTokenValor("0x2");
-        System.out.println("segundo" + vvalor);
-        vvalor = TS.determinarTokenValor("if");
-        System.out.println("tercero" + vvalor);
-        String prueba = "[hola \n"+  "\n"+ "chau \\n]";
-        System.out.println(prueba);
-        vvalor = TS.determinarTokenValor(prueba);
-        System.out.println(vvalor);
-    */
-
+        }
+        TS.imprimir()*/
     }
 }

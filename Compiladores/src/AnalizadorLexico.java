@@ -14,12 +14,6 @@ public class AnalizadorLexico {
         this.matrizSemantica = matrizSemantica;
     }
 
-
-    /*public int consultarTablaTransicion(int fila, int columna) {
-        //el estado es la fila y la columna el valor del caracter
-        return
-    }*/
-
     public int asignarValorChar(char caracter) {
         switch (caracter) {
             case '+':
