@@ -11,7 +11,7 @@ import java.io*;
 %left '+' '-'
 %left '*' '/'
 
-%start program
+%start prog
 
 %%
 prog							: ID BEGIN cuerpo END
