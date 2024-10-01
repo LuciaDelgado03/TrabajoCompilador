@@ -1,9 +1,9 @@
 %{
 
 
-import accion_semantica.AccionSemantica;
+//import accion_semantica.AccionSemantica;
 
-import java.io*;
+import java.io.*;
 %}
         //declaracion de tokens a recibir del Analizador Lexico
 %token IF THEN ELSE BEGIN END END_IF OUTF TYPEDEF FUN RET STRING REPEAT WHILE GOTO ID DIGITO HEXA CML DOUBLE LONGINT TOD STRUCT ASIGNACION DISTINTO MENOR_IGUAL MAYOR_IGUAL OUTF ETIQUETA
@@ -17,7 +17,7 @@ import java.io*;
 
 %%
 prog							: ID BEGIN cuerpo END
-							/*| ID cuerpo END {} /*TODO: notificar error FALTA BEGIN*/
+							| ID cuerpo END {agregarError("falta un begin");} //TODO: notificar error FALTA BEGIN
 							/*| BEGIN END {} /* TODO: Notificar falta ID Y CUERPO*/
 							/*| ID BEGIN cuerpo {} /*TODO: falta end*/
 							/*| ID cuerpo {} /*TODO: falta begin y end*/
@@ -33,7 +33,7 @@ sentencia					: sentencia_declaracion
 							| ETIQUETA
 							;
 
-sentencia_declaracion		: tipo lista_variables
+sentencia_declaracion		: tipo lista_variables ";"
 							| declaracion_funcion
 							| TYPEDEF ID ASIGNACION tipo "{" subrango "}" ";"
 							| TYPEDEF STRUCT "<" lista_tipos ">" "{" lista_variables "}" ID ";"
@@ -54,19 +54,20 @@ sentencia_ejecucion			: asignacion
 							;
 
 sentencia_print						: OUTF CML ";"
-							| OUTF "(" expresion ")" ";"
+							| OUTF "(" expresion ")" ";" {System.out.println(recuperar_lexema($3));}
 							;
 
-cuerpo_funcion              				: sentencia
+cuerpo_funcion              : cuerpo_funcion sentencia
+							| cuerpo_funcion RET "(" expresion ")" ";"
 							| RET "(" expresion ")" ";"
+							| sentencia
 							;
 
 parametro						: tipo ID
 							;
 
-expresion_aritmetica					: invocacion_funcion
-                            				| expresion
-							;
+/*expresion_aritmetica					: invocacion_funcion
+                            			| expresion*/
 
 invocacion_funcion          				: ID "(" expresion ")"
 							;
@@ -79,7 +80,7 @@ condicion_if 						: IF condicion THEN bloque_sentencia_ejecutable END_IF ";"
               						| IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"
               						%prec LOWER_THAN_ELSE;
 
-condicion						: "(" expresion_aritmetica comparador expresion_aritmetica ")"
+condicion						: "(" expresion comparador expresion ")"
 							;
 
 asignacion : lista_variables ASIGNACION lista_expresiones ';' /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
@@ -89,23 +90,23 @@ asignacion : lista_variables ASIGNACION lista_expresiones ';' /*TODO: verificar 
 estructura_asignacion : ID '.' ID ASIGNACION expresion_aritmetica
 					  ;*/
 
-expresion						: expresion "+" termino
-							| expresion "-" termino
+expresion					: expresion "+" termino		{$$ = $1 + $3;}
+							| expresion "-" termino		{$$ = $1 - $3;}
 							| TOD "(" expresion ")"
 							| termino
 							;
 
-termino							: termino "*" factor
-							| termino "/" factor
+termino						: termino "*" factor	{$$ = $1 * $3;}
+							| termino "/" factor	{$$ = $1 / $3;}
 							| factor
 							;
 
-factor							: ID
-							| DIGITO
-							//| ID "." ID /*TODO: que sea solo de un tipo definido como struct*/
-							| "-" DIGITO /*HAY QUE MULTIPLICARLO POR -1?*/
-							| HEXA
-							| "-" HEXA
+factor						: ID	{$$ = $1;}
+							| DIGITO	{$$ = $1;}
+							| "-" DIGITO	{$$ = -$2;}
+							| HEXA	{$$ = $1;}
+							| "-" HEXA	{$$ = -$2;}
+							| invocacion_funcion	{$$ = $1;}
 							;
 
 lista_variables				: lista_variables "," ID
@@ -114,8 +115,8 @@ lista_variables				: lista_variables "," ID
 							| ID
 							;
 
-lista_expresiones					: lista_expresiones "," expresion_aritmetica
-							| expresion_aritmetica
+lista_expresiones					: lista_expresiones "," expresion
+							| expresion
 							;
 
 lista_tipos						: lista_tipos "," tipo
@@ -134,5 +135,8 @@ comparador 					 	: "<"
 							| "DISTINTO"
 							;
 %%
+
+
+
 
 
