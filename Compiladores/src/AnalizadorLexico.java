@@ -87,9 +87,11 @@ public class AnalizadorLexico {
                 return 15;
             case '?':
                 return 16;
+            case '@':
+                return 17;
             default:
                 if (Character.isLetter(caracter)) {
-                    return 17;
+                    return 18;
                 } else {
                     throw new IllegalArgumentException("Caracter no válido: " + caracter);
                 }
@@ -139,7 +141,7 @@ public class AnalizadorLexico {
                 AccionesSemantica.AS10 instanciaAS10 = AccionesSemantica.AS10.obtenerInstancia(lector);
                 instanciaAS10.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
-            case 15:
+            case 11:
                 System.out.println("hola no hago nd");
                 break;
             default:
@@ -156,35 +158,30 @@ public class AnalizadorLexico {
         int estadoAnt = 0;
         StringBuilder cadena = new StringBuilder();
         Character caracter = null;
-        while (estado != -1) { //estado final es -1 y error es -2
+        while (estado != -1){ //estado final es -1 y error es -2
             estadoAnt = estado;
             caracter = lector.nuevoCaracter();
-            System.out.println("caracter:" +caracter);
+
+            //System.out.println("caracter:" +caracter);
             int valorChar = asignarValorChar(caracter);
 
             //consulta la tabla de transicion para saber a que estado movernos
-
             estado = matrizTransicion[estado][valorChar];
 
-            System.out.println(cadena); //TODO: ver como conectar el cadena con el token de las acciones semanticas para que se guarde cuando se corta
+            //System.out.println(cadena); //TODO: ver como conectar el cadena con el token de las acciones semanticas para que se guarde cuando se corta
             if (estado == -2) {
                 estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
             }
             //System.out.println("EstadoNuevo:" + estado);
             int accionSemantica = matrizSemantica[estadoAnt][valorChar];
             ejecutarAccionSemantica(accionSemantica, cadena, caracter);
-            //VER COMO HACER ESTO, deberia comprobar si hay un error y informalo
-            //}
-            /*if (estado == -2) { //estado de error
-                //controlarError(estadoAnt, caracter);
-                estado = 0; //si encuentro un error vuelvo a empezar, chequear despues para salvarlo
-                cadena = "";
-            }*/
 
         }
          //pasar a Acciones semanticas
-        System.out.println("cadena: " + cadena);
+
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
+
+        System.out.println("cadena: " + cadena+" Token: "+token);
         ParserVal yyval = new ParserVal(cadena); //ver si es necesario verificar que a los fijos no devuelva puntero
 
         return token;
@@ -228,4 +225,5 @@ public class AnalizadorLexico {
 
         return matriz;
     }
+
 }

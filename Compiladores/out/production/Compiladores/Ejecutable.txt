@@ -1,3 +1,6 @@
-programa
+prog
 BEGIN
+    LONGINT J;
+    J := 1 + 1;
+    OUTF(J);
 END

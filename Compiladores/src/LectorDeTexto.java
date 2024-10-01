@@ -7,6 +7,7 @@ public class LectorDeTexto {
     int nroLinea;
     private String linea;
     private int columna;
+    private boolean saltoDeLineaPendiente;
 
     public LectorDeTexto(String nombreArchivo) {
         try {
@@ -23,7 +24,7 @@ public class LectorDeTexto {
         return nroLinea;
     }
 
-    public int getColumna(){
+    public int getColumna() {
         return this.columna;
     }
 
@@ -35,7 +36,6 @@ public class LectorDeTexto {
             e.printStackTrace();
         }
     }
-
     public void cerrarArchivo() {
         try {
             if (br != null) {
@@ -46,15 +46,20 @@ public class LectorDeTexto {
         }
     }
 
-
-    //donde verificar que termino el archivo
     public char nuevoCaracter() {
-        if (columna >= linea.length()){
+            // Si hay un salto de línea pendiente, devolverlo primero
+        if (saltoDeLineaPendiente) {
+            saltoDeLineaPendiente = false;
+            return '\n'; // Devolvemos el salto de línea explícitamente
+            }
+        if ((linea == null) || (columna >= linea.length())) {
             if (this.hayLineas()) {
                 System.out.println("nuevaLinea");
                 this.getNuevaLinea();
                 this.columna = 0;
+                return '\t';
             } else {
+                System.out.println("fin de archivo");
                 return '?'; //caracter de fin
             }
         }
@@ -68,6 +73,7 @@ public class LectorDeTexto {
 
     public void retrocederCaracter(){
         //TODO: si estoy en la linea y retrocede en la primera tengo que volver a la linea anterior?
+        if(columna > 0)
         this.columna--;
     }
 

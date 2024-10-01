@@ -49,7 +49,10 @@ public abstract class AccionesSemantica {
                 // Truncar el StringBuilder a 15 caracteres
                 cadena.setLength(15); // Establece la longitud máxima de la cadena a 15
             }
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
     }
 
@@ -70,7 +73,11 @@ public abstract class AccionesSemantica {
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informar linea se esperaba un igual y llego otro caracter
             System.out.println("ERROR: Se esperaba un simbolo '=' en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
-            lector.retrocederCaracter();
+
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
     }
 
@@ -90,7 +97,6 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Implementación de AS4
         }
     }
 
@@ -128,8 +134,10 @@ public abstract class AccionesSemantica {
                         + " en la columna: " + lector.getColumna());
             }
 
-            // Retroceder un carácter
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
     }
 
@@ -150,7 +158,10 @@ public abstract class AccionesSemantica {
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informa error ya que se esperaba un numero, inserta el caracter
             System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
 
     }
@@ -192,7 +203,10 @@ public abstract class AccionesSemantica {
             }
 
             // Retroceder un carácter
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
     }
 
@@ -214,7 +228,9 @@ public abstract class AccionesSemantica {
             //se esperaba un numero o una letra A,B,C,D,E,F , y inserto en la linea
             System.out.println("ERROR: Se esperaba un digito o una letra de la A-F en la linea: " + lector.getNroLinea()
                                 + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+            }
         }
     }
 
@@ -236,7 +252,9 @@ public abstract class AccionesSemantica {
             // se esperaba un # para comentario, pero no llego, inserta el ultimo caracter
             System.out.println("ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
                     + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+            }
         }
     }
 
@@ -271,7 +289,7 @@ public abstract class AccionesSemantica {
                 }
 
                 // Verificar si el número está fuera del rango permitido para un entero con signo de 32 bits
-                if (numero < -2147483648 || numero > 2147483647) {
+                if (numero <= -2147483648 || numero >= 2147483647) {
                     System.out.println("ERROR: Supera el límite indicado para los valores hexadecimales en la línea: "
                             + lector.getNroLinea() + " en la columna: " + lector.getColumna());
                 }
@@ -282,7 +300,10 @@ public abstract class AccionesSemantica {
             }
 
             // Retroceder un carácter
-            lector.retrocederCaracter();
+            if(!caracter.equals('?')) {
+                lector.retrocederCaracter();
+
+            }
         }
     }
 
