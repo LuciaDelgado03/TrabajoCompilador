@@ -73,7 +73,6 @@ public class TablaSimbolos {
     public int determinarTokenValor(String caracter) {
         int valor = this.obtenerToken(caracter);
         if (valor != -1) {
-            System.out.println(valor);
             return valor;
         } else if (caracter.matches("^0x[a-zA-Z0-9]+$")) {
             int hexadecimal = obtenerToken("HEXA");

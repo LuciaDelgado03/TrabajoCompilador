@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public abstract class AccionesSemantica {
     //protected String Token;
     protected LectorDeTexto lector;
@@ -23,9 +25,8 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            System.out.println(caracter);
             cadena.append(caracter);
-
+            //System.out.println("Letra que inserta "+"'"+cadena+"'");
         }
     }
 
@@ -97,6 +98,9 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            System.out.println(cadena);
+            System.out.println("");
+            cadena.setLength(0);
         }
     }
 
@@ -115,8 +119,16 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            /*
             // Convertir el StringBuilder a String
             String numeroEnCadena = cadena.toString();
+            // Convertir la cadena a un número entero
+            int numero = Integer.parseInt(numeroEnCadena);
+
+            if (numero >= 2147483647) { //TODO: como hacemos con el negativo?
+                System.out.println("ERROR: Supera el limite indicado para los longint en la linea: "
+                        + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+            }
 
             try {
                 // Convertir la cadena a un número entero
@@ -133,6 +145,7 @@ public abstract class AccionesSemantica {
                 System.out.println("ERROR: El número no es válido en la linea: " + lector.getNroLinea()
                         + " en la columna: " + lector.getColumna());
             }
+             */
 
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
@@ -157,7 +170,7 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informa error ya que se esperaba un numero, inserta el caracter
-            System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+            System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'");
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
 
@@ -227,7 +240,7 @@ public abstract class AccionesSemantica {
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //se esperaba un numero o una letra A,B,C,D,E,F , y inserto en la linea
             System.out.println("ERROR: Se esperaba un digito o una letra de la A-F en la linea: " + lector.getNroLinea()
-                                + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+                                + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'");
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
@@ -251,7 +264,7 @@ public abstract class AccionesSemantica {
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             // se esperaba un # para comentario, pero no llego, inserta el ultimo caracter
             System.out.println("ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
-                    + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+                    + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ "'"+ caracter+"'");
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }

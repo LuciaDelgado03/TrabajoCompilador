@@ -17,7 +17,7 @@ import java.io.*;
 
 %%
 prog							: ID BEGIN cuerpo END
-							| ID cuerpo END {agregarError("falta un begin");} //TODO: notificar error FALTA BEGIN
+							| ID cuerpo END /*{agregarError("falta un begin");}*/ //TODO: notificar error FALTA BEGIN
 							/*| BEGIN END {} /* TODO: Notificar falta ID Y CUERPO*/
 							/*| ID BEGIN cuerpo {} /*TODO: falta end*/
 							/*| ID cuerpo {} /*TODO: falta begin y end*/
@@ -39,7 +39,7 @@ sentencia_declaracion		: tipo lista_variables ";"
 							| TYPEDEF STRUCT "<" lista_tipos ">" "{" lista_variables "}" ID ";"
 							;
 
-subrango 						: DIGITO "," DIGITO	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
+subrango 					: DIGITO "," DIGITO	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
 							| DOUBLE "," DOUBLE	/*TODO: A.S CHEQUEAR VALOR CON TIPO*/
 							;
 
@@ -53,8 +53,8 @@ sentencia_ejecucion			: asignacion
 							| GOTO ETIQUETA ";"
 							;
 
-sentencia_print						: OUTF CML ";"
-							| OUTF "(" expresion ")" ";" {System.out.println(recuperar_lexema($3));}
+sentencia_print				: OUTF CML ";"
+							| OUTF "(" expresion ")" ";" /*{System.out.println(recuperar_lexema($3));}*/
 							;
 
 cuerpo_funcion              : cuerpo_funcion sentencia
@@ -67,7 +67,7 @@ parametro						: tipo ID
 							;
 
 /*expresion_aritmetica					: invocacion_funcion
-                            			| expresion*/
+                            			| expresion   esta se va probablemente*/
 
 invocacion_funcion          				: ID "(" expresion ")"
 							;
@@ -90,24 +90,34 @@ asignacion : lista_variables ASIGNACION lista_expresiones ';' /*TODO: verificar 
 estructura_asignacion : ID '.' ID ASIGNACION expresion_aritmetica
 					  ;*/
 
-expresion					: expresion "+" termino		{$$ = $1 + $3;}
-							| expresion "-" termino		{$$ = $1 - $3;}
+expresion					: expresion "+" termino		/*{$$ = $1 + $3;}*/
+							| expresion "-" termino		/*{$$ = $1 - $3;}*/
 							| TOD "(" expresion ")"
 							| termino
 							;
 
-termino						: termino "*" factor	{$$ = $1 * $3;}
-							| termino "/" factor	{$$ = $1 / $3;}
+termino						: termino "*" factor	/*{$$ = $1 * $3;}*/
+							| termino "/" factor	/*{$$ = $1 / $3;}*/
 							| factor
 							;
 
-factor						: ID	{$$ = $1;}
-							| DIGITO	{$$ = $1;}
-							| "-" DIGITO	{$$ = -$2;}
-							| HEXA	{$$ = $1;}
-							| "-" HEXA	{$$ = -$2;}
-							| invocacion_funcion	{$$ = $1;}
-							;
+factor						: ID	/*{$$ = $1;}*/
+							| DIGITO	{if ($1 > 2147483647) {
+                                            yyerror("El número está fuera del rango permitido para un longint positivo.");
+                                         } else {
+                                         $$ = $1;
+                                         }
+                                         }
+							| "-" DIGITO	{if ($2 > 2147483648) {
+                                                yyerror("El número está fuera del rango permitido para un longint negativo.");
+                                             } else {
+                                                $$ = -$2;
+                                             }}
+
+							| HEXA	/*{$$ = $1;}*/
+							| "-" HEXA	/*{$$ = -$2;}*/
+							| invocacion_funcion	/*{$$ = $1;}*/
+
 
 lista_variables				: lista_variables "," ID
 							| lista_variables "," ID "." ID
@@ -135,8 +145,3 @@ comparador 					 	: "<"
 							| "DISTINTO"
 							;
 %%
-
-
-
-
-

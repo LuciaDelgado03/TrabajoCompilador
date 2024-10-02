@@ -54,7 +54,6 @@ public class LectorDeTexto {
             }
         if ((linea == null) || (columna >= linea.length())) {
             if (this.hayLineas()) {
-                System.out.println("nuevaLinea");
                 this.getNuevaLinea();
                 this.columna = 0;
                 return '\t';

@@ -431,10 +431,6 @@ final static String yyrule[] = {
 "comparador : \"DISTINTO\"",
 };
 
-//#line 138 "gramatica.y"
-
-
-//#line 369 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -449,7 +445,10 @@ String s=null;
   debug("state "+state+", reading "+ch+" ("+s+")");
 }
 
-
+void yyerror(String mensaje) {
+  // funcion utilizada para imprimir errores que produce yacc
+  System.out.println("Error yacc: " + mensaje);
+}
 
 
 
@@ -459,10 +458,7 @@ int yym;       //
 int yystate;   //current parsing state from state table
 String yys;    //current token string
 
-void yyerror(String mensaje) {
-  // funcion utilizada para imprimir errores que produce yacc
-  System.out.println("Error yacc: " + mensaje);
-}
+
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
@@ -591,55 +587,38 @@ boolean doaction;
     switch(yyn)
       {
 //########## USER-SUPPLIED ACTIONS ##########
-case 2:
-//#line 20 "gramatica.y"
-//{agregarError("falta un begin");}
-break;
-case 21:
-//#line 57 "gramatica.y"
-//{System.out.println(recuperar_lexema(val_peek(2)));}
-break;
-case 34:
-//#line 93 "gramatica.y"
-//{yyval = val_peek(2).ival + val_peek(0).ival;}
-break;
-case 35:
-//#line 94 "gramatica.y"
-//{yyval = val_peek(2) - val_peek(0);}
-break;
-case 38:
-//#line 99 "gramatica.y"
-//{yyval = val_peek(2) * val_peek(0);}
-break;
-case 39:
-//#line 100 "gramatica.y"
-//{yyval = val_peek(2) / val_peek(0);}
-break;
-case 41:
-//#line 104 "gramatica.y"
-{yyval = val_peek(0);}
-break;
-case 42:
+        case 42:
 //#line 105 "gramatica.y"
-{yyval = val_peek(0);}
-break;
-case 43:
-//#line 106 "gramatica.y"
-//{yyval = -val_peek(0);}
-break;
-case 44:
-//#line 107 "gramatica.y"
-{yyval = val_peek(0);}
-break;
-case 45:
-//#line 108 "gramatica.y"
-//{yyval = -val_peek(0);}
-break;
-case 46:
-//#line 109 "gramatica.y"
-{yyval = val_peek(0);}
-break;
-//#line 566 "Parser.java"
+        {
+          ParserVal valor = val_peek(1);
+          System.out.println("VALOR: "+ valor.sval);
+          double val = val_peek(0).dval;
+          Object obj = val_peek(0).obj;
+          System.out.print("objeto:" + obj);
+          System.out.print("valordouble:" + val);
+          double max = 2147483647.0;
+          //System.out.println("valor: ");
+          if (val > max) {
+            yyerror("El número está fuera del rango permitido para un longint positivo.");
+          } else {
+            yyval.obj = val;
+          }
+        }
+        break;
+        case 43:
+//#line 111 "gramatica.y"
+        {
+
+
+          double max = 2147483648.0;
+          /*if (val > max) {
+            yyerror("El número está fuera del rango permitido para un longint negativo.");
+          } else {
+            yyval.obj = -val;
+          }*/
+        }
+        break;
+//#line 531 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
@@ -691,7 +670,7 @@ break;
  */
 public void run(AnalizadorLexico lex)
 {
-  this.lector = lex;
+  lector = lex;
   yyparse();
 }
 //## end of method run() ########################################

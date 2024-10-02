@@ -142,16 +142,15 @@ public class AnalizadorLexico {
                 instanciaAS10.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 11:
-                System.out.println("hola no hago nd");
+                //System.out.println("");
                 break;
             default:
-                //System.out.println("soy la accion: "+accionSemantica);
-                System.out.println("Acción no válida. El número debe estar entre 1 y 10.");
+                System.out.println("Acción no válida. El número debe estar entre 1 y 11.");
                 break;
         }
     }
 
-    //ver el tema que no se quede en el while si nos quedamos sin caracteres
+
     public int yylex() {
         int valorToken = -1;
         int estado = 0;
@@ -162,30 +161,29 @@ public class AnalizadorLexico {
             estadoAnt = estado;
             caracter = lector.nuevoCaracter();
 
-            //System.out.println("caracter:" +caracter);
             int valorChar = asignarValorChar(caracter);
 
             //consulta la tabla de transicion para saber a que estado movernos
             estado = matrizTransicion[estado][valorChar];
 
-            //System.out.println(cadena); //TODO: ver como conectar el cadena con el token de las acciones semanticas para que se guarde cuando se corta
             if (estado == -2) {
                 estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
             }
-            //System.out.println("EstadoNuevo:" + estado);
+
             int accionSemantica = matrizSemantica[estadoAnt][valorChar];
             ejecutarAccionSemantica(accionSemantica, cadena, caracter);
 
         }
-         //pasar a Acciones semanticas
 
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
-
-        System.out.println("cadena: " + cadena+" Token: "+token);
-        ParserVal yyval = new ParserVal(cadena); //ver si es necesario verificar que a los fijos no devuelva puntero
+        ParserVal yyval = new ParserVal(cadena.toString());
+        System.out.println("cadena: " + cadena.toString()+" Token: "+token);
+        System.out.println("");
 
         return token;
     }
+
+
     public static int[][] leerArchivoComoMatriz(String rutaArchivo) {
         int[][] matriz = null;
 
