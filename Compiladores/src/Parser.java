@@ -22,6 +22,7 @@
 /*import accion_semantica.AccionSemantica;*/
 
 import java.io.*;
+import java.math.BigDecimal;
 //#line 23 "Parser.java"
 
 

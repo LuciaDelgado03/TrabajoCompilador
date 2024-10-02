@@ -15,8 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            lex = new AnalizadorLexico();
+
             par = new Parser(false);
+            lex = new AnalizadorLexico(par);
             par.run(lex);
             System.out.println("Fin de compilación");
         } catch (Exception var2) {

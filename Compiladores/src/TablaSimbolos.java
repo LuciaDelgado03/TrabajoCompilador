@@ -9,11 +9,13 @@ public class TablaSimbolos {
     private String archivoSimbolos;
     private static Map<String,Integer> tabla;
     private static Integer NO_ENCONTRADO = -1;
+    private Parser parser;
 
 
-    public TablaSimbolos(String archivo) {
+    public TablaSimbolos(String archivo, Parser parser) {
         this.archivoSimbolos = archivo;
         this.tabla = addTokenTXT();
+        this.parser = parser;
     }
     public Map<String,Integer> addTokenTXT(){
         Map<String, Integer> map = new HashMap<>();
@@ -88,8 +90,17 @@ public class TablaSimbolos {
         } else if (caracter.equals("@")){
             return obtenerToken("@");
         } else if (caracter.matches("^^\\d+$")) {
+            System.out.println("llegue tabla");
             int digito = obtenerToken("DIGITO");
-            this.addToken(caracter, digito);
+            //this.addToken(caracter, digito);
+            String val = caracter.toString();
+            //System.out.println(val);
+            Long numero =  Long.parseLong(val);
+            //System.out.println(numero);
+            ParserVal yyval= new ParserVal(numero);
+            //System.out.println(yyval.lval);
+            parser.val_push(yyval);
+            System.out.println("Valor almacenado en ParserVal: " + yyval.lval);
             return digito;
         } else if (caracter.equals("<=")){
             return obtenerToken("MENOR_IGUAL");
@@ -112,7 +123,14 @@ public class TablaSimbolos {
             int cadenaMultilinea = obtenerToken("CML");
             this.addToken(caracter,cadenaMultilinea);
             return cadenaMultilinea;
+        } else if (caracter.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")){
+            int identificador = obtenerToken("DOUBLE");
+            this.addToken(caracter, identificador);
+            return identificador;
         }
+        //caracter.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")
+
+
         return NO_ENCONTRADO;
 
     }

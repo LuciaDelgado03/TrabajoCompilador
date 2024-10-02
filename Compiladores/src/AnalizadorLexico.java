@@ -9,10 +9,12 @@ public class AnalizadorLexico {
     public TablaSimbolos tablaSimbolos;
     private int[][] matrizTransicion;
     private int[][] matrizSemantica;
+    private Parser parser;
 
-    public AnalizadorLexico() {
+    public AnalizadorLexico(Parser par) {
         String Path = "out/production/Compiladores/TablaSimbolos.txt";
-        TablaSimbolos TS = new TablaSimbolos(Path);
+        this.parser = par;
+        TablaSimbolos TS = new TablaSimbolos(Path, parser);
         this.tablaSimbolos = TS;
         String archEjecutable = "out/production/Compiladores/Ejecutable.txt";
         this.lector = new LectorDeTexto(archEjecutable);
@@ -20,6 +22,7 @@ public class AnalizadorLexico {
         String matrizAccionesSemanticas = "out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
         this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
+
     }
 
     public int asignarValorChar(char caracter) {
@@ -39,7 +42,7 @@ public class AnalizadorLexico {
             case '>':
             case '<':
                 return 2;
-            case '[':
+            case '{':
                 return 3;
             case '#':
                 return 4;
@@ -47,7 +50,7 @@ public class AnalizadorLexico {
                 return 5;
             case '=':
                 return 6;
-            case ']':
+            case '}':
                 return 7;
             case ' ':
             case '\t':
@@ -162,7 +165,7 @@ public class AnalizadorLexico {
             caracter = lector.nuevoCaracter();
 
             int valorChar = asignarValorChar(caracter);
-
+            //System.out.println(valorChar);
             //consulta la tabla de transicion para saber a que estado movernos
             estado = matrizTransicion[estado][valorChar];
 

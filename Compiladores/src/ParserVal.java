@@ -69,6 +69,11 @@ public ParserVal(Object val)
 {
   obj=val;
 }
+public ParserVal(Long val)
+  {
+    lval=val;
+  }
+
 }//end class
 
 //#############################################

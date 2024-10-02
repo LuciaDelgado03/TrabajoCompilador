@@ -1,7 +1,8 @@
 parte1
 BEGIN
     LONGINT J;
-    ## Dentro del rango
+    ##comentario mal
+    ##Dentro del rango
     J := 2147483647;
     J := -2147483648;
 
@@ -9,7 +10,7 @@ BEGIN
     J := 2147483648;
     J := -2147483649;
 
-    DOUBLE D;
+    OUTF {DOUBLE D;
     ## Dentro del rango
     D := 2.2250738585072014e-308;
     D := 1.7976931348623157e+308;
@@ -20,7 +21,7 @@ BEGIN
     D := 2.2250738585072015e-308;
     D := 1.7976931348623158e+308;
     D := -1.7976931348623158e+308;
-    D := -2.2250738585072015e-308;
+    D := -2.2250738585072015e-308;};
 
     LONGINT HEX;
     ## Dentro del rango

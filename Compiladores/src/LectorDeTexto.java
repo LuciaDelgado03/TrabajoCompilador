@@ -56,7 +56,7 @@ public class LectorDeTexto {
             if (this.hayLineas()) {
                 this.getNuevaLinea();
                 this.columna = 0;
-                return '\t';
+                return '\n';
             } else {
                 System.out.println("fin de archivo");
                 return '?'; //caracter de fin
