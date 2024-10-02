@@ -288,7 +288,7 @@ public abstract class AccionesSemantica {
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //verificar el rango del hexadecimal y retroceder
             // Convertir StringBuilder a String
-            String numeroEnHexadecimal = cadena.toString();
+            /*String numeroEnHexadecimal = cadena.toString();
 
             try {
                 // Verificar si es un número negativo
@@ -311,6 +311,8 @@ public abstract class AccionesSemantica {
                 System.out.println("ERROR: El número hexadecimal no es válido en la línea: " + lector.getNroLinea()
                         + " en la columna: " + lector.getColumna());
             }
+
+             */
 
             // Retroceder un carácter
             if(!caracter.equals('?')) {

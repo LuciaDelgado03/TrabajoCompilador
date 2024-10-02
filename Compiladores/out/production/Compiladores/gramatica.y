@@ -102,22 +102,87 @@ termino						: termino "*" factor	/*{$$ = $1 * $3;}*/
 							;
 
 factor						: ID	/*{$$ = $1;}*/
-							| DIGITO	{if ($1 > 2147483647) {
-                                            yyerror("El número está fuera del rango permitido para un longint positivo.");
-                                         } else {
-                                         $$ = $1;
-                                         }
-                                         }
-							| "-" DIGITO	{if ($2 > 2147483648) {
-                                                yyerror("El número está fuera del rango permitido para un longint negativo.");
-                                             } else {
-                                                $$ = -$2;
-                                             }}
+							| DIGITO	{
+                                              ParserVal valor = val_peek(1);
+                                              System.out.println("llegue para LOGNINT positivo" + valor.lval);
+                                              Long numero = valor.lval;
+                                              if (numero > 2147483647) {
+                                                yyerror("El número está fuera del rango permitido para un longint positivo.");
+                                              }
+                                              else{
+                                                valor.ival = numero.intValue();
+                                                lector.tablaSimbolos.addToken(numero.toString(),272);
+                                              }
+                                        }
+							| "-" DIGITO	{
+                                                  ParserVal valor = val_peek(1);
+                                                  System.out.println("llegue para LONGINT negativo " + valor.lval);
+                                                  Long numero = valor.lval;
+                                                  numero = -numero;
+                                                  int max = -2147483648;
+                                                  if (numero < -2147483648) {
+                                                    yyerror("El número está fuera del rango permitido para un longint negativo.");
+                                                  } else{
+                                                    valor.ival = numero.intValue();
+                                                    lector.tablaSimbolos.addToken(numero.toString(),272);
+                                                  }
+                                             }
 
-							| HEXA	/*{$$ = $1;}*/
-							| "-" HEXA	/*{$$ = -$2;}*/
+							| HEXA	{
+                                      ParserVal valor = val_peek(1);
+                                      System.out.println("llegue para LOGNINT positivo" + valor.lval);
+                                      Long numero = valor.lval;
+                                      if (numero > 0x7FFFFFFF) {
+                                        yyerror("El número está fuera del rango permitido para un HEXA positivo.");
+                                      }
+                                      else{
+                                        valor.ival = numero.intValue();
+                                        lector.tablaSimbolos.addToken(numero.toString(),273);
+                                      }
+                                                                            }
+							| "-" HEXA	{
+                                          ParserVal valor = val_peek(1);
+                                          System.out.println("llegue para LONGINT negativo " + valor.lval);
+                                          Long numero = valor.lval;
+                                          numero = -numero;
+                                          int max = -2147483648;
+                                          if (numero < -2147483648) {
+                                            yyerror("El número está fuera del rango permitido para un longint negativo.");
+                                          } else{
+                                            valor.ival = numero.intValue();
+                                            lector.tablaSimbolos.addToken(numero.toString(),273);
+                                          }
+                                     }
 							| invocacion_funcion	/*{$$ = $1;}*/
-
+							| DOUBLE {
+							            ParserVal valor = val_peek(1);
+                                        System.out.println("llegue para DOUBLE positivo" + valor.lval);
+                                        BigDecimal numero = valor.lval;
+                                        BigDecimal min = 2.2250738585072014e-308;
+                                        BigDecimal max = 1.7976931348623157e+308;;
+                                        if (numero > max || (numero < min && numero != 0.0)) {
+                                            yyerror("El número está fuera del rango permitido para un double positivo.");
+                                        }
+                                        else{
+                                            valor.ival = numero.intValue();
+                                            lector.tablaSimbolos.addToken(numero.toString(),275);
+                                            }
+                                      }
+							| "-" DOUBLE {
+                                              ParserVal valor = val_peek(1);
+                                              System.out.println("llegue para DOUBLE negativo " + valor.lval);
+                                              BigDecimal numero = valor.lval;
+                                              numero = -numero;
+                                              BigDecimal min = -1.7976931348623157e+308;
+                                              BigDecimal max = -2.2250738585072014e-308;
+                                              if (numero > max || (numero < min) {
+                                                yyerror("El número está fuera del rango permitido para un longint negativo.");
+                                              } else{
+                                                valor.ival = numero.intValue();
+                                                lector.tablaSimbolos.addToken(numero.toString(),275);
+                                              }
+                                         }
+							;
 
 lista_variables				: lista_variables "," ID
 							| lista_variables "," ID "." ID
@@ -145,3 +210,9 @@ comparador 					 	: "<"
 							| "DISTINTO"
 							;
 %%
+
+
+void yyerror(String mensaje) {
+  // funcion utilizada para imprimir errores que produce yacc
+  System.out.println("Error yacc: " + mensaje);
+}

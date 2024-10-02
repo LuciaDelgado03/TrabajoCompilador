@@ -76,7 +76,14 @@ public class TablaSimbolos {
             return valor;
         } else if (caracter.matches("^0x[a-zA-Z0-9]+$")) {
             int hexadecimal = obtenerToken("HEXA");
-            this.addToken(caracter, hexadecimal);
+            String val = caracter.toString();
+            //System.out.println(val);
+            //System.out.println(numero);
+            ParserVal yyval= new ParserVal(val);
+            //System.out.println(yyval.lval);
+            parser.val_push(yyval);
+            System.out.println("Valor almacenado en ParserVal: " + yyval.sval);
+            //this.addToken(caracter, hexadecimal);
             return hexadecimal;
         } else if (caracter.equals("@")){
             return obtenerToken("@");
@@ -100,7 +107,7 @@ public class TablaSimbolos {
             int identificador = obtenerToken("ETIQUETA");
             this.addToken(caracter, identificador);
             return identificador;
-        } else if (caracter.matches("[\\s\\S]*")){
+        } else if (caracter.matches("\\{[\\s\\S]*\\}")){
             caracter = caracter.replaceAll("\\n", "");
             int cadenaMultilinea = obtenerToken("CML");
             this.addToken(caracter,cadenaMultilinea);

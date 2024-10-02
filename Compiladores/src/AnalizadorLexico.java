@@ -176,7 +176,7 @@ public class AnalizadorLexico {
         }
 
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
-        ParserVal yyval = new ParserVal(cadena.toString());
+        //ParserVal yylval = new ParserVal(cadena.toString());
         System.out.println("cadena: " + cadena.toString()+" Token: "+token);
         System.out.println("");
 

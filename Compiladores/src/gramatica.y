@@ -137,6 +137,7 @@ comparador 					 	: "<"
 %%
 
 
-
-
-
+void yyerror(String mensaje) {
+  // funcion utilizada para imprimir errores que produce yacc
+  System.out.println("Error yacc: " + mensaje);
+}
