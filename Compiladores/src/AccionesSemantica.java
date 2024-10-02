@@ -131,15 +131,7 @@ public abstract class AccionesSemantica {
             }
 
             try {
-                // Convertir la cadena a un número entero
-                int numero = Integer.parseInt(numeroEnCadena);
 
-                // Verificar si está dentro del rango de un int (-2^31 a 2^31 - 1)
-                //TODO: CREO QUE EL VERIFICAR NO ES ASI PORQUE NO TENEMOS EN CUENTA EL SIMBOLO A ESTA ALTURA, NUNCA VA A SER NEGATIVO
-                if (numero < Integer.MIN_VALUE || numero > Integer.MAX_VALUE) {
-                    System.out.println("ERROR: Supera el limite indicado para los longint en la linea: "
-                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
-                }
             } catch (NumberFormatException e) {
                 // Capturar la excepción si la conversión no es válida
                 System.out.println("ERROR: El número no es válido en la linea: " + lector.getNroLinea()
@@ -268,6 +260,7 @@ public abstract class AccionesSemantica {
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
+
         }
     }
 

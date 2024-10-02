@@ -24,8 +24,8 @@ BEGIN
 
     LONGINT HEX;
     ## Dentro del rango
-    HEX:= -80000000;
-    HEX := 0x7FFFFFFF
+    HEX:= -0x80000000;
+    HEX := 0x7FFFFFFF;
 
     ##Fuera de rango
     HEX := -0x80000001;
@@ -35,7 +35,7 @@ BEGIN
     DOUBLE P;
     P := 1.0;
     P := 1;
-    P := .5;
+    P := 0.5;
     P := 0.0d–5;
     P := 1.2d5;
 
@@ -47,6 +47,7 @@ BEGIN
     # comentario mal
     {soy una
     cadena multilinea}
+
 
 END
 

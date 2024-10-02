@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 public class AnalizadorLexico {
     private LectorDeTexto lector;
-    private TablaSimbolos tablaSimbolos;
+    public TablaSimbolos tablaSimbolos;
     private int[][] matrizTransicion;
     private int[][] matrizSemantica;
 
