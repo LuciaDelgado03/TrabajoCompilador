@@ -29,7 +29,7 @@ import java.io.*;
 
 public class Parser
 {
-
+AnalizadorLexico lector;
 boolean yydebug;        //do I want debug output?
 int yynerrs;            //number of errors so far
 int yyerrflag;          //was there an error?
@@ -459,7 +459,10 @@ int yym;       //
 int yystate;   //current parsing state from state table
 String yys;    //current token string
 
-
+void yyerror(String mensaje) {
+  // funcion utilizada para imprimir errores que produce yacc
+  System.out.println("Error yacc: " + mensaje);
+}
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
@@ -590,27 +593,27 @@ boolean doaction;
 //########## USER-SUPPLIED ACTIONS ##########
 case 2:
 //#line 20 "gramatica.y"
-{agregarError("falta un begin");}
+//{agregarError("falta un begin");}
 break;
 case 21:
 //#line 57 "gramatica.y"
-{System.out.println(recuperar_lexema(val_peek(2)));}
+//{System.out.println(recuperar_lexema(val_peek(2)));}
 break;
 case 34:
 //#line 93 "gramatica.y"
-{yyval = val_peek(2).ival + val_peek(0).ival;}
+//{yyval = val_peek(2).ival + val_peek(0).ival;}
 break;
 case 35:
 //#line 94 "gramatica.y"
-{yyval = val_peek(2) - val_peek(0);}
+//{yyval = val_peek(2) - val_peek(0);}
 break;
 case 38:
 //#line 99 "gramatica.y"
-{yyval = val_peek(2) * val_peek(0);}
+//{yyval = val_peek(2) * val_peek(0);}
 break;
 case 39:
 //#line 100 "gramatica.y"
-{yyval = val_peek(2) / val_peek(0);}
+//{yyval = val_peek(2) / val_peek(0);}
 break;
 case 41:
 //#line 104 "gramatica.y"
@@ -622,7 +625,7 @@ case 42:
 break;
 case 43:
 //#line 106 "gramatica.y"
-{yyval = -val_peek(0);}
+//{yyval = -val_peek(0);}
 break;
 case 44:
 //#line 107 "gramatica.y"
@@ -630,7 +633,7 @@ case 44:
 break;
 case 45:
 //#line 108 "gramatica.y"
-{yyval = -val_peek(0);}
+//{yyval = -val_peek(0);}
 break;
 case 46:
 //#line 109 "gramatica.y"
@@ -653,7 +656,7 @@ break;
       val_push(yyval);           //also save the semantic value of parsing
       if (yychar < 0)            //we want another character?
         {
-        yychar = yylex();        //get next character
+        yychar = lector.yylex();        //get next character
         if (yychar<0) yychar=0;  //clean, if necessary
         if (yydebug)
           yylexdebug(yystate,yychar);
@@ -686,8 +689,9 @@ break;
  * object in the background.  It is intended for extending Thread
  * or implementing Runnable.  Turn off with -Jnorun .
  */
-public void run()
+public void run(AnalizadorLexico lex)
 {
+  this.lector = lex;
   yyparse();
 }
 //## end of method run() ########################################
