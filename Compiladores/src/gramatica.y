@@ -108,7 +108,7 @@ parametro					: tipo ID
                             /*| ID {System.out.println("ERROR, falta declaracion de TIPO");}*/
 							| tipo {System.out.println("ERROR, falta ID del parametro");}
 							;
-							;
+
 
 invocacion_funcion          : ID "(" expresion ")"  {if ($1.sval.equals(null)){ System.out.println("No existe una funcion con ese nombre");}}
                             //| "(" expresion ")" {System.out.println("ERROR, falta ID en la invocacion");} //TODO: algunos casos este choca con el de cuerpo_funcion
@@ -162,31 +162,33 @@ termino						: termino "*" factor
 							| termino "*" "*" factor {System.out.println("ERROR, hay 2 operadores");}
 							| termino "*" "/" factor {System.out.println("ERROR, hay 2 operadores");}
 							| termino "/" "/" factor {System.out.println("ERROR, hay 2 operadores");}
-							| termino "/" "/" factor {System.out.println("ERROR, hay 2 operadores");}
+							| termino "/" "*" factor {System.out.println("ERROR, hay 2 operadores");}
 							| termino "/" {System.out.println("ERROR, falta de operando");}
 							| termino "*" {System.out.println("ERROR, falta de operando");}
 							| "/" factor {System.out.println("ERROR, falta de operando");}
 							| "*" factor {System.out.println("ERROR, falta de operando");}
-							| factor
+							| factor {$$= $1}
+							//| termino  factor	{System.out.println("ERROR, falta operador");}
 							;
 
 factor						: invocacion_funcion	//{$$ = $1;}
                             |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;  System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
                             | LONGINT {$$ = $1;
-                                      System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);
-                                      if ($1.lval > 2147483648L){
+                                      Long valor = Long.parseLong($1.sval);
+                                      if (valor == 2147483648L){
                                         yyerror("El número está fuera del rango permitido para un longint positivo.");
                                       }
                                       lector.tablaSimbolos.addToken($1,token,this.LONGINT);
                                     }
-                            | "-" LONGINT	{
-                                              $$ = $1;
-                                            System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);
-                                            lector.tablaSimbolos.addToken($1,token,this.LONGINT);
+                           | "-" LONGINT	{
+                                             $$ = -$2; //TODO: posible error
+                                             String lexema = '-'+ $2;
+
+                                            lector.tablaSimbolos.addToken(lexema,token,this.LONGINT);
                                              }
 
-                            | HEXA	{
-                                      ParserVal valor = val_peek(1);
+                           | HEXA	{
+                                      /*ParserVal valor = val_peek(1);
                                       System.out.println("llegue para LOGNINT positivo" + valor.lval);
                                       Long numero = valor.lval;
                                       if (numero > 0x7FFFFFFF) {
@@ -195,9 +197,9 @@ factor						: invocacion_funcion	//{$$ = $1;}
                                       else{
                                         valor.ival = numero.intValue();
                                         lector.tablaSimbolos.addToken(numero.toString(),273);
-                                      }
+                                     } */
                                                                             }
-                            | "-" HEXA	{
+                           | "-" HEXA	{/*
                                           ParserVal valor = val_peek(1);
                                           System.out.println("llegue para LONGINT negativo " + valor.lval);
                                           Long numero = valor.lval;
