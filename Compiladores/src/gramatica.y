@@ -1,19 +1,20 @@
 %{
 
 
-//import accion_semantica.AccionSemantica;
 
 import java.io.*;
 %}
         //declaracion de tokens a recibir del Analizador Lexico
 %token IF THEN ELSE BEGIN END END_IF OUTF TYPEDEF FUN RET STRING REPEAT WHILE GOTO ID LONGINT HEXA CML DOUBLE TOD STRUCT ASIGNACION DISTINTO MENOR_IGUAL MAYOR_IGUAL OUTF ETIQUETA
 
-%left '+' '-'
-%left '*' '/'
+%left "+" "-"
+%left "*" "/"
+%left '.'
 %left ASIGNACION
 %nonassoc LOWER_THAN_ELSE
 %nonassoc ELSE
 %start prog
+
 
 %%
 prog						: ID BEGIN cuerpo END {System.out.println($1);}
@@ -72,11 +73,10 @@ sentencia_ejecucion			: asignacion
 					 		| condicion_if
 							| sentencia_print
 							| REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";" {System.out.println("Declaracion REPEAT-WHILE");}
-                            /*| bloque_sentencia_ejecutable WHILE "(" condicion ")" ";"  {System.out.println("ERROR,falta palabra REPEAT");} ESTA GENERA CONFLICTO  */
+                            //| bloque_sentencia_ejecutable WHILE "(" condicion ")" ";"  {System.out.println("ERROR,falta palabra REPEAT");}
                             | REPEAT bloque_sentencia_ejecutable  "(" condicion ")" ";" {System.out.println("ERROR,falta palabra WHILE");}
                             | REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")"  {System.out.println("ERROR,falta palabra ';' al final de la declaracion ");}
                             | REPEAT bloque_sentencia_ejecutable WHILE "(" ")" ";" {System.out.println("ERROR,falta falta la condicion del WHILE ");}
-                            | REPEAT bloque_sentencia_ejecutable WHILE condicion ";" {System.out.println("ERROR,falta '()' en la declaracion de la condicion ");}
                             | GOTO ETIQUETA ";" {System.out.println("Declaracion de GOTO ");}
                             | GOTO ETIQUETA  {System.out.println("ERROR, Falta ';' al final de la declaracion  ");}
                             | GOTO  ";" {System.out.println("ERROR,falta la ETIQUETA  ");}
@@ -86,10 +86,10 @@ sentencia_ejecucion			: asignacion
 sentencia_print				: OUTF "(" CML ")" ";" {System.out.println($2);}
 							| OUTF "(" expresion ")" ";"
 							| OUTF "(" ")" ";"      {System.out.println("Falta parámetro en sentencia OUTF");}
-							| OUTF "(" expresion ")" {System.out.println("Falta ";" en la sentencia OUTF");}
-							| OUTF "(" CML ")" {System.out.println("Falta ";" en la sentencia OUTF");}
-							| OUTF CML {System.out.println("Faltan los parentecis en la sentencia OUTF");}
-							| OUTF expresion {System.out.println("Faltan los parentecis en la sentencia OUTF");}
+							| OUTF "(" expresion ")" {System.out.println("Falta ';' en la sentencia OUTF");}
+							| OUTF "(" CML ")" {System.out.println("Falta ';' en la sentencia OUTF");}
+							| OUTF CML ";" {System.out.println("Faltan los parentesis en la sentencia OUTF");}
+							| OUTF expresion ";"{System.out.println("Faltan los parentesis en la sentencia OUTF");}
 							;
 
 cuerpo_funcion              : RET "(" expresion ")" ";" {System.out.println("Declaracion del Cuerpo de la funcion");}
@@ -111,13 +111,13 @@ parametro					: tipo ID
 							;
 
 invocacion_funcion          : ID "(" expresion ")"  {if ($1.sval.equals(null)){ System.out.println("No existe una funcion con ese nombre");}}
-                            /*| "(" expresion ")" {System.out.println("ERROR, falta ID en la invocacion");}  SHIFT REDUCE CONFLICT*/
-                            | ID "(" ")" {System.out.println("ERROR, falta parametro en la invocacion de la funcion");}
+                            //| "(" expresion ")" {System.out.println("ERROR, falta ID en la invocacion");} //TODO: algunos casos este choca con el de cuerpo_funcion
+                            /*| ID "(" ")" {System.out.println("ERROR, falta parametro en la invocacion de la funcion");}*/
                             ;
 
 bloque_sentencia_ejecutable 				: BEGIN bloque_sentencia_ejecutable sentencia_ejecucion END
-					  		| BEGIN sentencia_ejecucion END
-					  		;
+					  		                | BEGIN sentencia_ejecucion END
+					  		                ;
 
 condicion_if 						: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" /*{System.out.println("Declaracion de IF");}*/
                                     | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"  /*{System.out.println(Declaracion de IF,ELSE );}*/
@@ -131,41 +131,34 @@ condicion_if 						: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_I
                                     | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE  END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el ELSE");}
                                     | IF "(" condicion ")" THEN ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el IF");}
                                     | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion");}
-                                    | IF condicion THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis "()"");}
-                                    | IF "(" condicion  THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis ")"");}
-                                    | IF  condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis "("");}
-                                    | IF "(" condicion  THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis ")" ");}
-                                    | IF condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis "(" ");}
-                                    | IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta un parentesis "()" ");}
-
-                                    %prec LOWER_THAN_ELSE;
+                                    %prec LOWER_THAN_ELSE
+                                    ;
 
 condicion						: "(" expresion comparador expresion ")"
                                 | "("  ")" {System.out.println("ERROR,falta de comparador en condicion");}
+                                //| "(" expresion comparador expresion {System.out.println("ERROR,falta de ')' ");} //TODO: problemas ver como solucionar
+                                |  expresion comparador expresion ")" {System.out.println("ERROR,falta de '(' ");}
 							    ;
 
 asignacion : lista_variables ASIGNACION lista_expresiones ';'{$1.ival = $2.ival;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
 
-expresion					: expresion "+" termino		{$$ = $1.ival + $3.ival;}
-                            | expresion "-" termino		/*{$$ = $1 - $3;}*/
+
+expresion					: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
+                            | expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
                             | expresion "+" "+" termino {System.out.println("ERROR, hay 2 operadores");}
-                            | expresion "+" "-" termino {System.out.println("ERROR, hay 2 operadores");}
-                            | expresion "-" "-" termino {System.out.println("ERROR, hay 2 operadores");}
                             | expresion "-" "+" termino {System.out.println("ERROR, hay 2 operadores");}
-                            | expresion  termino		{System.out.println("ERROR, falta de operador");}
+                            //| expresion  termino		{System.out.println("ERROR, falta de operador");}
                             | "+" termino {System.out.println("ERROR, falta de operando");}
                             | expresion "+" {System.out.println("ERROR, falta de operando");}
-                            | "-" termino {System.out.println("ERROR, falta de operando");}
                             | expresion "-" {System.out.println("ERROR, falta de operando");}
                             | TOD "(" expresion ")" {System.out.println("Declaracion de TOD");}
-                            | "(" expresion ")" {System.out.println("ERROR, falta declaracion de TOD");}
                             | TOD "("  ")" {System.out.println("ERROR, falta de expresion");}
-                            | termino
+                            | termino {$$.ival = $1.ival;}
                             ;
 
-termino						: termino "*" factor	/*{$$ = $1 * $3;}*/
-							| termino "/" factor	/*{$$ = $1 / $3;}*/
-							| termino factor {System.out.println("ERROR, falta de operando");}
+
+termino						: termino "*" factor
+							| termino "/" factor
 							| termino "*" "*" factor {System.out.println("ERROR, hay 2 operadores");}
 							| termino "*" "/" factor {System.out.println("ERROR, hay 2 operadores");}
 							| termino "/" "/" factor {System.out.println("ERROR, hay 2 operadores");}
@@ -177,8 +170,8 @@ termino						: termino "*" factor	/*{$$ = $1 * $3;}*/
 							| factor
 							;
 
-factor						: ID	{$$ = $1;
-                                    System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
+factor						: invocacion_funcion	//{$$ = $1;}
+                            |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;  System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
                             | LONGINT {$$ = $1;
                                       System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);
                                       if ($1.lval > 2147483648L){
@@ -215,9 +208,10 @@ factor						: ID	{$$ = $1;
                                           } else{
                                             valor.ival = numero.intValue();
                                             lector.tablaSimbolos.addToken(numero.toString(),273);
-                                          }
+                                          }*/
                                      }
-                            | DOUBLE {/*
+
+                           | DOUBLE {/*
                                         ParserVal valor = val_peek(1);
                                         System.out.println("llegue para DOUBLE positivo" + valor.lval);
                                         BigDecimal numero = valor.lval;
@@ -231,7 +225,7 @@ factor						: ID	{$$ = $1;
                                             lector.tablaSimbolos.addToken(numero.toString(),275);
                                             }
                                       */}
-                            | "-" DOUBLE {/*
+                           | "-" DOUBLE {/*
                                               ParserVal valor = val_peek(1);
                                               System.out.println("llegue para DOUBLE negativo " + valor.lval);
                                               BigDecimal numero = valor.lval;
@@ -243,20 +237,25 @@ factor						: ID	{$$ = $1;
                                               } else{
                                                 valor.ival = numero.intValue();
                                                 lector.tablaSimbolos.addToken(numero.toString(),275);
-                                              }
-                                         */}
-                            | invocacion_funcion	/*{$$ = $1;}*/
-                            ;
+                                              }*/
+                                         }
+
+
+                           ;
 
 lista_variables				: lista_variables "," ID
-							| lista_variables "," ID "." ID
-							| lista_variables ID {System.out.println("ERROR, falta "," en la lista ");}
-							| ID "." ID
+							| lista_variables "," id_compuesta
+							//| lista_variables ID {System.out.println("ERROR, falta "," en la lista ");}
+							//| lista_variables id_compuesta {System.out.println("ERROR, falta "," en la lista ");}
+							| id_compuesta
 							| ID {System.out.println($1);}
 							;
 
-lista_expresiones			: lista_expresiones "," expresion
-                            | lista_expresiones  expresion {System.out.println("ERROR, falta de ',' en la lista");}
+id_compuesta                : ID "." ID
+                            ;
+
+lista_expresiones			: lista_expresiones ',' expresion
+                            //| lista_expresiones  expresion {System.out.println("ERROR, falta de ',' en la lista");}
 							| expresion
 							;
 
@@ -267,7 +266,8 @@ lista_tipos					: lista_tipos "," tipo
 
 tipo		 				: LONGINT
 							| DOUBLE
-							| ID  /*TODO: verificar que el use un tipo creado*/
+							| ID
+							%prec ID /*TODO: verificar que el use un tipo creado*/
 							;
 
 comparador 					: "<"
