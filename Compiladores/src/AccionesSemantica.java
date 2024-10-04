@@ -119,31 +119,22 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            /*
             // Convertir el StringBuilder a String
             String numeroEnCadena = cadena.toString();
             // Convertir la cadena a un número entero
-            int numero = Integer.parseInt(numeroEnCadena);
-
-            if (numero >= 2147483647) { //TODO: como hacemos con el negativo?
+            Long numero = Long.decode(numeroEnCadena);
+            long maxValorAbsoluto = 2147483648L;
+            if (numero > maxValorAbsoluto) { //TODO: como hacemos con el negativo?
                 System.out.println("ERROR: Supera el limite indicado para los longint en la linea: "
                         + lector.getNroLinea() + " en la columna: " + lector.getColumna());
             }
-
-            try {
-
-            } catch (NumberFormatException e) {
-                // Capturar la excepción si la conversión no es válida
-                System.out.println("ERROR: El número no es válido en la linea: " + lector.getNroLinea()
-                        + " en la columna: " + lector.getColumna());
-            }
-             */
 
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
         }
     }
+
 
     public static class AS6 extends AccionesSemantica {
         private static AS6 instancia;
@@ -268,34 +259,24 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            //verificar el rango del hexadecimal y retroceder
-            // Convertir StringBuilder a String
-            /*String numeroEnHexadecimal = cadena.toString();
-
-            try {
-                // Verificar si es un número negativo
-                int numero;
-                if (numeroEnHexadecimal.startsWith("-")) {
-                    // Si es negativo, quitar el prefijo "-0x" y convertir a entero negativo
-                    numero = Integer.parseUnsignedInt(numeroEnHexadecimal.substring(3), 16) * -1;
-                } else {
-                    // Si es positivo, quitar el prefijo "0x" y convertir a entero
-                    numero = Integer.parseUnsignedInt(numeroEnHexadecimal.substring(2), 16);
-                }
-
-                // Verificar si el número está fuera del rango permitido para un entero con signo de 32 bits
-                if (numero <= -2147483648 || numero >= 2147483647) {
-                    System.out.println("ERROR: Supera el límite indicado para los valores hexadecimales en la línea: "
-                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
-                }
-            } catch (NumberFormatException e) {
-                // El número no es válido
-                System.out.println("ERROR: El número hexadecimal no es válido en la línea: " + lector.getNroLinea()
-                        + " en la columna: " + lector.getColumna());
+            // Convertir el número hexadecimal a long
+            long valor = Long.parseLong(cadena.toString(), 16);
+            // Si el valor es mayor o igual a 0x80000000, queremos interpretarlo como un número negativo
+            if (valor >= 0x80000000L) {
+                valor -= 0x100000000L; // Restar 2^32 para obtener el valor negativo correcto
             }
-
-             */
-
+            // Obtener el valor absoluto
+            long valorAbsoluto = Math.abs(valor);
+            // Definir el valor absoluto máximo
+            long maxValorAbsoluto = 2147483648L;
+            // Comparar el valor absoluto
+            if (valorAbsoluto > maxValorAbsoluto) {
+                System.out.println("El valor absoluto es mayor que " + maxValorAbsoluto);
+            } else if (valorAbsoluto == maxValorAbsoluto) {
+                System.out.println("El valor absoluto es igual a " + maxValorAbsoluto);
+            } else {
+                System.out.println("El valor absoluto es menor que " + maxValorAbsoluto);
+            }
             // Retroceder un carácter
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();

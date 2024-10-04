@@ -10,9 +10,6 @@ public class Main {
     static AnalizadorLexico lex = null;
     static Parser par = null;
 
-    public Main() {
-    }
-
     public static void main(String[] args) {
         try {
 
