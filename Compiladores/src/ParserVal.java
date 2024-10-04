@@ -28,7 +28,7 @@ public String sval;
  * object value of this 'union'
  */
 public Object obj;
-public Long lval;
+
 //#############################################
 //## C O N S T R U C T O R S
 //#############################################
@@ -69,11 +69,6 @@ public ParserVal(Object val)
 {
   obj=val;
 }
-public ParserVal(Long val)
-  {
-    lval=val;
-  }
-
 }//end class
 
 //#############################################

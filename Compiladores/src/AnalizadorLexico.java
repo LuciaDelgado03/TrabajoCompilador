@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
 public class AnalizadorLexico {
     private LectorDeTexto lector;
     public TablaSimbolos tablaSimbolos;
@@ -14,7 +15,7 @@ public class AnalizadorLexico {
     public AnalizadorLexico(Parser par) {
         String Path = "out/production/Compiladores/TablaSimbolos.txt";
         this.parser = par;
-        TablaSimbolos TS = new TablaSimbolos(Path, parser);
+        TablaSimbolos TS = new TablaSimbolos(Path);
         this.tablaSimbolos = TS;
         String archEjecutable = "out/production/Compiladores/Ejecutable.txt";
         this.lector = new LectorDeTexto(archEjecutable);
@@ -22,7 +23,6 @@ public class AnalizadorLexico {
         String matrizAccionesSemanticas = "out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
         this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
-
     }
 
     public int asignarValorChar(char caracter) {
@@ -179,7 +179,7 @@ public class AnalizadorLexico {
         }
 
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
-        //ParserVal yylval = new ParserVal(cadena.toString());
+        parser.yylval= new ParserVal(cadena.toString());
         System.out.println("cadena: " + cadena.toString()+" Token: "+token);
         System.out.println("");
 

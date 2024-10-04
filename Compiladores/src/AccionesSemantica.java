@@ -141,7 +141,6 @@ public abstract class AccionesSemantica {
 
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
-
             }
         }
     }
@@ -165,7 +164,6 @@ public abstract class AccionesSemantica {
             System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'");
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
-
             }
         }
 
@@ -189,28 +187,19 @@ public abstract class AccionesSemantica {
             // Convertir StringBuilder a String
             String numeroEnCadena = cadena.toString();
 
-            try {
-                // Convertir la cadena a un número double
-                double numero = Double.parseDouble(numeroEnCadena);
+            // Convertir la cadena a un número double
+            double numero = Double.parseDouble(numeroEnCadena);
 
-                // Verificar si está fuera del rango permitido o es 0.0
-                //TODO: CREO QUE EL VERIFICAR NO ES ASI PORQUE NO TENEMOS EN CUENTA EL SIMBOLO A ESTA ALTURA, NUNCA VA A SER NEGATIVO
-                if (!(numero > 2.2250738585072014e-308 && numero < 1.7976931348623157e308) &&
-                        !(numero < -2.2250738585072014e-308 && numero > -1.7976931348623157e308)) {
-                    // Fuera del rango o 0.0
-                    System.out.println("ERROR: Supera el límite indicado para los valores double en la línea: "
-                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
-                }
-            } catch (NumberFormatException e) {
-                // El número no es válido
-                System.out.println("ERROR: El número no es válido en la línea: " + lector.getNroLinea()
-                        + " en la columna: " + lector.getColumna());
+            // Verificar si está fuera del rango permitido o es 0.0
+            if (!(numero > 2.2250738585072014e-308 && numero < 1.7976931348623157e308)) {
+                // Fuera del rango o 0.0
+                System.out.println("ERROR: Supera el límite indicado para los valores double en la línea: "
+                        + lector.getNroLinea() + " en la columna: " + lector.getColumna());
             }
 
             // Retroceder un carácter
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
-
             }
         }
     }

@@ -7,18 +7,16 @@ public class TablaSimbolos {
     private Integer token;
     private String atributo;
     private String archivoSimbolos;
-    private static Map<String,Integer> tabla;
+    private static Map<String,DatosTablaSimbolos> tabla;
     private static Integer NO_ENCONTRADO = -1;
-    private Parser parser;
 
 
-    public TablaSimbolos(String archivo, Parser parser) {
+    public TablaSimbolos(String archivo) {
         this.archivoSimbolos = archivo;
         this.tabla = addTokenTXT();
-        this.parser = parser;
     }
-    public Map<String,Integer> addTokenTXT(){
-        Map<String, Integer> map = new HashMap<>();
+    public Map<String,DatosTablaSimbolos> addTokenTXT(){
+        Map<String, DatosTablaSimbolos> map = new HashMap<>();
         String filePath = archivoSimbolos; // Cambia esta ruta por la ubicación correcta del archivo
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -40,9 +38,9 @@ public class TablaSimbolos {
                             // En cualquier otro caso, tomar la segunda parte como clave
                             key = parts[1].trim();
                         }
-
+                        DatosTablaSimbolos datos = new DatosTablaSimbolos(value);
                         // Agregar el par clave-valor al mapa
-                        map.put(key, value);
+                        map.put(key, datos);
                     } catch (NumberFormatException e) {
                         System.out.println("Error al convertir el valor a Integer: " + parts[0]);
                     }
@@ -59,77 +57,81 @@ public class TablaSimbolos {
     public void imprimir(){
         this.tabla.forEach((key, value) -> System.out.println(key + " : " + value));
     }
-    public void addToken(String Lexema,Integer identificador) {
-        if(!tabla.containsKey(Lexema))
-            this.tabla.put(Lexema,identificador);
+
+    public void addToken(String Lexema,Integer identificador, String tipo) {
+        if(!tabla.containsKey(Lexema)){
+            DatosTablaSimbolos datos = new DatosTablaSimbolos(identificador);
+            datos.setTipo(tipo);
+            this.tabla.put(Lexema,datos);
+        }
     }
 
     public int obtenerToken(String lexema) {
-        for (Map.Entry<String , Integer> entry : tabla.entrySet()) {
+        for (Map.Entry<String , DatosTablaSimbolos> entry : tabla.entrySet()) {
             if ((entry.getKey().equals(lexema)) || (entry.getKey().equalsIgnoreCase(lexema))) {
-                return entry.getValue();
+                return entry.getValue().getToken();
             }
         }
         return NO_ENCONTRADO;
     }
-    public int determinarTokenValor(String caracter) {
-        int valor = this.obtenerToken(caracter);
+
+
+    public int determinarTokenValor(String cadena) {
+        int valor = this.obtenerToken(cadena);
         if (valor != -1) {
             return valor;
-        } else if (caracter.matches("^0x[a-zA-Z0-9]+$")) {
+
+        } else if (cadena.matches("^0x[a-zA-Z0-9]+$")) {
             int hexadecimal = obtenerToken("HEXA");
-            String val = caracter.toString();
-            //System.out.println(val);
-            //System.out.println(numero);
-            ParserVal yyval= new ParserVal(val);
-            //System.out.println(yyval.lval);
-            parser.val_push(yyval);
-            System.out.println("Valor almacenado en ParserVal: " + yyval.sval);
-            //this.addToken(caracter, hexadecimal);
+            //addToken(cadena, null, "LONGINT");
+
             return hexadecimal;
-        } else if (caracter.equals("@")){
+
+        } else if (cadena.equals("@")){
             return obtenerToken("@");
-        } else if (caracter.matches("^^\\d+$")) {
-            System.out.println("llegue tabla");
-            int digito = obtenerToken("DIGITO");
-            //this.addToken(caracter, digito);
-            String val = caracter.toString();
-            //System.out.println(val);
-            Long numero =  Long.parseLong(val);
+
+        } else if (cadena.matches("^^\\d+$")) {
+            int digito = obtenerToken("LONGINT");
+            //addToken(cadena, null, "LONGINT");
+            //String val = caracter.toString();
+            //int numero =  Integer.parseInt(val);
             //System.out.println(numero);
-            ParserVal yyval= new ParserVal(numero);
-            //System.out.println(yyval.lval);
-            parser.val_push(yyval);
-            System.out.println("Valor almacenado en ParserVal: " + yyval.lval);
+            //System.out.println("b");
             return digito;
-        } else if (caracter.equals("<=")){
+
+        } else if (cadena.equals("<=")){
             return obtenerToken("MENOR_IGUAL");
-        } else if (caracter.equals(">=")){
+
+        } else if (cadena.equals(">=")){
             return obtenerToken("MAYOR_IGUAL");
-        } else if (caracter.equals("!=")){
+
+        } else if (cadena.equals("!=")){
             return obtenerToken("DISTINTO");
-        } else if (caracter.equals(":=")){
+
+        } else if (cadena.equals(":=")){
             return obtenerToken("ASIGNACION");
-        } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*$")) {
+
+        } else if (cadena.matches("^[a-zA-Z][a-zA-Z0-9_]*$")) {
             int identificador = obtenerToken("ID");
-            this.addToken(caracter, identificador);
+            this.addToken(cadena, identificador, null);
             return identificador;
-        } else if (caracter.matches("^[a-zA-Z][a-zA-Z0-9_]*@$")){
-            int identificador = obtenerToken("ETIQUETA");
-            this.addToken(caracter, identificador);
-            return identificador;
-        } else if (caracter.matches("\\{[\\s\\S]*\\}")){
-            caracter = caracter.replaceAll("\\n", "");
+
+        } else if (cadena.matches("^[a-zA-Z][a-zA-Z0-9_]*@$")){
+            int etiqueta = obtenerToken("ETIQUETA");
+            this.addToken(cadena, etiqueta, null);
+            return etiqueta;
+
+        } else if (cadena.matches("\\{[\\s\\S]*\\}")){
+            cadena = cadena.replaceAll("\\n", "");
             int cadenaMultilinea = obtenerToken("CML");
-            this.addToken(caracter,cadenaMultilinea);
+            this.addToken(cadena,cadenaMultilinea, null);
             return cadenaMultilinea;
-        } else if (caracter.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")){
+
+        } else if (cadena.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")){
             int identificador = obtenerToken("DOUBLE");
-            this.addToken(caracter, identificador);
+            //this.addToken(cadena, null, "DOUBLE");
             return identificador;
         }
-        //caracter.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")
-
 
         return NO_ENCONTRADO;
 
