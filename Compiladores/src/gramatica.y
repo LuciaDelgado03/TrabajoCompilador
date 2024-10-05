@@ -167,7 +167,7 @@ termino						: termino "*" factor
 							| termino "*" {System.out.println("ERROR, falta de operando");}
 							| "/" factor {System.out.println("ERROR, falta de operando");}
 							| "*" factor {System.out.println("ERROR, falta de operando");}
-							| factor {$$= $1}
+							| factor {$$= $1;}
 							//| termino  factor	{System.out.println("ERROR, falta operador");}
 							;
 

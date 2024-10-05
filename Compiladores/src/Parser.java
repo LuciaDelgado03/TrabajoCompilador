@@ -1204,7 +1204,7 @@ case 108:
 break;
 case 109:
 //#line 170 "gramatica.y"
-{yyval= val_peek(0)}
+{yyval= val_peek(0);}
 break;
 case 111:
 //#line 175 "gramatica.y"
