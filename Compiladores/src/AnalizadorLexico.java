@@ -27,7 +27,7 @@ public class AnalizadorLexico {
 
     public int asignarValorChar(char caracter) {
         switch (caracter) {
-            case '+':
+
             case '*':
             case '/':
             case '(':
@@ -93,6 +93,7 @@ public class AnalizadorLexico {
                 return 17;
             case '–':
             case '-':
+            case '+':
                 return 18;
             default:
                 if (Character.isLetter(caracter)) {
@@ -185,7 +186,7 @@ public class AnalizadorLexico {
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
         parser.yylval= new ParserVal(cadena.toString());
         System.out.println("cadena: " + cadena.toString()+" Token: "+token);
-        System.out.println("");
+        //System.out.println("");
 
         return token;
     }
