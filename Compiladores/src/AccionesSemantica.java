@@ -175,25 +175,24 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            // Convertir StringBuilder a String
-            String numeroEnCadena = cadena.toString();
+            double LIMITE_INFERIOR = 2.2250738585072014e-308;
+            double LIMITE_SUPERIOR = 1.7976931348623157e+308;
+            try {
+                double numero = Double.parseDouble(cadena.toString());
+                if(Math.abs(numero) > LIMITE_SUPERIOR){
+                    System.out.println("ERROR: Supera el limite indicado para los DOUBLE en la linea: "
+                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                }
+            } catch (NumberFormatException e) {
 
-            // Convertir la cadena a un número double
-            double numero = Double.parseDouble(numeroEnCadena);
-
-            // Verificar si está fuera del rango permitido o es 0.0
-            if (!(numero > 2.2250738585072014e-308 && numero < 1.7976931348623157e308)) {
-                // Fuera del rango o 0.0
-                System.out.println("ERROR: Supera el límite indicado para los valores double en la línea: "
-                        + lector.getNroLinea() + " en la columna: " + lector.getColumna());
             }
-
             // Retroceder un carácter
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
         }
     }
+
 
     public static class AS8 extends AccionesSemantica {
         private static AS8 instancia;
@@ -260,31 +259,31 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             // Convertir el número hexadecimal a long
-            long valor = Long.parseLong(cadena.toString(), 16);
-            // Si el valor es mayor o igual a 0x80000000, queremos interpretarlo como un número negativo
-            if (valor >= 0x80000000L) {
-                valor -= 0x100000000L; // Restar 2^32 para obtener el valor negativo correcto
+            String hexa = cadena.toString();
+            if (hexa.startsWith("0x")) {
+                hexa = hexa.substring(2);
             }
-            // Obtener el valor absoluto
-            long valorAbsoluto = Math.abs(valor);
-            // Definir el valor absoluto máximo
-            long maxValorAbsoluto = 2147483648L;
-            // Comparar el valor absoluto
-            if (valorAbsoluto > maxValorAbsoluto) {
-                System.out.println("El valor absoluto es mayor que " + maxValorAbsoluto);
-            } else if (valorAbsoluto == maxValorAbsoluto) {
-                System.out.println("El valor absoluto es igual a " + maxValorAbsoluto);
-            } else {
-                System.out.println("El valor absoluto es menor que " + maxValorAbsoluto);
-            }
-            // Retroceder un carácter
-            if(!caracter.equals('?')) {
-                lector.retrocederCaracter();
 
+            try {
+                // Convertimos el string a long especificando que la base es 16 (hexadecimal)
+                long num = Long.parseLong(hexa, 16);
+                long maxValorAbsoluto = 2147483648L;
+                // Verificación del rango si es necesario
+                if (num > maxValorAbsoluto) {
+                    System.out.println("ERROR: Supera el limite indicado para los HEXA en la linea: "
+                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Formato de número inválido.");
+                // Retroceder un carácter
+
+            }
+            if (!caracter.equals('?')) {
+                lector.retrocederCaracter();
             }
         }
-    }
 
+    }
 }
 
 

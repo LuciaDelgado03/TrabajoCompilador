@@ -13,14 +13,14 @@ public class AnalizadorLexico {
     private Parser parser;
 
     public AnalizadorLexico(Parser par) {
-        String Path = "out/production/Compiladores/TablaSimbolos.txt";
+        String Path = "Compiladores/out/production/Compiladores/TablaSimbolos.txt";
         this.parser = par;
         TablaSimbolos TS = new TablaSimbolos(Path);
         this.tablaSimbolos = TS;
-        String archEjecutable = "out/production/Compiladores/Ejecutable.txt";
+        String archEjecutable = "Compiladores/out/production/Compiladores/Ejecutable.txt";
         this.lector = new LectorDeTexto(archEjecutable);
-        String matrizTransiciones = "out/production/Compiladores/matrizTransicion.txt";
-        String matrizAccionesSemanticas = "out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
+        String matrizTransiciones = "Compiladores/out/production/Compiladores/matrizTransicion.txt";
+        String matrizAccionesSemanticas = "Compiladores/out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
         this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
     }
@@ -28,7 +28,6 @@ public class AnalizadorLexico {
     public int asignarValorChar(char caracter) {
         switch (caracter) {
             case '+':
-            case '-':
             case '*':
             case '/':
             case '(':
@@ -92,9 +91,12 @@ public class AnalizadorLexico {
                 return 16;
             case '@':
                 return 17;
+            case '–':
+            case '-':
+                return 18;
             default:
                 if (Character.isLetter(caracter)) {
-                    return 18;
+                    return 19;
                 } else {
                     throw new IllegalArgumentException("Caracter no válido: " + caracter);
                 }
@@ -163,17 +165,19 @@ public class AnalizadorLexico {
         while (estado != -1){ //estado final es -1 y error es -2
             estadoAnt = estado;
             caracter = lector.nuevoCaracter();
-
+            //System.out.println("estado:" + estado);
+            //System.out.println("caracter:" + caracter);
             int valorChar = asignarValorChar(caracter);
+            //System.out.println("valor:" + valorChar);
             //System.out.println(valorChar);
             //consulta la tabla de transicion para saber a que estado movernos
             estado = matrizTransicion[estado][valorChar];
-
             if (estado == -2) {
                 estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
             }
 
             int accionSemantica = matrizSemantica[estadoAnt][valorChar];
+
             ejecutarAccionSemantica(accionSemantica, cadena, caracter);
 
         }

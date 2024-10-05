@@ -79,6 +79,7 @@ public class TablaSimbolos {
     public int determinarTokenValor(String cadena) {
         int valor = this.obtenerToken(cadena);
         if (valor != -1) {
+            System.out.println("encontrado");
             return valor;
 
         } else if (cadena.matches("^0x[a-zA-Z0-9]+$")) {
@@ -127,12 +128,12 @@ public class TablaSimbolos {
             this.addToken(cadena,cadenaMultilinea, null);
             return cadenaMultilinea;
 
-        } else if (cadena.matches("^[+-]?\\d+\\.\\d+(d[+-]?\\d+)?$")){
+        } else if (cadena.matches("^\\d+\\.\\d+(d[-–]?\\d+)?$")){
             int identificador = obtenerToken("DOUBLE");
             //this.addToken(cadena, null, "DOUBLE");
             return identificador;
         }
-
+        System.out.println("no encontrado");
         return NO_ENCONTRADO;
 
     }
