@@ -1,9 +1,11 @@
 parte1
 BEGIN
-    LONGINT J;
     ##comentario mal
     ##Dentro del rango
-    J := 2147483647;
+    OUTF ({soy una
+    cadena multilinea});
+    LONGINT j;
+    J := x;
     J := -2147483648;
 
     ##Fuera de rango
@@ -23,14 +25,14 @@ BEGIN
     D := -1.7976931348623158e+308;
     D := -2.2250738585072015e-308;};
 
-    LONGINT HEX;
+    HEXA HEX;
     ## Dentro del rango
-    HEX:= -0x80000000;
+    HEX := -0x80000000;
     HEX := 0x7FFFFFFF;
 
     ##Fuera de rango
     HEX := -0x80000001;
-    HEX:= 0x8FFFFFFF;
+    HEX := 0x8FFFFFFF;
 
     ## Parte entera con y sin parte decimal
     DOUBLE P;
