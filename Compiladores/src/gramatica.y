@@ -209,44 +209,60 @@ factor							: invocacion_funcion	//{$$ = $1;}
 							| DOUBLE 	{
                                                                              $$ = $1 ; // valor del número
                                                                              String valor = $1.sval;
-                                                                             System.out.println("llegue para DOUBLE positivo: " + valor);
-									     String valorConvertido = valor.replace("d", "E");
+                                                                             System.out.println("Llegué para DOUBLE positivo: " + valor);
+                                                                                 String valorConvertido = valor.replace("d", "E");
+                                                                                 System.out.println("Llegué para DOUBLE positivo Replace: " + valorConvertido);
 
-                                                                                 BigDecimal numero = new BigDecimal(valorConvertido);
-                                                                                 BigDecimal min = new BigDecimal("2.2250738585072014E-308");
-                                                                                 BigDecimal max = new BigDecimal("1.7976931348623157E+308");
+                                                                                 try {
+                                                                                     // Convertir la cadena a un tipo double para evitar problemas de formato con BigDecimal.
+                                                                                     double numero = Double.parseDouble(valorConvertido);
+                                                                                     double min = 2.2250738585072014E-308;
+                                                                                     double max = 1.7976931348623157E+308;
 
-                                                                                 // Comparamos el número contra los límites permitidos
-                                                                                 if ((numero.compareTo(max) > 0 || (numero.compareTo(min) < 0) && numero.compareTo(BigDecimal.ZERO) != 0)) {
-                                                                                     yyerror("El número está fuera del rango permitido para un double positivo.");
-                                                                                 } else {
-                                                                                     // Si el número está dentro del rango permitido, añade el token
-											String valorConvertido = valor.replace("E", "d");
-                                                                                	BigDecimal numero = new BigDecimal(valorConvertido);
-                                                                                     int token = this.DOUBLE;
-                                                                                     lector.tablaSimbolos.addToken(numero.toString(),token,"DOUBLE");
+                                                                                     // Comparamos el número contra los límites permitidos.
+                                                                                     if (numero > max || (numero < min && numero != 0.0)) {
+                                                                                         yyerror("El número está fuera del rango permitido para un double positivo.");
+                                                                                     } else {
+                                                                                         String valorC = valor.replace("E", "d");
+                                                                                         double numeroC = -Double.parseDouble(valorC);
+                                                                                         int token = this.DOUBLE;
+                                                                                         lector.tablaSimbolos.addToken(Double.toString(numeroC), token, "DOUBLE");
+                                                                                     }
+                                                                                 } catch (NumberFormatException e) {
+                                                                                     // Control de error en caso de que la conversión a double falle.
+                                                                                     yyerror("Formato de número inválido: " + valorConvertido);
                                                                                  }
 
                                                                          }
                            				|"-" DOUBLE
                            				{
                            				  $$ = $2;
-                           				  	String valor = $2.sval;
-                                                           	System.out.println("llegue para DOUBLE negativo: " + valor);
-								String valorConvertido = valor.replace("d", "E")
-                                                                BigDecimal numero = new BigDecimal(valorConvertido).negate();
-                                                                BigDecimal min = new BigDecimal("-1.7976931348623157E+308");
-                                                                BigDecimal max = new BigDecimal("-2.2250738585072014E-308");
+                           				  String valor = $2.sval;
+                                                          System.out.println("llegue para DOUBLE negativo: " + valor);
+                                                           String valorConvertido = valor.replace("d", "E");
 
-                                                                // Comparamos el número contra los límites permitidos
-                                                                if (numero.compareTo(max) > 0 || numero.compareTo(min) < 0) {
-                                                                    yyerror("El número está fuera del rango permitido para un double negativo.");
-                                                                } else {
-								    String valorConvertido = valor.replace("E", "d")
-								    BigDecimal numero = new BigDecimal(valorConvertido).negate();
-                                                                    int token = this.DOUBLE;
-                                                                    lector.tablaSimbolos.addToken(numero.toString(),token, "DOUBLE");
-                                                                }
+                                                              try {
+                                                                  // Convertimos el valor a double y lo negamos.
+                                                                  double numero = -Double.parseDouble(valorConvertido); // Negamos el valor.
+                                                                  double min = -1.7976931348623157E+308;
+                                                                  double max = -2.2250738585072014E-308;
+
+                                                                  // Comparamos el número contra los límites permitidos.
+                                                                  if (numero > max || numero < min) {
+                                                                      yyerror("El número está fuera del rango permitido para un double negativo.");
+                                                                  } else {
+                                                                      String valorC = valor.replace("E", "d");
+                                                                      double numeroC = -Double.parseDouble(valorC);
+                                                                      int token = this.DOUBLE;
+                                                                      lector.tablaSimbolos.addToken(Double.toString(numeroC), token, "DOUBLE");
+
+                                                                  }
+                                                              } catch (NumberFormatException e) {
+
+                                                                  // Control de error en caso de que la conversión a double falle.
+                                                                  yyerror("Formato de número inválido: " + valorConvertido);
+                                                              }
+
 
 
 							}
