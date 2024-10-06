@@ -123,7 +123,7 @@ public class TablaSimbolos {
             this.addToken(cadena,cadenaMultilinea, null);
             return cadenaMultilinea;
 
-        } else if (cadena.matches("^\\d+\\.\\d+([dD][+-]?\\d+)?$")) {
+        } else if (cadena.matches("^\\d+\\.\\d+([dD][+-–]?\\d+)?$")) {
             int identificador = obtenerToken("DOUBLE");
             return identificador;
         }

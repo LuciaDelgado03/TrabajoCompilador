@@ -114,30 +114,31 @@ invocacion_funcion          				: ID "(" expresion ")"  {if ($1.sval.equals(null
                             				/*| ID "(" ")" {System.out.println("ERROR, falta parametro en la invocacion de la funcion");}*/
                             				;
 
-bloque_sentencia_ejecutable 				: BEGIN bloque_sentencia_ejecutable sentencia_ejecucion END
-					  		| BEGIN sentencia_ejecucion END
-					  		;
+bloque_sentencia_ejecutable     : BEGIN lista_sentencias END
+					  		    ;
 
-condicion_if 						: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" /*{System.out.println("Declaracion de IF");}*/
-                                    			| IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"  /*{System.out.println(Declaracion de IF,ELSE );}*/
-                                    			| IF "(" condicion ")" bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, Falta THEN luego de la condicion");}
-                                    			| IF "(" ")"THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta de Condicion");}
-                                    			| IF THEN END_IF ";" {System.out.println("ERROR,falta el bloque ejecutable");}
-                                    			| IF THEN bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion");}
-                                    			| IF THEN bloque_sentencia_ejecutable END_IF  {System.out.println("ERROR,falta ';' al final de la declaracion");}
-                                    			| IF "(" condicion ")" THEN bloque_sentencia_ejecutable  bloque_sentencia_ejecutable END_IF ";"  {System.out.println("ERROR, falta ELSE luego de la sentencias de ejecucion");}
-                                    			| IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF {System.out.println("ERROR,falta ';' al final de la declaracion");}
-                                    			| IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE  END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el ELSE");}
-                                    			| IF "(" condicion ")" THEN ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el IF");}
-                                    			| IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion");}
-                                    			%prec LOWER_THAN_ELSE
-                                    			;
+lista_sentencias                : lista_sentencias sentencia_ejecucion
+                                | sentencia_ejecucion
+                                ;
 
-condicion						: "(" expresion comparador expresion ")"
-                                			| "("  ")" {System.out.println("ERROR,falta de comparador en condicion");}
-                                			//| "(" expresion comparador expresion {System.out.println("ERROR,falta de ')' ");} //TODO: problemas ver como solucionar
-                                			|  expresion comparador expresion ")" {System.out.println("ERROR,falta de '(' ");}
-							;
+condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" /*{System.out.println("Declaracion de IF");}*/
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"  /*{System.out.println(Declaracion de IF,ELSE );}*/
+                                | IF "(" condicion ")" bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, Falta THEN luego de la condicion");}
+                                | IF "(" ")"THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta de Condicion");}
+                                | IF THEN END_IF ";" {System.out.println("ERROR,falta el bloque ejecutable");}
+                                | IF THEN bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion");}
+                                | IF THEN bloque_sentencia_ejecutable END_IF  {System.out.println("ERROR,falta ';' al final de la declaracion");}
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable  bloque_sentencia_ejecutable END_IF ";"  {System.out.println("ERROR, falta ELSE luego de la sentencias de ejecucion");}
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF {System.out.println("ERROR,falta ';' al final de la declaracion");}
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE  END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el ELSE");}
+                                | IF "(" condicion ")" THEN ELSE bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, falta el bloque ejecutable en el IF");}
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion");}
+                                %prec LOWER_THAN_ELSE
+                                ;
+
+condicion						:  expresion comparador expresion
+                                |  lista_expresiones {System.out.println("ERROR, falta comparador en comparacion");}
+                                ;
 
 asignacion : 						lista_variables ASIGNACION lista_expresiones ";"{$$= $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
 
@@ -172,21 +173,22 @@ termino							: termino "*" factor
 
 
 factor							: invocacion_funcion	//{$$ = $1;}
-                            				|ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;  System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
-                            				| LONGINT 	{$$ = $1;
-                                      					Long valor = Long.parseLong($1.sval);
-                                      					if (valor == 2147483648L){
-                                        				yyerror("El número está fuera del rango permitido para un longint positivo.");
-                                      					}
-                                      					int token =   this.LONGINT;
-                                      					lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
-                                    					}
-                           				| "-" LONGINT	{
-                                             				$$ = $2; //TODO: posible error
-                                             				String lexema = '-'+ $2.sval;
-									int token =   this.LONGINT;
-                                                                        lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
-                                             				}
+                                |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;  System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
+                                    | LONGINT 	{
+                                                    $$ = $1;
+                                                    Long valor = Long.parseLong($1.sval);
+                                                    if (valor == 2147483648L){
+                                                        yyerror("El número está fuera del rango permitido para un longint positivo.");
+                                                    }
+                                                    int token =   this.LONGINT;
+                                                    lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
+                                                }
+                                | "-" LONGINT	{
+                                                    $$ = $2; //TODO: posible error
+                                                    String lexema = '-'+ $2.sval;
+                                                    int token =   this.LONGINT;
+                                                    lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
+                                                }
 
                            				| HEXA		{ $$ = $1;
 								       				String hexa = $1.sval;
@@ -297,12 +299,12 @@ tipo		 					: DOUBLE
 							%prec ID /*TODO: verificar que el use un tipo creado*/
 							;
 
-comparador 						: "<"
-							| ">"
-							| "MAYOR_IGUAL"
-							| "MENOR_IGUAL"
-							| "DISTINTO"
-							;
+comparador 					    : "<"
+                                | ">"
+                                | MAYOR_IGUAL
+                                | MENOR_IGUAL
+                                | DISTINTO
+                                ;
 %%
 
 

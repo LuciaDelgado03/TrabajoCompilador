@@ -41,16 +41,27 @@ BEGIN
     P := 0.5;
     P := 0.0d–5;
     P := 1.2d5;
-
+    if ( HEX <= 10) then BEGIN
+        HEX := HEX + 1;
+        HEX := HEX + 1;
+    END
+    END_IF;
     LONGINT tengomenosde;
     LONGINT tengomenosd_15;
-    IF
-    if
-    LONGINT iden!/;
-    # comentario mal
-    {soy una
-    cadena multilinea}
-
-
+    if ( HEX <= 10) then BEGIN
+        HEX := HEX + 1;
+        if ( HEX >= 10) then BEGIN
+            HEX := HEX + 2;
+                if ( HEX < 10) BEGIN
+                    if ( HEX > 10) then BEGIN
+                        HEX := HEX + 3;
+                        END
+                    else
+                    END_IF;
+                END
+                END_IF;
+        END
+        END_IF;
+    END
+    end_if;
 END
-
