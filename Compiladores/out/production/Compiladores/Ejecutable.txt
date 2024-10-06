@@ -1,14 +1,12 @@
 parte1
 BEGIN
-    ##comentario mal
-    ##Dentro del rango
-    OUTF ({soy una
-    cadena multilinea});
+    LONGINT j};
+    #comentario mal
+    ##---------------------------LONGINT DENTRO DEL RANGO-----------------------------------------
     LONGINT j;
     J := x;
     J := -2147483648;
-
-    ##Fuera de rango
+    ##---------------------------LONGINT FUERA DEL RANGO------------------------------------------
     J := 2147483648;
     J := -2147483649;
 
@@ -68,7 +66,7 @@ BEGIN
     ##--------------------------IF SIN PARENTESIS, SIN END_IF, SIN CUERPO----------------------------
     if ( HEX <= 10) then BEGIN
         HEX := HEX + 1;
-        if ( HEX >= 10) then BEGIN
+        if  HEX >= 10 then BEGIN
             HEX := HEX + 2;
                 if ( HEX < 10) BEGIN
                     if ( HEX > 10) then BEGIN
@@ -80,5 +78,46 @@ BEGIN
         END
         END_IF;
     END
-    end_if;
+
+    ##----------------------------------STRUCT------------------------------------------------------
+    TYPEDEF Struct  <LONGINT,DOUBLE,HEXA> (
+        a,
+        b,
+        c,
+    ) s1;
+    s1 x, y, z;
+    x.a := 8;
+    x := y;
+    int := y.b;
+
+    TYPEDEF <LONGINT,DOUBLE,HEXA >(
+        a,
+    ) s2;
+
+    ##---------------------------REPEAT WHILE COMPLETO----------------------------------------------
+    REPEAT BEGIN
+    HEX := HEX +1;
+    END
+    WHILE (HEX <10);
+
+    ##---------------------------REPEAT WHILE SIN PARENTESIS-----------------------------------------
+    REPEAT BEGIN
+    HEX := HEX + 2;
+    END
+    WHILE HEX < 20;
+
+    ##---------------------------REPEAT WHILE SIN CUERPO----------------------------------------------
+    repeat
+    while (x > 30);
+
+    ##---------------------------DECLARACION DE FUNCION-----------------------------------------------
+    LONGINT fun sumar( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+        DOUBLE fun dividir ( )
+        begin
+            x := x/2;
+            ret (x);
+        end
+    END
 END

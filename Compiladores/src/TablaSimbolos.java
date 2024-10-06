@@ -127,7 +127,6 @@ public class TablaSimbolos {
             int identificador = obtenerToken("DOUBLE");
             return identificador;
         }
-        System.out.println("no encontrado");
         return NO_ENCONTRADO;
 
     }

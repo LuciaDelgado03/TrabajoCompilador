@@ -242,6 +242,7 @@ public abstract class AccionesSemantica {
                     + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ "'"+ caracter+"'");
             lector.retrocederCaracter();
         }
+
     }
 
     public static class AS10 extends AccionesSemantica {

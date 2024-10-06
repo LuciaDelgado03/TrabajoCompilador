@@ -103,7 +103,8 @@ public class AnalizadorLexico {
                 if (Character.isLetter(caracter)) {
                     return 19;
                 } else {
-                    throw new IllegalArgumentException("Caracter no válido: " + caracter);
+                    System.out.println("Caracter no válido: " + caracter);
+                    return -1;
                 }
         }
     }
@@ -180,15 +181,18 @@ public class AnalizadorLexico {
             //System.out.println("valor:" + valorChar);
             //System.out.println(valorChar);
             //consulta la tabla de transicion para saber a que estado movernos
-            estado = matrizTransicion[estado][valorChar];
-            if (estado == -2) {
-                estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
+            if(valorChar != -1) {
+                estado = matrizTransicion[estado][valorChar];
+                if (estado == -2) {
+                    System.out.println("El caracter:" + caracter + " es invalido en la linea: "+ this.getNroLinea());
+                    estado = estadoAnt; //Estado anterior si se ejecuta alguna accion semantica que retroceda la columna en el lector
+                }
+                else {
+                    int accionSemantica = matrizSemantica[estadoAnt][valorChar];
+
+                    ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                }
             }
-
-            int accionSemantica = matrizSemantica[estadoAnt][valorChar];
-
-            ejecutarAccionSemantica(accionSemantica, cadena, caracter);
-
         }
 
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());

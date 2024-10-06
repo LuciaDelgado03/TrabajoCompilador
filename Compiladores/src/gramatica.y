@@ -182,12 +182,12 @@ termino							: termino "*" factor
                                 | "/" factor {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
                                 | "*" factor {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
                                 | factor {$$= $1;}
-                                //| termino  factor	{System.out.println("ERROR, falta operador");}
+                                //| termino error factor	{System.out.println("ERROR, falta operador en la linea: " + lector.getNroLinea());}
                                 ;
 
 
 factor							: invocacion_funcion	//{$$ = $1;}
-                                |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;  System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
+                                |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;}
                                     | LONGINT 	{
                                                     $$ = $1;
                                                     Long valor = Long.parseLong($1.sval);
@@ -283,7 +283,6 @@ factor							: invocacion_funcion	//{$$ = $1;}
                                                           }
                                                 }
                                 ;
-
 
 lista_variables					: lista_variables "," ID
                                 | lista_variables "," id_compuesta
