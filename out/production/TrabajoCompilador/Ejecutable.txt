@@ -1,0 +1,52 @@
+parte1
+BEGIN
+    LONGINT J;
+    ## Dentro del rango
+    J := 2147483647;
+    J := -2147483648;
+
+    ##Fuera de rango
+    J := 2147483648;
+    J := -2147483649;
+
+    DOUBLE D;
+    ## Dentro del rango
+    D := 2.2250738585072014e-308;
+    D := 1.7976931348623157e+308;
+    D := -1.7976931348623157e+308;
+    D := -2.2250738585072014e-308;
+
+    ##Fuera de rango
+    D := 2.2250738585072015e-308;
+    D := 1.7976931348623158e+308;
+    D := -1.7976931348623158e+308;
+    D := -2.2250738585072015e-308;
+
+    LONGINT HEX;
+    ## Dentro del rango
+    HEX:= -80000000;
+    HEX := 0x7FFFFFFF
+
+    ##Fuera de rango
+    HEX := -80000001;
+    HEX:= 0x8FFFFFFF;
+
+    ## Parte entera con y sin parte decimal
+    DOUBLE P;
+    P := 1.0;
+    P := 1;
+    P := .5;
+    P := 0.0d–5;
+    P := 1.2d5;
+
+    LONGINT tengomenosde;
+    LONGINT tengomenosd_15;
+    IF
+    if
+    LONGINT iden!/;
+    # comentario mal
+    {soy una
+    cadena multilinea}
+
+END
+
