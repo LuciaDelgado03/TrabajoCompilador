@@ -240,10 +240,7 @@ public abstract class AccionesSemantica {
             // se esperaba un # para comentario, pero no llego, inserta el ultimo caracter
             System.out.println("ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
                     + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ "'"+ caracter+"'");
-            if(!caracter.equals('?')) {
-                lector.retrocederCaracter();
-            }
-
+            lector.retrocederCaracter();
         }
     }
 
@@ -287,6 +284,26 @@ public abstract class AccionesSemantica {
             }
         }
 
+    }
+    public static class AS11 extends AccionesSemantica {
+        private static AS11 instancia;
+
+        private AS11(LectorDeTexto lector) {
+            super(lector);
+        }
+
+        public static AS11 obtenerInstancia(LectorDeTexto lector) {
+            if (instancia == null) {
+                instancia = new AS11(lector);
+            }
+            return instancia;
+        }
+
+        public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            if (!caracter.equals('?')) {
+                lector.retrocederCaracter();
+            }
+        }
     }
 }
 

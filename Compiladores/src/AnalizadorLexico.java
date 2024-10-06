@@ -152,6 +152,10 @@ public class AnalizadorLexico {
                 instanciaAS10.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 11:
+                AccionesSemantica.AS11 instanciaAS11 = AccionesSemantica.AS11.obtenerInstancia(lector);
+                instanciaAS11.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                break;
+            case 12:
                 //System.out.println("");
                 break;
             default:

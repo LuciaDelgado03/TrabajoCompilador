@@ -25,9 +25,6 @@ import java.math.BigDecimal;
 
 
 
-
-
-
 public class Parser
 {
 AnalizadorLexico lector;

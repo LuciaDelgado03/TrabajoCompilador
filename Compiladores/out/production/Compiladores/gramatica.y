@@ -191,34 +191,62 @@ factor						: ID	{$$ = $1;
                                           }
                                      }
                             | invocacion_funcion	/*{$$ = $1;}*/
-                            | DOUBLE {/*
-                                        ParserVal valor = val_peek(1);
-                                        System.out.println("llegue para DOUBLE positivo" + valor.lval);
-                                        BigDecimal numero = valor.lval;
-                                        BigDecimal min = 2.2250738585072014e-308;
-                                        BigDecimal max = 1.7976931348623157e+308;;
-                                        if (numero > max || (numero < min && numero != 0.0)) {
-                                            yyerror("El número está fuera del rango permitido para un double positivo.");
-                                        }
-                                        else{
-                                            valor.ival = numero.intValue();
-                                            lector.tablaSimbolos.addToken(numero.toString(),275);
+                            | DOUBLE {
+                                          $$ = $1 ; // valor del número
+                                          String valor = $1.sval;
+                                          System.out.println("Llegué para DOUBLE positivo: " + valor);
+                                          String valorConvertido = valor.replace("d", "E");
+                                          System.out.println("Llegué para DOUBLE positivo Replace: " + valorConvertido);
+
+                                          try {
+                                               // Convertir la cadena a un tipo double para evitar problemas de formato con BigDecimal.
+                                               double numero = Double.parseDouble(valorConvertido);
+                                               double min = 2.2250738585072014E-308;
+                                               double max = 1.7976931348623157E+308;
+
+                                               // Comparamos el número contra los límites permitidos.
+                                               if (numero > max || (numero < min && numero != 0.0)) {
+                                                   yyerror("El número está fuera del rango permitido para un double positivo.");
+                                               } else {
+                                                   String valorC = valor.replace("E", "d");
+                                                   double numeroC = -Double.parseDouble(valorC);
+                                                   int token = this.DOUBLE;
+                                                   lector.tablaSimbolos.addToken(Double.toString(numeroC), token, "DOUBLE");
+                                               }
+                                          } catch (NumberFormatException e) {
+                                               // Control de error en caso de que la conversión a double falle.
+                                               yyerror("Formato de número inválido: " + valorConvertido);
+                                          }
+                                      }
+                            | "-" DOUBLE {
+                                            $$ = $2;
+                                            String valor = $2.sval;
+                                            System.out.println("llegue para DOUBLE negativo: " + valor);
+                                            String valorConvertido = valor.replace("d", "E");
+
+                                            try {
+                                                // Convertimos el valor a double y lo negamos.
+                                                double numero = -Double.parseDouble(valorConvertido); // Negamos el valor.
+                                                double min = -1.7976931348623157E+308;
+                                                double max = -2.2250738585072014E-308;
+
+                                                // Comparamos el número contra los límites permitidos.
+                                                if (numero > max || numero < min) {
+                                                    yyerror("El número está fuera del rango permitido para un double negativo.");
+                                                } else {
+                                                    String valorC = valor.replace("E", "d");
+                                                    double numeroC = -Double.parseDouble(valorC);
+                                                    int token = this.DOUBLE;
+                                                    lector.tablaSimbolos.addToken(Double.toString(numeroC), token, "DOUBLE");
+
+                                                }
+                                            } catch (NumberFormatException e) {
+
+                                                     // Control de error en caso de que la conversión a double falle.
+                                                     yyerror("Formato de número inválido: " + valorConvertido);
                                             }
-                                      */}
-                            | "-" DOUBLE {/*
-                                              ParserVal valor = val_peek(1);
-                                              System.out.println("llegue para DOUBLE negativo " + valor.lval);
-                                              BigDecimal numero = valor.lval;
-                                              numero = -numero;
-                                              BigDecimal min = -1.7976931348623157e+308;
-                                              BigDecimal max = -2.2250738585072014e-308;
-                                              if (numero > max || (numero < min) {
-                                                yyerror("El número está fuera del rango permitido para un longint negativo.");
-                                              } else{
-                                                valor.ival = numero.intValue();
-                                                lector.tablaSimbolos.addToken(numero.toString(),275);
-                                              }
-                                         */}
+
+                                          }
                             ;
 
 lista_variables				: lista_variables "," ID

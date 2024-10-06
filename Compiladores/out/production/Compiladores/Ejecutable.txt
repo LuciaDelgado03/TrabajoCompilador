@@ -72,8 +72,7 @@ BEGIN
             HEX := HEX + 2;
                 if ( HEX < 10) BEGIN
                     if ( HEX > 10) then BEGIN
-                        HEX := HEX + 3;
-                        END
+                    END
                     else
                     END_IF;
                 END
