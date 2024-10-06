@@ -179,7 +179,7 @@ public abstract class AccionesSemantica {
             double LIMITE_SUPERIOR = 1.7976931348623157e+308;
             try {
                 double numero = Double.parseDouble(cadena.toString());
-                if(Math.abs(numero) > LIMITE_SUPERIOR){
+                if(Math.abs(numero) > LIMITE_SUPERIOR || Math.abs(numero) <LIMITE_INFERIOR){
                     System.out.println("ERROR: Supera el limite indicado para los DOUBLE en la linea: "
                             + lector.getNroLinea() + " en la columna: " + lector.getColumna());
                 }
@@ -268,7 +268,7 @@ public abstract class AccionesSemantica {
                 // Convertimos el string a long especificando que la base es 16 (hexadecimal)
                 long num = Long.parseLong(hexa, 16);
                 long maxValorAbsoluto = 2147483648L;
-                // Verificación del rango si es necesario
+                // Verificación del rango
                 if (num > maxValorAbsoluto) {
                     System.out.println("ERROR: Supera el limite indicado para los HEXA en la linea: "
                             + lector.getNroLinea() + " en la columna: " + lector.getColumna());
@@ -285,87 +285,4 @@ public abstract class AccionesSemantica {
 
     }
 }
-
-
-/*public abstract class AccionesSemantica {
-    public String Token;
-
-    public void insertarCaracter(){
-
-    }
-
-    public abstract void ejecutarAccionSemantica(int accionSemantica, String cadena);
-
-    public class AS1 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //GUARDA LOS CARACTERES QUE ESTAMOS LEYENDO
-            //concatenar
-        }
-    }
-
-    public class AS2 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            // controlar la longitud y concatenar, ademas verificar el rango
-            // verificar si viene algo distinto de un digito, letra o _ y eso insertarlo en la misma linea
-        }
-    }
-    public class AS3 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-        //informar linea se esperaba un igual y llego otro caracter
-        }
-    }
-    //es la misma que la AS3
-    public class AS4 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //verificar si viene algo distinto de = y insertarlo en la misma linea
-        }
-    }
-
-    public class AS5 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //verifica el rango si es long int imprime por pantall , y lo  inserta el caracter en la linea
-        }
-    }
-
-    public class AS6 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //informa error ya que se esperaba un numero, inserta el caracter
-        }
-    }
-
-    public class AS7 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //es un punto flotante, corroborar el rango, avisar en caso de error, vuelve a imsertar el digito
-        }
-    }
-
-    public class AS8 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //se esperaba un numero o una letra A,B,C,D,E,F , y inserto en la linea
-        }
-    }
-
-    public class AS9 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            // se eesperaba un # para comentario, pero no llego, inserta el ultimo caracter
-        }
-    }
-
-    public class AS10 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            // verificar el rango de exa, e insertar el ultimo caracter
-        }
-    }
-
-    public class AS11 extends AccionesSemantica {
-        public void ejecutarAccionSemantica(int accionSemantica, String cadena) {
-            //fin del archivo controlar lo q haya q hacer :P
-        }
-    }
-
-
-}
-*/
-
-
 
