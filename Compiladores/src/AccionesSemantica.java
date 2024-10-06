@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.math.BigDecimal;
 
 public abstract class AccionesSemantica {
     //protected String Token;
@@ -175,17 +176,20 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            double LIMITE_INFERIOR = 2.2250738585072014e-308;
-            double LIMITE_SUPERIOR = 1.7976931348623157e+308;
+            /*BigDecimal LIMITE_INFERIOR = new BigDecimal(2.2250738585072014e-308);
+            BigDecimal LIMITE_SUPERIOR = new BigDecimal(1.7976931348623157e+308);
+            String valor = cadena.toString();
+            String valorConvertido = valor.replace("d", "E");
             try {
-                double numero = Double.parseDouble(cadena.toString());
-                if(Math.abs(numero) > LIMITE_SUPERIOR || Math.abs(numero) <LIMITE_INFERIOR){
+                BigDecimal numero = new BigDecimal(valorConvertido);
+                System.out.println("convertido" + numero);
+                if(LIMITE_SUPERIOR.compareTo(numero) < 0 || LIMITE_INFERIOR.compareTo(numero) > 0){
                     System.out.println("ERROR: Supera el limite indicado para los DOUBLE en la linea: "
                             + lector.getNroLinea() + " en la columna: " + lector.getColumna());
                 }
             } catch (NumberFormatException e) {
-
-            }
+                System.out.println("Error en formato double para "+ cadena);
+            }*/
             // Retroceder un carácter
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();

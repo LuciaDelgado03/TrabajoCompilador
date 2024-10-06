@@ -25,6 +25,10 @@ public class AnalizadorLexico {
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
     }
 
+    public int getNroLinea (){
+        return lector.getNroLinea();
+    }
+
     public int asignarValorChar(char caracter) {
         switch (caracter) {
 
@@ -186,7 +190,7 @@ public class AnalizadorLexico {
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
         parser.yylval= new ParserVal(cadena.toString());
         System.out.println("cadena: " + cadena.toString()+" Token: "+token);
-        //System.out.println("");
+        System.out.println("");
 
         return token;
     }
