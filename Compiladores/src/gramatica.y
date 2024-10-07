@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 
 %%
-prog							: ID BEGIN cuerpo END {System.out.println($1);}
+prog							: ID BEGIN cuerpo END {System.out.println("Fin sentencia prog");}
 							    | ID cuerpo END {System.out.println("ERROR,falta begin programa principal en la linea: " + lector.getNroLinea());}
                                 | BEGIN END {System.out.println("ERROR,falta el ID del programa principal en la linea: " + lector.getNroLinea());}
                                 | ID BEGIN cuerpo {System.out.println("ERROR,falta END del programa principal en la linea: " + lector.getNroLinea());}
@@ -33,7 +33,7 @@ sentencia						: sentencia_declaracion
                                 | ETIQUETA
                                 ;
 
-sentencia_declaracion			: tipo lista_variables ";" {System.out.println($2);}
+sentencia_declaracion			: tipo lista_variables ";" {/*System.out.println($2);*/}
 							    | tipo lista_variables {System.out.println("ERROR, Falta ; en la sentencia de declaracion en la linea: " + lector.getNroLinea());}
 						    	| declaracion_funcion
 						    	| TYPEDEF ID ASIGNACION tipo "(" subrango ")" ";" {System.out.println("Declaracion de Subtipo");}
@@ -90,7 +90,7 @@ sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" c
                                 | REPEAT WHILE "(" condicion ")" ";" {System.out.println("ERRROR, falta el cuerpo de la iteracion repeat en la linea: " + lector.getNroLinea());}
                                 ;
 
-sentencia_print					: OUTF "(" CML ")" ";" {System.out.println($3.sval);}
+sentencia_print					: OUTF "(" CML ")" ";" //{System.out.println($3.sval);}
                                 | OUTF "(" expresion ")" ";"
                                 | OUTF "(" ")" ";"      {System.out.println("ERROR, Falta parámetro en sentencia OUTF en la linea: " + lector.getNroLinea());}
                                 | OUTF "(" expresion ")" {System.out.println("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
@@ -166,7 +166,7 @@ expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| TOD "(" expresion ")" {System.out.println("Declaracion de TOD");}
 						    	| TOD "("  ")" {System.out.println("ERROR, falta de expresion en la linea: " + lector.getNroLinea());}
-						    	| termino {$$.ival = $1.ival;}
+						    	| termino {$$ = $1;}
 						    	;
 
 
@@ -319,8 +319,6 @@ comparador 					    : "<"
                                 | DISTINTO
                                 ;
 %%
-
-
 void yyerror(String mensaje) {
   // funcion utilizada para imprimir errores que produce yacc
   System.out.println("Error yacc: " + mensaje);

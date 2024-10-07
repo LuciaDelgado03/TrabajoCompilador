@@ -157,7 +157,10 @@ public class AnalizadorLexico {
                 instanciaAS11.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 12:
-                //System.out.println("");
+                AccionesSemantica.AS12 instanciaAS12 = AccionesSemantica.AS12.obtenerInstancia(lector);
+                instanciaAS12.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
+                break;
+            case 13:
                 break;
             default:
                 System.out.println("Acción no válida. El número debe estar entre 1 y 11.");
@@ -167,6 +170,11 @@ public class AnalizadorLexico {
 
 
     public int yylex() {
+        String ANSI_BLUE = "\u001B[34m";
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_RED = "\u001B[31m";
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_ORANGE = "\u001B[33m";
         int valorToken = -1;
         int estado = 0;
         int estadoAnt = 0;
@@ -194,13 +202,13 @@ public class AnalizadorLexico {
                 }
             }
         }
-
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
         parser.yylval= new ParserVal(cadena.toString());
-        System.out.println("cadena: " + cadena.toString()+" Token: "+token);
-        System.out.println("");
+        //System.out.print(" cadena: " + ANSI_BLUE + cadena.toString() + ANSI_RESET + " Token: " + ANSI_BLUE + token + ANSI_RESET);
+        System.out.print( ANSI_GREEN + cadena.toString()  + ANSI_BLUE + " ("  + token +  ") "+ ANSI_RESET );
 
         return token;
+
     }
 
 

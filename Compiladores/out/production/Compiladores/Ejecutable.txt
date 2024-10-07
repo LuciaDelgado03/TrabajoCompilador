@@ -87,9 +87,25 @@ BEGIN
         c,
     ) s1;
 
-    TYPEDEF <LONGINT,DOUBLE,HEXA >(
+    ##-------FALTA DE STRUCT -------------
+    TYPEDEF <LONGINT,DOUBLE, HEXA>(
         a,
     ) s2;
+    ##-------FALTA DE <> -----------------
+    TYPEDEF STRUCT LONGINT,DOUBLE, HEXA(
+            a,
+        ) s2;
+
+    ##-------FALTA DE ID AL FINAL-------------
+         TYPEDEF STRUCT<LONGINT,DOUBLE, HEXA>(
+             a,
+         );
+
+    ##-------INVOCACION STRUCT -------------
+        s1 x, y, z;
+        x.a := 8;
+        x := y;
+        int := y.b;
 
     ##---------------------------REPEAT WHILE COMPLETO----------------------------------------------
     REPEAT BEGIN
