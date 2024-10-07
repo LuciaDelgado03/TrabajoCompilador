@@ -12,12 +12,11 @@ public class AnalizadorLexico {
     private int[][] matrizSemantica;
     private Parser parser;
 
-    public AnalizadorLexico(Parser par) {
+    public AnalizadorLexico(Parser par, String archEjecutable) {
         String Path = "Compiladores/out/production/Compiladores/TablaSimbolos.txt";
         this.parser = par;
         TablaSimbolos TS = new TablaSimbolos(Path);
         this.tablaSimbolos = TS;
-        String archEjecutable = "Compiladores/out/production/Compiladores/Ejecutable.txt";
         this.lector = new LectorDeTexto(archEjecutable);
         String matrizTransiciones = "Compiladores/out/production/Compiladores/matrizTransicion.txt";
         String matrizAccionesSemanticas = "Compiladores/out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
@@ -161,7 +160,7 @@ public class AnalizadorLexico {
             case 12:
                 break;
             default:
-                System.out.println("Acción no válida. El número debe estar entre 1 y 11.");
+
                 break;
         }
     }
@@ -181,13 +180,9 @@ public class AnalizadorLexico {
         while (estado != -1){ //estado final es -1 y error es -2
             estadoAnt = estado;
             caracter = lector.nuevoCaracter();
-            //System.out.println("estado:" + estado);
-            //System.out.println("caracter:" + caracter);
             int valorChar = asignarValorChar(caracter);
-            //System.out.println("valor:" + valorChar);
-            //System.out.println(valorChar);
             //consulta la tabla de transicion para saber a que estado movernos
-            if(valorChar != -1) {
+            if(valorChar != -1) { //Si es un caracter valido
                 estado = matrizTransicion[estado][valorChar];
                 if (estado == -2) {
                     System.out.println("El caracter:" + caracter + " es invalido en la linea: "+ this.getNroLinea());

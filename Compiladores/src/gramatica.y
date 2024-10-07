@@ -30,7 +30,6 @@ cuerpo							: cuerpo sentencia
 
 sentencia						: sentencia_declaracion
                                 | sentencia_ejecucion
-                                | ETIQUETA
                                 ;
 
 sentencia_declaracion			: tipo lista_variables ";" {/*System.out.println($2);*/}
@@ -72,7 +71,7 @@ sentencia_ejecucion				: asignacion
                                 | sentencia_while
                                 | invocacion_funcion ";"
 						    	| GOTO ETIQUETA ";" {System.out.println("Declaracion de GOTO");}
-						    	| GOTO ETIQUETA  {yyerror("ERROR, Falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
+						    	| GOTO ETIQUETA  {yyerror("ERROR, Falta ';' al final de la sentencia en la linea: " + lector.getNroLinea());}
 						    	| GOTO  ";" {yyerror("ERROR, falta la ETIQUETA en la linea: " + lector.getNroLinea());}
 						    	//| ETIQUETA ";" {yyerror("ERROR, falta el GOTO en la linea: " + lector.getNroLinea());}
                                 | ETIQUETA
@@ -301,6 +300,7 @@ lista_tipos						: lista_tipos "," tipo
 tipo		 					: DOUBLE
                                 | LONGINT
                                 | ID    %prec ID
+                                | TYPEDEF ID
                                 ;
 
 comparador 					    : "<"
