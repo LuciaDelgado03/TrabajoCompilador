@@ -148,7 +148,7 @@ condicion						:  expresion comparador expresion
 asignacion                      : lista_variables ASIGNACION lista_expresiones ';' {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
                                 ;
 
-expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
+expresion						: expresion "+" termino 		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
 						    	| expresion "+" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
