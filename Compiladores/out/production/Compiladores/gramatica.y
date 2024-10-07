@@ -137,6 +137,7 @@ termino						: termino "*" factor	/*{$$ = $1 * $3;}*/
 
 factor						: ID	{$$ = $1;
                                     System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);}
+
                             | DIGITO {$$ = $1;
                                       System.out.println("la variable" + $1.sval + "tiene valor: " + $1.ival);
                             /*
@@ -255,7 +256,7 @@ lista_variables				: lista_variables "," ID
 							| ID {System.out.println($1);}
 							;
 
-lista_expresiones					: lista_expresiones "," expresion
+lista_expresiones			: lista_expresiones "," expresion
 							| expresion
 							;
 

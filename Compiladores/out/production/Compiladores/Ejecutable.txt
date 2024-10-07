@@ -53,31 +53,55 @@ BEGIN
     x := 1 + 1;
     x := J / 1;
     ##---------------SIN OPERANDO-----------
-    x :=   + 1;
+    x :=  + 1;
     ##---------------SIN OPERADOR-----------
-    x := 1   J;
+    x := 1 + J;
 
     ##---------------------------IMPRESIONES POR PANTALLA-------------------------------------------
+
     OUTF ();
     OUTF (5);
     OUTF ({OUTF
             ML});
+    OUTF (OUTF);
 
-    ##--------------------------IF SIN PARENTESIS, SIN END_IF, SIN CUERPO----------------------------
+    ##--------------------------CASOS DE DECLARACION IF----------------------------------------------
+
+    ##---------------COMPLETO------------
+
     if ( HEX <= 10) then BEGIN
-        HEX := HEX + 1;
-        if  HEX >= 10 then BEGIN
-            HEX := HEX + 2;
-                if ( HEX < 10) BEGIN
-                    if ( HEX > 10) then BEGIN
-                    END
-                    else
-                    END_IF;
-                END
-                END_IF;
+        hex := 1;
+    END
+    END_IF;
+
+    ##---------COMPLETO ASIGNACION--------
+        if ( HEX < 10) BEGIN
+           HEX := HEX + 3;
         END
         END_IF;
+
+    ##----------SIN PARENTESIS------------
+    if  HEX >= 10 then BEGIN
+        HEX := HEX + 2;
+    end
+    end_if;
+
+    ##-------COMPLETO IF-ELSE -------------
+    if ( HEX > 10) then BEGIN
+        HEX := HEX + 2;
     END
+    else begin
+       HEX := HEX + 2;
+    end
+    END_IF;
+    ##---COMPLETO Y DE CUERPO  OTRO IF -----
+    IF(HEX > 10) THEN begin
+        HEX := HEX + 2;
+        IF (HEX > 10) THEN
+            HEX:= HEX+2;
+        end_if;
+    end
+    end_if;
 
     ##----------------------------------STRUCT------------------------------------------------------
     ##---------------COMPLETO -------------
