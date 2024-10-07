@@ -42,135 +42,137 @@
   35                      | tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END
   36                      | tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END
   37                      | tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' END
-  38                      | tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END
-  39                      | tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END
-  40                      | tipo FUN ID '(' parametro ')' BEGIN END
+  38                      | tipo FUN ID '(' parametro ')' BEGIN cuerpo RET expresion ';' END
+  39                      | tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END
+  40                      | tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END
+  41                      | tipo FUN ID '(' parametro ')' BEGIN END
 
-  41  sentencia_ejecucion : asignacion
-  42                      | condicion_if
-  43                      | sentencia_print
-  44                      | sentencia_while
-  45                      | invocacion_funcion ';'
-  46                      | GOTO ETIQUETA ';'
-  47                      | GOTO ETIQUETA
-  48                      | GOTO ';'
-  49                      | ETIQUETA ';'
+  42  sentencia_ejecucion : asignacion
+  43                      | condicion_if
+  44                      | sentencia_print
+  45                      | sentencia_while
+  46                      | invocacion_funcion ';'
+  47                      | GOTO ETIQUETA ';'
+  48                      | GOTO ETIQUETA
+  49                      | GOTO ';'
+  50                      | ETIQUETA ';'
 
-  50  sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' ';'
-  51                  | REPEAT bloque_sentencia_ejecutable '(' condicion ')' ';'
-  52                  | REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')'
-  53                  | REPEAT bloque_sentencia_ejecutable WHILE '(' ')' ';'
-  54                  | REPEAT bloque_sentencia_ejecutable WHILE condicion ')' ';'
-  55                  | REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ';'
-  56                  | REPEAT bloque_sentencia_ejecutable WHILE condicion ';'
-  57                  | REPEAT WHILE '(' condicion ')' ';'
+  51  sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' ';'
+  52                  | REPEAT bloque_sentencia_ejecutable '(' condicion ')' ';'
+  53                  | REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')'
+  54                  | REPEAT bloque_sentencia_ejecutable WHILE '(' ')' ';'
+  55                  | REPEAT bloque_sentencia_ejecutable WHILE condicion ')' ';'
+  56                  | REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ';'
+  57                  | REPEAT bloque_sentencia_ejecutable WHILE condicion ';'
+  58                  | REPEAT WHILE '(' condicion ')' ';'
 
-  58  sentencia_print : OUTF '(' CML ')' ';'
-  59                  | OUTF '(' expresion ')' ';'
-  60                  | OUTF '(' ')' ';'
-  61                  | OUTF '(' expresion ')'
-  62                  | OUTF '(' CML ')'
-  63                  | OUTF CML ';'
-  64                  | OUTF expresion ';'
-  65                  | OUTF '(' error ')' ';'
+  59  sentencia_print : OUTF '(' CML ')' ';'
+  60                  | OUTF '(' expresion ')' ';'
+  61                  | OUTF '(' ')' ';'
+  62                  | OUTF '(' expresion ')'
+  63                  | OUTF '(' CML ')'
+  64                  | OUTF CML ';'
+  65                  | OUTF expresion ';'
+  66                  | OUTF '(' error ')' ';'
 
-  66  parametro : tipo ID
-  67            | ID
+  67  parametro : tipo ID
+  68            | ID
 
-  68  invocacion_funcion : ID '(' expresion ')'
-  69                     | ID '(' ')'
+  69  invocacion_funcion : ID '(' expresion ')'
+  70                     | ID '(' ')'
 
-  70  bloque_sentencia_ejecutable : BEGIN lista_sentencias END
+  71  bloque_sentencia_ejecutable : BEGIN lista_sentencias END
 
-  71  lista_sentencias : lista_sentencias sentencia_ejecucion
-  72                   | sentencia_ejecucion
+  72  lista_sentencias : lista_sentencias sentencia_ejecucion
+  73                   | sentencia_ejecucion
 
-  73  condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'
-  74               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
-  75               | IF '(' condicion ')' bloque_sentencia_ejecutable END_IF ';'
-  76               | IF '(' ')' THEN bloque_sentencia_ejecutable END_IF ';'
-  77               | IF '(' condicion ')' THEN error END_IF ';'
-  78               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ';'
-  79               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable error
-  80               | IF THEN bloque_sentencia_ejecutable END_IF
-  81               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'
-  82               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF
-  83               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'
-  84               | IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'
-  85               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'
-  86               | IF condicion THEN bloque_sentencia_ejecutable END_IF ';'
-  87               | IF '(' condicion THEN bloque_sentencia_ejecutable END_IF ';'
-  88               | IF condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'
-  89               | IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
-  90               | IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
-  91               | IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
-  92               | IF '(' condicion ')' THEN sentencia_ejecucion END_IF ';'
-  93               | IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'
-  94               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'
-  95               | IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'
+  74  condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'
+  75               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
+  76               | IF '(' condicion ')' bloque_sentencia_ejecutable END_IF ';'
+  77               | IF '(' ')' THEN bloque_sentencia_ejecutable END_IF ';'
+  78               | IF '(' condicion ')' THEN error END_IF ';'
+  79               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ';'
+  80               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable error
+  81               | IF THEN bloque_sentencia_ejecutable END_IF error
+  82               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'
+  83               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF
+  84               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'
+  85               | IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'
+  86               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'
+  87               | IF condicion THEN bloque_sentencia_ejecutable END_IF ';'
+  88               | IF '(' condicion THEN bloque_sentencia_ejecutable END_IF ';'
+  89               | IF condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'
+  90               | IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
+  91               | IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
+  92               | IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'
+  93               | IF '(' condicion ')' THEN sentencia_ejecucion END_IF ';'
+  94               | IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'
+  95               | IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'
+  96               | IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'
 
-  96  condicion : expresion comparador expresion
-  97            | lista_expresiones
+  97  condicion : expresion comparador expresion
+  98            | lista_expresiones
 
-  98  asignacion : lista_variables ASIGNACION lista_expresiones ';'
+  99  asignacion : lista_variables ASIGNACION lista_expresiones ';'
+ 100             | lista_variables ASIGNACION lista_expresiones error
 
-  99  expresion : expresion '+' termino
- 100            | expresion '-' termino
- 101            | expresion '+' '+' termino
- 102            | expresion '-' '+' termino
- 103            | '+' termino
- 104            | expresion '+'
- 105            | expresion '-'
- 106            | TOD '(' expresion ')'
- 107            | TOD '(' ')'
- 108            | termino
+ 101  expresion : expresion '+' termino
+ 102            | expresion '-' termino
+ 103            | expresion '+' '+' termino
+ 104            | expresion '-' '+' termino
+ 105            | '+' termino
+ 106            | expresion '+'
+ 107            | expresion '-'
+ 108            | TOD '(' expresion ')'
+ 109            | TOD '(' ')'
+ 110            | termino
 
- 109  termino : termino '*' factor
- 110          | termino '/' factor
- 111          | termino '*' '*' factor
- 112          | termino '*' '/' factor
- 113          | termino '/' '/' factor
- 114          | termino '/' '*' factor
- 115          | termino '/'
- 116          | termino '*'
- 117          | '/' factor
- 118          | '*' factor
- 119          | factor
+ 111  termino : termino '*' factor
+ 112          | termino '/' factor
+ 113          | termino '*' '*' factor
+ 114          | termino '*' '/' factor
+ 115          | termino '/' '/' factor
+ 116          | termino '/' '*' factor
+ 117          | termino '/'
+ 118          | termino '*'
+ 119          | '/' factor
+ 120          | '*' factor
+ 121          | factor
 
- 120  factor : invocacion_funcion
- 121         | ID
- 122         | id_compuesta
- 123         | LONGINT
- 124         | '-' LONGINT
- 125         | HEXA
- 126         | '-' HEXA
- 127         | DOUBLE
- 128         | '-' DOUBLE
+ 122  factor : invocacion_funcion
+ 123         | ID
+ 124         | id_compuesta
+ 125         | LONGINT
+ 126         | '-' LONGINT
+ 127         | HEXA
+ 128         | '-' HEXA
+ 129         | DOUBLE
+ 130         | '-' DOUBLE
 
- 129  lista_variables : lista_variables ',' ID
- 130                  | lista_variables ',' id_compuesta
- 131                  | id_compuesta
- 132                  | ID
+ 131  lista_variables : lista_variables ',' ID
+ 132                  | lista_variables ',' id_compuesta
+ 133                  | id_compuesta
+ 134                  | ID
 
- 133  id_compuesta : ID '.' ID
+ 135  id_compuesta : ID '.' ID
 
- 134  lista_expresiones : lista_expresiones ',' expresion
- 135                    | expresion
+ 136  lista_expresiones : lista_expresiones ',' expresion
+ 137                    | expresion
 
- 136  lista_tipos : lista_tipos ',' tipo
- 137              | lista_tipos tipo
- 138              | tipo
+ 138  lista_tipos : lista_tipos ',' tipo
+ 139              | lista_tipos tipo
+ 140              | tipo
 
- 139  tipo : DOUBLE
- 140       | LONGINT
- 141       | HEXA
- 142       | ID
+ 141  tipo : DOUBLE
+ 142       | LONGINT
+ 143       | HEXA
+ 144       | ID
 
- 143  comparador : '<'
- 144             | '>'
- 145             | MAYOR_IGUAL
- 146             | MENOR_IGUAL
- 147             | DISTINTO
+ 145  comparador : '<'
+ 146             | '>'
+ 147             | MAYOR_IGUAL
+ 148             | MENOR_IGUAL
+ 149             | DISTINTO
 
 state 0
 	$accept : . prog $end  (0)
@@ -257,29 +259,29 @@ state 3
 
 
 state 4
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (73)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF . '(' condicion ')' bloque_sentencia_ejecutable END_IF ';'  (75)
-	condicion_if : IF . '(' ')' THEN bloque_sentencia_ejecutable END_IF ';'  (76)
-	condicion_if : IF . '(' condicion ')' THEN error END_IF ';'  (77)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ';'  (78)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable error  (79)
-	condicion_if : IF . THEN bloque_sentencia_ejecutable END_IF  (80)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (83)
-	condicion_if : IF . '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (84)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF . condicion THEN bloque_sentencia_ejecutable END_IF ';'  (86)
-	condicion_if : IF . '(' condicion THEN bloque_sentencia_ejecutable END_IF ';'  (87)
-	condicion_if : IF . condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (88)
-	condicion_if : IF . '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (89)
-	condicion_if : IF . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
-	condicion_if : IF . condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
-	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion END_IF ';'  (92)
-	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (94)
-	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (74)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF . '(' condicion ')' bloque_sentencia_ejecutable END_IF ';'  (76)
+	condicion_if : IF . '(' ')' THEN bloque_sentencia_ejecutable END_IF ';'  (77)
+	condicion_if : IF . '(' condicion ')' THEN error END_IF ';'  (78)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ';'  (79)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable error  (80)
+	condicion_if : IF . THEN bloque_sentencia_ejecutable END_IF error  (81)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (84)
+	condicion_if : IF . '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (85)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF . condicion THEN bloque_sentencia_ejecutable END_IF ';'  (87)
+	condicion_if : IF . '(' condicion THEN bloque_sentencia_ejecutable END_IF ';'  (88)
+	condicion_if : IF . condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (89)
+	condicion_if : IF . '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
+	condicion_if : IF . condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (92)
+	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion END_IF ';'  (93)
+	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF . '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF . '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (96)
 
 	THEN  shift 31
 	ID  shift 32
@@ -310,14 +312,14 @@ state 5
 
 
 state 6
-	sentencia_print : OUTF . '(' CML ')' ';'  (58)
-	sentencia_print : OUTF . '(' expresion ')' ';'  (59)
-	sentencia_print : OUTF . '(' ')' ';'  (60)
-	sentencia_print : OUTF . '(' expresion ')'  (61)
-	sentencia_print : OUTF . '(' CML ')'  (62)
-	sentencia_print : OUTF . CML ';'  (63)
-	sentencia_print : OUTF . expresion ';'  (64)
-	sentencia_print : OUTF . '(' error ')' ';'  (65)
+	sentencia_print : OUTF . '(' CML ')' ';'  (59)
+	sentencia_print : OUTF . '(' expresion ')' ';'  (60)
+	sentencia_print : OUTF . '(' ')' ';'  (61)
+	sentencia_print : OUTF . '(' expresion ')'  (62)
+	sentencia_print : OUTF . '(' CML ')'  (63)
+	sentencia_print : OUTF . CML ';'  (64)
+	sentencia_print : OUTF . expresion ';'  (65)
+	sentencia_print : OUTF . '(' error ')' ';'  (66)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -367,14 +369,14 @@ state 8
 
 
 state 9
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ')' ';'  (50)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable '(' condicion ')' ';'  (51)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ')'  (52)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' ')' ';'  (53)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE condicion ')' ';'  (54)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ';'  (55)
-	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE condicion ';'  (56)
-	sentencia_while : REPEAT . WHILE '(' condicion ')' ';'  (57)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ')' ';'  (51)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable '(' condicion ')' ';'  (52)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ')'  (53)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' ')' ';'  (54)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE condicion ')' ';'  (55)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE '(' condicion ';'  (56)
+	sentencia_while : REPEAT . bloque_sentencia_ejecutable WHILE condicion ';'  (57)
+	sentencia_while : REPEAT . WHILE '(' condicion ')' ';'  (58)
 
 	BEGIN  shift 57
 	WHILE  shift 58
@@ -384,9 +386,9 @@ state 9
 
 
 state 10
-	sentencia_ejecucion : GOTO . ETIQUETA ';'  (46)
-	sentencia_ejecucion : GOTO . ETIQUETA  (47)
-	sentencia_ejecucion : GOTO . ';'  (48)
+	sentencia_ejecucion : GOTO . ETIQUETA ';'  (47)
+	sentencia_ejecucion : GOTO . ETIQUETA  (48)
+	sentencia_ejecucion : GOTO . ';'  (49)
 
 	ETIQUETA  shift 60
 	';'  shift 61
@@ -394,41 +396,41 @@ state 10
 
 
 state 11
-	invocacion_funcion : ID . '(' expresion ')'  (68)
-	invocacion_funcion : ID . '(' ')'  (69)
-	lista_variables : ID .  (132)
-	id_compuesta : ID . '.' ID  (133)
-	tipo : ID .  (142)
+	invocacion_funcion : ID . '(' expresion ')'  (69)
+	invocacion_funcion : ID . '(' ')'  (70)
+	lista_variables : ID .  (134)
+	id_compuesta : ID . '.' ID  (135)
+	tipo : ID .  (144)
 
 	'.'  shift 62
 	'('  shift 63
-	FUN  reduce 142
-	ID  reduce 142
-	ASIGNACION  reduce 132
-	','  reduce 132
+	FUN  reduce 144
+	ID  reduce 144
+	ASIGNACION  reduce 134
+	','  reduce 134
 
 
 state 12
-	tipo : LONGINT .  (140)
+	tipo : LONGINT .  (142)
 
-	.  reduce 140
+	.  reduce 142
 
 
 state 13
-	tipo : HEXA .  (141)
+	tipo : HEXA .  (143)
+
+	.  reduce 143
+
+
+state 14
+	tipo : DOUBLE .  (141)
 
 	.  reduce 141
 
 
-state 14
-	tipo : DOUBLE .  (139)
-
-	.  reduce 139
-
-
 state 15
 	sentencia : ETIQUETA .  (11)
-	sentencia_ejecucion : ETIQUETA . ';'  (49)
+	sentencia_ejecucion : ETIQUETA . ';'  (50)
 
 	';'  shift 64
 	$end  reduce 11
@@ -504,9 +506,10 @@ state 20
 	declaracion_funcion : tipo . ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (35)
 	declaracion_funcion : tipo . FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (36)
 	declaracion_funcion : tipo . FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' END  (37)
-	declaracion_funcion : tipo . FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (38)
-	declaracion_funcion : tipo . FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo . FUN ID '(' parametro ')' BEGIN END  (40)
+	declaracion_funcion : tipo . FUN ID '(' parametro ')' BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo . FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (39)
+	declaracion_funcion : tipo . FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo . FUN ID '(' parametro ')' BEGIN END  (41)
 
 	FUN  shift 66
 	ID  shift 67
@@ -517,9 +520,10 @@ state 20
 
 
 state 21
-	asignacion : lista_variables . ASIGNACION lista_expresiones ';'  (98)
-	lista_variables : lista_variables . ',' ID  (129)
-	lista_variables : lista_variables . ',' id_compuesta  (130)
+	asignacion : lista_variables . ASIGNACION lista_expresiones ';'  (99)
+	asignacion : lista_variables . ASIGNACION lista_expresiones error  (100)
+	lista_variables : lista_variables . ',' ID  (131)
+	lista_variables : lista_variables . ',' id_compuesta  (132)
 
 	ASIGNACION  shift 69
 	','  shift 70
@@ -533,40 +537,40 @@ state 22
 
 
 state 23
-	sentencia_ejecucion : asignacion .  (41)
-
-	.  reduce 41
-
-
-state 24
-	sentencia_ejecucion : condicion_if .  (42)
+	sentencia_ejecucion : asignacion .  (42)
 
 	.  reduce 42
 
 
-state 25
-	sentencia_ejecucion : sentencia_print .  (43)
+state 24
+	sentencia_ejecucion : condicion_if .  (43)
 
 	.  reduce 43
 
 
-state 26
-	sentencia_ejecucion : sentencia_while .  (44)
+state 25
+	sentencia_ejecucion : sentencia_print .  (44)
 
 	.  reduce 44
 
 
+state 26
+	sentencia_ejecucion : sentencia_while .  (45)
+
+	.  reduce 45
+
+
 state 27
-	sentencia_ejecucion : invocacion_funcion . ';'  (45)
+	sentencia_ejecucion : invocacion_funcion . ';'  (46)
 
 	';'  shift 71
 	.  error
 
 
 state 28
-	lista_variables : id_compuesta .  (131)
+	lista_variables : id_compuesta .  (133)
 
-	.  reduce 131
+	.  reduce 133
 
 
 state 29
@@ -635,7 +639,7 @@ state 30
 
 
 state 31
-	condicion_if : IF THEN . bloque_sentencia_ejecutable END_IF  (80)
+	condicion_if : IF THEN . bloque_sentencia_ejecutable END_IF error  (81)
 
 	BEGIN  shift 57
 	.  error
@@ -644,56 +648,57 @@ state 31
 
 
 state 32
-	invocacion_funcion : ID . '(' expresion ')'  (68)
-	invocacion_funcion : ID . '(' ')'  (69)
-	factor : ID .  (121)
-	id_compuesta : ID . '.' ID  (133)
+	invocacion_funcion : ID . '(' expresion ')'  (69)
+	invocacion_funcion : ID . '(' ')'  (70)
+	factor : ID .  (123)
+	id_compuesta : ID . '.' ID  (135)
 
 	'.'  shift 62
 	'('  shift 63
-	THEN  reduce 121
-	DISTINTO  reduce 121
-	MENOR_IGUAL  reduce 121
-	MAYOR_IGUAL  reduce 121
-	'+'  reduce 121
-	'-'  reduce 121
-	'*'  reduce 121
-	'/'  reduce 121
-	';'  reduce 121
-	')'  reduce 121
-	'<'  reduce 121
-	'>'  reduce 121
-	','  reduce 121
+	error  reduce 123
+	THEN  reduce 123
+	DISTINTO  reduce 123
+	MENOR_IGUAL  reduce 123
+	MAYOR_IGUAL  reduce 123
+	'+'  reduce 123
+	'-'  reduce 123
+	'*'  reduce 123
+	'/'  reduce 123
+	';'  reduce 123
+	')'  reduce 123
+	'<'  reduce 123
+	'>'  reduce 123
+	','  reduce 123
 
 
 state 33
-	factor : LONGINT .  (123)
-
-	.  reduce 123
-
-
-state 34
-	factor : HEXA .  (125)
+	factor : LONGINT .  (125)
 
 	.  reduce 125
 
 
-state 35
-	factor : DOUBLE .  (127)
+state 34
+	factor : HEXA .  (127)
 
 	.  reduce 127
 
 
+state 35
+	factor : DOUBLE .  (129)
+
+	.  reduce 129
+
+
 state 36
-	expresion : TOD . '(' expresion ')'  (106)
-	expresion : TOD . '(' ')'  (107)
+	expresion : TOD . '(' expresion ')'  (108)
+	expresion : TOD . '(' ')'  (109)
 
 	'('  shift 75
 	.  error
 
 
 state 37
-	expresion : '+' . termino  (103)
+	expresion : '+' . termino  (105)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -711,9 +716,9 @@ state 37
 
 
 state 38
-	factor : '-' . LONGINT  (124)
-	factor : '-' . HEXA  (126)
-	factor : '-' . DOUBLE  (128)
+	factor : '-' . LONGINT  (126)
+	factor : '-' . HEXA  (128)
+	factor : '-' . DOUBLE  (130)
 
 	LONGINT  shift 77
 	HEXA  shift 78
@@ -722,7 +727,7 @@ state 38
 
 
 state 39
-	termino : '*' . factor  (118)
+	termino : '*' . factor  (120)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -737,7 +742,7 @@ state 39
 
 
 state 40
-	termino : '/' . factor  (117)
+	termino : '/' . factor  (119)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -752,24 +757,24 @@ state 40
 
 
 state 41
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (73)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' . condicion ')' bloque_sentencia_ejecutable END_IF ';'  (75)
-	condicion_if : IF '(' . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (76)
-	condicion_if : IF '(' . condicion ')' THEN error END_IF ';'  (77)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ';'  (78)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable error  (79)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (83)
-	condicion_if : IF '(' . condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (84)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' . condicion THEN bloque_sentencia_ejecutable END_IF ';'  (87)
-	condicion_if : IF '(' . condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (89)
-	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion END_IF ';'  (92)
-	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (94)
-	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable END_IF ';'  (74)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' . condicion ')' bloque_sentencia_ejecutable END_IF ';'  (76)
+	condicion_if : IF '(' . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (77)
+	condicion_if : IF '(' . condicion ')' THEN error END_IF ';'  (78)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ';'  (79)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable error  (80)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (84)
+	condicion_if : IF '(' . condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (85)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' . condicion THEN bloque_sentencia_ejecutable END_IF ';'  (88)
+	condicion_if : IF '(' . condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion END_IF ';'  (93)
+	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' . condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' . condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (96)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -793,14 +798,14 @@ state 41
 
 
 state 42
-	condicion : expresion . comparador expresion  (96)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-	lista_expresiones : expresion .  (135)
+	condicion : expresion . comparador expresion  (97)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+	lista_expresiones : expresion .  (137)
 
 	DISTINTO  shift 84
 	MENOR_IGUAL  shift 85
@@ -809,25 +814,25 @@ state 42
 	'-'  shift 88
 	'<'  shift 89
 	'>'  shift 90
-	THEN  reduce 135
-	';'  reduce 135
-	')'  reduce 135
-	','  reduce 135
+	THEN  reduce 137
+	';'  reduce 137
+	')'  reduce 137
+	','  reduce 137
 
 	comparador  goto 91
 
 
 state 43
-	factor : invocacion_funcion .  (120)
+	factor : invocacion_funcion .  (122)
 
-	.  reduce 120
+	.  reduce 122
 
 
 state 44
-	condicion_if : IF condicion . THEN bloque_sentencia_ejecutable END_IF ';'  (86)
-	condicion_if : IF condicion . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (88)
-	condicion_if : IF condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
-	condicion_if : IF condicion . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
+	condicion_if : IF condicion . THEN bloque_sentencia_ejecutable END_IF ';'  (87)
+	condicion_if : IF condicion . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (89)
+	condicion_if : IF condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
+	condicion_if : IF condicion . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (92)
 
 	THEN  shift 92
 	')'  shift 93
@@ -835,67 +840,68 @@ state 44
 
 
 state 45
-	condicion : lista_expresiones .  (97)
-	lista_expresiones : lista_expresiones . ',' expresion  (134)
+	condicion : lista_expresiones .  (98)
+	lista_expresiones : lista_expresiones . ',' expresion  (136)
 
 	','  shift 94
-	THEN  reduce 97
-	';'  reduce 97
-	')'  reduce 97
+	THEN  reduce 98
+	';'  reduce 98
+	')'  reduce 98
 
 
 state 46
-	expresion : termino .  (108)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
+	expresion : termino .  (110)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
 
 	'*'  shift 95
 	'/'  shift 96
-	THEN  reduce 108
-	DISTINTO  reduce 108
-	MENOR_IGUAL  reduce 108
-	MAYOR_IGUAL  reduce 108
-	'+'  reduce 108
-	'-'  reduce 108
-	';'  reduce 108
-	')'  reduce 108
-	'<'  reduce 108
-	'>'  reduce 108
-	','  reduce 108
+	error  reduce 110
+	THEN  reduce 110
+	DISTINTO  reduce 110
+	MENOR_IGUAL  reduce 110
+	MAYOR_IGUAL  reduce 110
+	'+'  reduce 110
+	'-'  reduce 110
+	';'  reduce 110
+	')'  reduce 110
+	'<'  reduce 110
+	'>'  reduce 110
+	','  reduce 110
 
 
 state 47
-	termino : factor .  (119)
+	termino : factor .  (121)
 
-	.  reduce 119
+	.  reduce 121
 
 
 state 48
-	factor : id_compuesta .  (122)
+	factor : id_compuesta .  (124)
 
-	.  reduce 122
+	.  reduce 124
 
 
 state 49
-	sentencia_print : OUTF CML . ';'  (63)
+	sentencia_print : OUTF CML . ';'  (64)
 
 	';'  shift 97
 	.  error
 
 
 state 50
-	sentencia_print : OUTF '(' . CML ')' ';'  (58)
-	sentencia_print : OUTF '(' . expresion ')' ';'  (59)
-	sentencia_print : OUTF '(' . ')' ';'  (60)
-	sentencia_print : OUTF '(' . expresion ')'  (61)
-	sentencia_print : OUTF '(' . CML ')'  (62)
-	sentencia_print : OUTF '(' . error ')' ';'  (65)
+	sentencia_print : OUTF '(' . CML ')' ';'  (59)
+	sentencia_print : OUTF '(' . expresion ')' ';'  (60)
+	sentencia_print : OUTF '(' . ')' ';'  (61)
+	sentencia_print : OUTF '(' . expresion ')'  (62)
+	sentencia_print : OUTF '(' . CML ')'  (63)
+	sentencia_print : OUTF '(' . error ')' ';'  (66)
 
 	error  shift 98
 	ID  shift 32
@@ -919,13 +925,13 @@ state 50
 
 
 state 51
-	sentencia_print : OUTF expresion . ';'  (64)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	sentencia_print : OUTF expresion . ';'  (65)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
@@ -994,7 +1000,7 @@ state 56
 
 
 state 57
-	bloque_sentencia_ejecutable : BEGIN . lista_sentencias END  (70)
+	bloque_sentencia_ejecutable : BEGIN . lista_sentencias END  (71)
 
 	IF  shift 4
 	OUTF  shift 6
@@ -1016,20 +1022,20 @@ state 57
 
 
 state 58
-	sentencia_while : REPEAT WHILE . '(' condicion ')' ';'  (57)
+	sentencia_while : REPEAT WHILE . '(' condicion ')' ';'  (58)
 
 	'('  shift 115
 	.  error
 
 
 state 59
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ')' ';'  (50)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . '(' condicion ')' ';'  (51)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ')'  (52)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' ')' ';'  (53)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE condicion ')' ';'  (54)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ';'  (55)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE condicion ';'  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . '(' condicion ')' ';'  (52)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ')'  (53)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' ')' ';'  (54)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE condicion ')' ';'  (55)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE '(' condicion ';'  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable . WHILE condicion ';'  (57)
 
 	WHILE  shift 116
 	'('  shift 117
@@ -1037,44 +1043,44 @@ state 59
 
 
 state 60
-	sentencia_ejecucion : GOTO ETIQUETA . ';'  (46)
-	sentencia_ejecucion : GOTO ETIQUETA .  (47)
+	sentencia_ejecucion : GOTO ETIQUETA . ';'  (47)
+	sentencia_ejecucion : GOTO ETIQUETA .  (48)
 
 	';'  shift 118
-	$end  reduce 47
-	IF  reduce 47
-	ELSE  reduce 47
-	END  reduce 47
-	END_IF  reduce 47
-	OUTF  reduce 47
-	TYPEDEF  reduce 47
-	FUN  reduce 47
-	RET  reduce 47
-	REPEAT  reduce 47
-	GOTO  reduce 47
-	ID  reduce 47
-	LONGINT  reduce 47
-	HEXA  reduce 47
-	DOUBLE  reduce 47
-	ETIQUETA  reduce 47
+	$end  reduce 48
+	IF  reduce 48
+	ELSE  reduce 48
+	END  reduce 48
+	END_IF  reduce 48
+	OUTF  reduce 48
+	TYPEDEF  reduce 48
+	FUN  reduce 48
+	RET  reduce 48
+	REPEAT  reduce 48
+	GOTO  reduce 48
+	ID  reduce 48
+	LONGINT  reduce 48
+	HEXA  reduce 48
+	DOUBLE  reduce 48
+	ETIQUETA  reduce 48
 
 
 state 61
-	sentencia_ejecucion : GOTO ';' .  (48)
+	sentencia_ejecucion : GOTO ';' .  (49)
 
-	.  reduce 48
+	.  reduce 49
 
 
 state 62
-	id_compuesta : ID '.' . ID  (133)
+	id_compuesta : ID '.' . ID  (135)
 
 	ID  shift 119
 	.  error
 
 
 state 63
-	invocacion_funcion : ID '(' . expresion ')'  (68)
-	invocacion_funcion : ID '(' . ')'  (69)
+	invocacion_funcion : ID '(' . expresion ')'  (69)
+	invocacion_funcion : ID '(' . ')'  (70)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1096,9 +1102,9 @@ state 63
 
 
 state 64
-	sentencia_ejecucion : ETIQUETA ';' .  (49)
+	sentencia_ejecucion : ETIQUETA ';' .  (50)
 
-	.  reduce 49
+	.  reduce 50
 
 
 state 65
@@ -1112,9 +1118,10 @@ state 66
 	declaracion_funcion : tipo FUN . ID '(' parametro ')' BEGIN cuerpo END  (33)
 	declaracion_funcion : tipo FUN . '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (36)
 	declaracion_funcion : tipo FUN . ID parametro BEGIN cuerpo RET '(' expresion ')' ';' END  (37)
-	declaracion_funcion : tipo FUN . ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (38)
-	declaracion_funcion : tipo FUN . ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo FUN . ID '(' parametro ')' BEGIN END  (40)
+	declaracion_funcion : tipo FUN . ID '(' parametro ')' BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN . ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (39)
+	declaracion_funcion : tipo FUN . ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo FUN . ID '(' parametro ')' BEGIN END  (41)
 
 	ID  shift 122
 	'('  shift 123
@@ -1123,34 +1130,34 @@ state 66
 
 state 67
 	declaracion_funcion : tipo ID . '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (35)
-	lista_variables : ID .  (132)
-	id_compuesta : ID . '.' ID  (133)
+	lista_variables : ID .  (134)
+	id_compuesta : ID . '.' ID  (135)
 
 	'.'  shift 62
 	'('  shift 124
-	$end  reduce 132
-	IF  reduce 132
-	END  reduce 132
-	OUTF  reduce 132
-	TYPEDEF  reduce 132
-	FUN  reduce 132
-	RET  reduce 132
-	REPEAT  reduce 132
-	GOTO  reduce 132
-	ID  reduce 132
-	LONGINT  reduce 132
-	HEXA  reduce 132
-	DOUBLE  reduce 132
-	ETIQUETA  reduce 132
-	';'  reduce 132
-	','  reduce 132
+	$end  reduce 134
+	IF  reduce 134
+	END  reduce 134
+	OUTF  reduce 134
+	TYPEDEF  reduce 134
+	FUN  reduce 134
+	RET  reduce 134
+	REPEAT  reduce 134
+	GOTO  reduce 134
+	ID  reduce 134
+	LONGINT  reduce 134
+	HEXA  reduce 134
+	DOUBLE  reduce 134
+	ETIQUETA  reduce 134
+	';'  reduce 134
+	','  reduce 134
 
 
 state 68
 	sentencia_declaracion : tipo lista_variables . ';'  (12)
 	sentencia_declaracion : tipo lista_variables .  (13)
-	lista_variables : lista_variables . ',' ID  (129)
-	lista_variables : lista_variables . ',' id_compuesta  (130)
+	lista_variables : lista_variables . ',' ID  (131)
+	lista_variables : lista_variables . ',' id_compuesta  (132)
 
 	';'  shift 125
 	','  shift 70
@@ -1171,7 +1178,8 @@ state 68
 
 
 state 69
-	asignacion : lista_variables ASIGNACION . lista_expresiones ';'  (98)
+	asignacion : lista_variables ASIGNACION . lista_expresiones ';'  (99)
+	asignacion : lista_variables ASIGNACION . lista_expresiones error  (100)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1193,8 +1201,8 @@ state 69
 
 
 state 70
-	lista_variables : lista_variables ',' . ID  (129)
-	lista_variables : lista_variables ',' . id_compuesta  (130)
+	lista_variables : lista_variables ',' . ID  (131)
+	lista_variables : lista_variables ',' . id_compuesta  (132)
 
 	ID  shift 128
 	.  error
@@ -1203,9 +1211,9 @@ state 70
 
 
 state 71
-	sentencia_ejecucion : invocacion_funcion ';' .  (45)
+	sentencia_ejecucion : invocacion_funcion ';' .  (46)
 
-	.  reduce 45
+	.  reduce 46
 
 
 state 72
@@ -1248,15 +1256,15 @@ state 73
 
 
 state 74
-	condicion_if : IF THEN bloque_sentencia_ejecutable . END_IF  (80)
+	condicion_if : IF THEN bloque_sentencia_ejecutable . END_IF error  (81)
 
 	END_IF  shift 131
 	.  error
 
 
 state 75
-	expresion : TOD '(' . expresion ')'  (106)
-	expresion : TOD '(' . ')'  (107)
+	expresion : TOD '(' . expresion ')'  (108)
+	expresion : TOD '(' . ')'  (109)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1278,150 +1286,19 @@ state 75
 
 
 state 76
-	expresion : '+' termino .  (103)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
+	expresion : '+' termino .  (105)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
 
 	'*'  shift 95
 	'/'  shift 96
-	THEN  reduce 103
-	DISTINTO  reduce 103
-	MENOR_IGUAL  reduce 103
-	MAYOR_IGUAL  reduce 103
-	'+'  reduce 103
-	'-'  reduce 103
-	';'  reduce 103
-	')'  reduce 103
-	'<'  reduce 103
-	'>'  reduce 103
-	','  reduce 103
-
-
-state 77
-	factor : '-' LONGINT .  (124)
-
-	.  reduce 124
-
-
-state 78
-	factor : '-' HEXA .  (126)
-
-	.  reduce 126
-
-
-state 79
-	factor : '-' DOUBLE .  (128)
-
-	.  reduce 128
-
-
-state 80
-	termino : '*' factor .  (118)
-
-	.  reduce 118
-
-
-state 81
-	termino : '/' factor .  (117)
-
-	.  reduce 117
-
-
-state 82
-	condicion_if : IF '(' ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (76)
-
-	THEN  shift 134
-	.  error
-
-
-state 83
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (73)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' condicion . ')' bloque_sentencia_ejecutable END_IF ';'  (75)
-	condicion_if : IF '(' condicion . ')' THEN error END_IF ';'  (77)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ';'  (78)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable error  (79)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (83)
-	condicion_if : IF '(' condicion . ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (84)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' condicion . THEN bloque_sentencia_ejecutable END_IF ';'  (87)
-	condicion_if : IF '(' condicion . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (89)
-	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion END_IF ';'  (92)
-	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (94)
-	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (95)
-
-	THEN  shift 135
-	')'  shift 136
-	.  error
-
-
-state 84
-	comparador : DISTINTO .  (147)
-
-	.  reduce 147
-
-
-state 85
-	comparador : MENOR_IGUAL .  (146)
-
-	.  reduce 146
-
-
-state 86
-	comparador : MAYOR_IGUAL .  (145)
-
-	.  reduce 145
-
-
-state 87
-	expresion : expresion '+' . termino  (99)
-	expresion : expresion '+' . '+' termino  (101)
-	expresion : expresion '+' .  (104)
-
-	ID  shift 32
-	LONGINT  shift 33
-	HEXA  shift 34
-	DOUBLE  shift 35
-	'*'  shift 39
-	'/'  shift 40
-	THEN  reduce 104
-	DISTINTO  reduce 104
-	MENOR_IGUAL  reduce 104
-	MAYOR_IGUAL  reduce 104
-	'+'  reduce 104
-	'-'  reduce 104
-	';'  reduce 104
-	')'  reduce 104
-	'<'  reduce 104
-	'>'  reduce 104
-	','  reduce 104
-
-	invocacion_funcion  goto 43
-	termino  goto 138
-	factor  goto 47
-	id_compuesta  goto 48
-
-
-state 88
-	expresion : expresion '-' . termino  (100)
-	expresion : expresion '-' . '+' termino  (102)
-	expresion : expresion '-' .  (105)
-
-	ID  shift 32
-	LONGINT  shift 33
-	HEXA  shift 34
-	DOUBLE  shift 35
-	'*'  shift 39
-	'/'  shift 40
+	error  reduce 105
 	THEN  reduce 105
 	DISTINTO  reduce 105
 	MENOR_IGUAL  reduce 105
@@ -1434,6 +1311,140 @@ state 88
 	'>'  reduce 105
 	','  reduce 105
 
+
+state 77
+	factor : '-' LONGINT .  (126)
+
+	.  reduce 126
+
+
+state 78
+	factor : '-' HEXA .  (128)
+
+	.  reduce 128
+
+
+state 79
+	factor : '-' DOUBLE .  (130)
+
+	.  reduce 130
+
+
+state 80
+	termino : '*' factor .  (120)
+
+	.  reduce 120
+
+
+state 81
+	termino : '/' factor .  (119)
+
+	.  reduce 119
+
+
+state 82
+	condicion_if : IF '(' ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (77)
+
+	THEN  shift 134
+	.  error
+
+
+state 83
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable END_IF ';'  (74)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' condicion . ')' bloque_sentencia_ejecutable END_IF ';'  (76)
+	condicion_if : IF '(' condicion . ')' THEN error END_IF ';'  (78)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ';'  (79)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable error  (80)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (84)
+	condicion_if : IF '(' condicion . ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (85)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' condicion . THEN bloque_sentencia_ejecutable END_IF ';'  (88)
+	condicion_if : IF '(' condicion . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion END_IF ';'  (93)
+	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' condicion . ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' condicion . ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (96)
+
+	THEN  shift 135
+	')'  shift 136
+	.  error
+
+
+state 84
+	comparador : DISTINTO .  (149)
+
+	.  reduce 149
+
+
+state 85
+	comparador : MENOR_IGUAL .  (148)
+
+	.  reduce 148
+
+
+state 86
+	comparador : MAYOR_IGUAL .  (147)
+
+	.  reduce 147
+
+
+state 87
+	expresion : expresion '+' . termino  (101)
+	expresion : expresion '+' . '+' termino  (103)
+	expresion : expresion '+' .  (106)
+
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	'*'  shift 39
+	'/'  shift 40
+	error  reduce 106
+	THEN  reduce 106
+	DISTINTO  reduce 106
+	MENOR_IGUAL  reduce 106
+	MAYOR_IGUAL  reduce 106
+	'+'  reduce 106
+	'-'  reduce 106
+	';'  reduce 106
+	')'  reduce 106
+	'<'  reduce 106
+	'>'  reduce 106
+	','  reduce 106
+
+	invocacion_funcion  goto 43
+	termino  goto 138
+	factor  goto 47
+	id_compuesta  goto 48
+
+
+state 88
+	expresion : expresion '-' . termino  (102)
+	expresion : expresion '-' . '+' termino  (104)
+	expresion : expresion '-' .  (107)
+
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	'*'  shift 39
+	'/'  shift 40
+	error  reduce 107
+	THEN  reduce 107
+	DISTINTO  reduce 107
+	MENOR_IGUAL  reduce 107
+	MAYOR_IGUAL  reduce 107
+	'+'  reduce 107
+	'-'  reduce 107
+	';'  reduce 107
+	')'  reduce 107
+	'<'  reduce 107
+	'>'  reduce 107
+	','  reduce 107
+
 	invocacion_funcion  goto 43
 	termino  goto 140
 	factor  goto 47
@@ -1441,19 +1452,19 @@ state 88
 
 
 state 89
-	comparador : '<' .  (143)
+	comparador : '<' .  (145)
 
-	.  reduce 143
+	.  reduce 145
 
 
 state 90
-	comparador : '>' .  (144)
+	comparador : '>' .  (146)
 
-	.  reduce 144
+	.  reduce 146
 
 
 state 91
-	condicion : expresion comparador . expresion  (96)
+	condicion : expresion comparador . expresion  (97)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1474,8 +1485,8 @@ state 91
 
 
 state 92
-	condicion_if : IF condicion THEN . bloque_sentencia_ejecutable END_IF ';'  (86)
-	condicion_if : IF condicion THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
+	condicion_if : IF condicion THEN . bloque_sentencia_ejecutable END_IF ';'  (87)
+	condicion_if : IF condicion THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (92)
 
 	BEGIN  shift 57
 	.  error
@@ -1484,15 +1495,15 @@ state 92
 
 
 state 93
-	condicion_if : IF condicion ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (88)
-	condicion_if : IF condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF condicion ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (89)
+	condicion_if : IF condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
 
 	THEN  shift 143
 	.  error
 
 
 state 94
-	lista_expresiones : lista_expresiones ',' . expresion  (134)
+	lista_expresiones : lista_expresiones ',' . expresion  (136)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1513,28 +1524,29 @@ state 94
 
 
 state 95
-	termino : termino '*' . factor  (109)
-	termino : termino '*' . '*' factor  (111)
-	termino : termino '*' . '/' factor  (112)
-	termino : termino '*' .  (116)
+	termino : termino '*' . factor  (111)
+	termino : termino '*' . '*' factor  (113)
+	termino : termino '*' . '/' factor  (114)
+	termino : termino '*' .  (118)
 
 	ID  shift 32
 	LONGINT  shift 33
 	HEXA  shift 34
 	DOUBLE  shift 35
-	THEN  reduce 116
-	DISTINTO  reduce 116
-	MENOR_IGUAL  reduce 116
-	MAYOR_IGUAL  reduce 116
-	'+'  reduce 116
-	'-'  reduce 116
-	'*'  reduce 116
-	'/'  reduce 116
-	';'  reduce 116
-	')'  reduce 116
-	'<'  reduce 116
-	'>'  reduce 116
-	','  reduce 116
+	error  reduce 118
+	THEN  reduce 118
+	DISTINTO  reduce 118
+	MENOR_IGUAL  reduce 118
+	MAYOR_IGUAL  reduce 118
+	'+'  reduce 118
+	'-'  reduce 118
+	'*'  reduce 118
+	'/'  reduce 118
+	';'  reduce 118
+	')'  reduce 118
+	'<'  reduce 118
+	'>'  reduce 118
+	','  reduce 118
 
 	invocacion_funcion  goto 43
 	factor  goto 147
@@ -1542,28 +1554,29 @@ state 95
 
 
 state 96
-	termino : termino '/' . factor  (110)
-	termino : termino '/' . '/' factor  (113)
-	termino : termino '/' . '*' factor  (114)
-	termino : termino '/' .  (115)
+	termino : termino '/' . factor  (112)
+	termino : termino '/' . '/' factor  (115)
+	termino : termino '/' . '*' factor  (116)
+	termino : termino '/' .  (117)
 
 	ID  shift 32
 	LONGINT  shift 33
 	HEXA  shift 34
 	DOUBLE  shift 35
-	THEN  reduce 115
-	DISTINTO  reduce 115
-	MENOR_IGUAL  reduce 115
-	MAYOR_IGUAL  reduce 115
-	'+'  reduce 115
-	'-'  reduce 115
-	'*'  reduce 115
-	'/'  reduce 115
-	';'  reduce 115
-	')'  reduce 115
-	'<'  reduce 115
-	'>'  reduce 115
-	','  reduce 115
+	error  reduce 117
+	THEN  reduce 117
+	DISTINTO  reduce 117
+	MENOR_IGUAL  reduce 117
+	MAYOR_IGUAL  reduce 117
+	'+'  reduce 117
+	'-'  reduce 117
+	'*'  reduce 117
+	'/'  reduce 117
+	';'  reduce 117
+	')'  reduce 117
+	'<'  reduce 117
+	'>'  reduce 117
+	','  reduce 117
 
 	invocacion_funcion  goto 43
 	factor  goto 150
@@ -1571,42 +1584,42 @@ state 96
 
 
 state 97
-	sentencia_print : OUTF CML ';' .  (63)
+	sentencia_print : OUTF CML ';' .  (64)
 
-	.  reduce 63
+	.  reduce 64
 
 
 state 98
-	sentencia_print : OUTF '(' error . ')' ';'  (65)
+	sentencia_print : OUTF '(' error . ')' ';'  (66)
 
 	')'  shift 151
 	.  error
 
 
 state 99
-	sentencia_print : OUTF '(' CML . ')' ';'  (58)
-	sentencia_print : OUTF '(' CML . ')'  (62)
+	sentencia_print : OUTF '(' CML . ')' ';'  (59)
+	sentencia_print : OUTF '(' CML . ')'  (63)
 
 	')'  shift 152
 	.  error
 
 
 state 100
-	sentencia_print : OUTF '(' ')' . ';'  (60)
+	sentencia_print : OUTF '(' ')' . ';'  (61)
 
 	';'  shift 153
 	.  error
 
 
 state 101
-	sentencia_print : OUTF '(' expresion . ')' ';'  (59)
-	sentencia_print : OUTF '(' expresion . ')'  (61)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	sentencia_print : OUTF '(' expresion . ')' ';'  (60)
+	sentencia_print : OUTF '(' expresion . ')'  (62)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
@@ -1615,9 +1628,9 @@ state 101
 
 
 state 102
-	sentencia_print : OUTF expresion ';' .  (64)
+	sentencia_print : OUTF expresion ';' .  (65)
 
-	.  reduce 64
+	.  reduce 65
 
 
 state 103
@@ -1639,9 +1652,9 @@ state 103
 
 
 state 104
-	tipo : ID .  (142)
+	tipo : ID .  (144)
 
-	.  reduce 142
+	.  reduce 144
 
 
 state 105
@@ -1659,15 +1672,15 @@ state 105
 
 
 state 106
-	lista_tipos : tipo .  (138)
+	lista_tipos : tipo .  (140)
 
-	.  reduce 138
+	.  reduce 140
 
 
 state 107
 	sentencia_declaracion : TYPEDEF STRUCT lista_tipos . '(' lista_variables ',' ')' ID ';'  (23)
-	lista_tipos : lista_tipos . ',' tipo  (136)
-	lista_tipos : lista_tipos . tipo  (137)
+	lista_tipos : lista_tipos . ',' tipo  (138)
+	lista_tipos : lista_tipos . tipo  (139)
 
 	ID  shift 104
 	LONGINT  shift 12
@@ -1689,8 +1702,8 @@ state 108
 
 state 109
 	sentencia_declaracion : TYPEDEF '<' lista_tipos . '>' '(' lista_variables ',' ')' ID ';'  (24)
-	lista_tipos : lista_tipos . ',' tipo  (136)
-	lista_tipos : lista_tipos . tipo  (137)
+	lista_tipos : lista_tipos . ',' tipo  (138)
+	lista_tipos : lista_tipos . tipo  (139)
 
 	ID  shift 104
 	LONGINT  shift 12
@@ -1717,33 +1730,33 @@ state 110
 
 
 state 111
-	invocacion_funcion : ID . '(' expresion ')'  (68)
-	invocacion_funcion : ID . '(' ')'  (69)
-	lista_variables : ID .  (132)
-	id_compuesta : ID . '.' ID  (133)
+	invocacion_funcion : ID . '(' expresion ')'  (69)
+	invocacion_funcion : ID . '(' ')'  (70)
+	lista_variables : ID .  (134)
+	id_compuesta : ID . '.' ID  (135)
 
 	'.'  shift 62
 	'('  shift 63
-	ASIGNACION  reduce 132
-	','  reduce 132
+	ASIGNACION  reduce 134
+	','  reduce 134
 
 
 state 112
-	sentencia_ejecucion : ETIQUETA . ';'  (49)
+	sentencia_ejecucion : ETIQUETA . ';'  (50)
 
 	';'  shift 64
 	.  error
 
 
 state 113
-	lista_sentencias : sentencia_ejecucion .  (72)
+	lista_sentencias : sentencia_ejecucion .  (73)
 
-	.  reduce 72
+	.  reduce 73
 
 
 state 114
-	bloque_sentencia_ejecutable : BEGIN lista_sentencias . END  (70)
-	lista_sentencias : lista_sentencias . sentencia_ejecucion  (71)
+	bloque_sentencia_ejecutable : BEGIN lista_sentencias . END  (71)
+	lista_sentencias : lista_sentencias . sentencia_ejecucion  (72)
 
 	IF  shift 4
 	END  shift 166
@@ -1765,7 +1778,7 @@ state 114
 
 
 state 115
-	sentencia_while : REPEAT WHILE '(' . condicion ')' ';'  (57)
+	sentencia_while : REPEAT WHILE '(' . condicion ')' ';'  (58)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1788,12 +1801,12 @@ state 115
 
 
 state 116
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ')' ';'  (50)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ')'  (52)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' ')' ';'  (53)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . condicion ')' ';'  (54)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ';'  (55)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . condicion ';'  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ')'  (53)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' ')' ';'  (54)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . condicion ')' ';'  (55)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . '(' condicion ';'  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE . condicion ';'  (57)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1817,7 +1830,7 @@ state 116
 
 
 state 117
-	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' . condicion ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' . condicion ')' ';'  (52)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -1840,31 +1853,31 @@ state 117
 
 
 state 118
-	sentencia_ejecucion : GOTO ETIQUETA ';' .  (46)
+	sentencia_ejecucion : GOTO ETIQUETA ';' .  (47)
 
-	.  reduce 46
+	.  reduce 47
 
 
 state 119
-	id_compuesta : ID '.' ID .  (133)
+	id_compuesta : ID '.' ID .  (135)
 
-	.  reduce 133
+	.  reduce 135
 
 
 state 120
-	invocacion_funcion : ID '(' ')' .  (69)
+	invocacion_funcion : ID '(' ')' .  (70)
 
-	.  reduce 69
+	.  reduce 70
 
 
 state 121
-	invocacion_funcion : ID '(' expresion . ')'  (68)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	invocacion_funcion : ID '(' expresion . ')'  (69)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
@@ -1876,9 +1889,10 @@ state 122
 	declaracion_funcion : tipo FUN ID . '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
 	declaracion_funcion : tipo FUN ID . '(' parametro ')' BEGIN cuerpo END  (33)
 	declaracion_funcion : tipo FUN ID . parametro BEGIN cuerpo RET '(' expresion ')' ';' END  (37)
-	declaracion_funcion : tipo FUN ID . '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (38)
-	declaracion_funcion : tipo FUN ID . '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo FUN ID . '(' parametro ')' BEGIN END  (40)
+	declaracion_funcion : tipo FUN ID . '(' parametro ')' BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN ID . '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (39)
+	declaracion_funcion : tipo FUN ID . '(' parametro ')' cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo FUN ID . '(' parametro ')' BEGIN END  (41)
 
 	ID  shift 163
 	LONGINT  shift 12
@@ -1924,57 +1938,60 @@ state 125
 
 
 state 126
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-	lista_expresiones : expresion .  (135)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+	lista_expresiones : expresion .  (137)
 
 	'+'  shift 87
 	'-'  shift 88
-	';'  reduce 135
-	','  reduce 135
+	error  reduce 137
+	';'  reduce 137
+	','  reduce 137
 
 
 state 127
-	asignacion : lista_variables ASIGNACION lista_expresiones . ';'  (98)
-	lista_expresiones : lista_expresiones . ',' expresion  (134)
+	asignacion : lista_variables ASIGNACION lista_expresiones . ';'  (99)
+	asignacion : lista_variables ASIGNACION lista_expresiones . error  (100)
+	lista_expresiones : lista_expresiones . ',' expresion  (136)
 
-	';'  shift 177
+	error  shift 177
+	';'  shift 178
 	','  shift 94
 	.  error
 
 
 state 128
-	lista_variables : lista_variables ',' ID .  (129)
-	id_compuesta : ID . '.' ID  (133)
+	lista_variables : lista_variables ',' ID .  (131)
+	id_compuesta : ID . '.' ID  (135)
 
 	'.'  shift 62
-	$end  reduce 129
-	IF  reduce 129
-	END  reduce 129
-	OUTF  reduce 129
-	TYPEDEF  reduce 129
-	FUN  reduce 129
-	RET  reduce 129
-	REPEAT  reduce 129
-	GOTO  reduce 129
-	ID  reduce 129
-	LONGINT  reduce 129
-	HEXA  reduce 129
-	DOUBLE  reduce 129
-	ASIGNACION  reduce 129
-	ETIQUETA  reduce 129
-	';'  reduce 129
-	','  reduce 129
+	$end  reduce 131
+	IF  reduce 131
+	END  reduce 131
+	OUTF  reduce 131
+	TYPEDEF  reduce 131
+	FUN  reduce 131
+	RET  reduce 131
+	REPEAT  reduce 131
+	GOTO  reduce 131
+	ID  reduce 131
+	LONGINT  reduce 131
+	HEXA  reduce 131
+	DOUBLE  reduce 131
+	ASIGNACION  reduce 131
+	ETIQUETA  reduce 131
+	';'  reduce 131
+	','  reduce 131
 
 
 state 129
-	lista_variables : lista_variables ',' id_compuesta .  (130)
+	lista_variables : lista_variables ',' id_compuesta .  (132)
 
-	.  reduce 130
+	.  reduce 132
 
 
 state 130
@@ -1984,77 +2001,78 @@ state 130
 
 
 state 131
-	condicion_if : IF THEN bloque_sentencia_ejecutable END_IF .  (80)
+	condicion_if : IF THEN bloque_sentencia_ejecutable END_IF . error  (81)
 
-	.  reduce 80
+	error  shift 179
+	.  error
 
 
 state 132
-	expresion : TOD '(' ')' .  (107)
+	expresion : TOD '(' ')' .  (109)
 
-	.  reduce 107
+	.  reduce 109
 
 
 state 133
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-	expresion : TOD '(' expresion . ')'  (106)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+	expresion : TOD '(' expresion . ')'  (108)
 
 	'+'  shift 87
 	'-'  shift 88
-	')'  shift 178
+	')'  shift 180
 	.  error
 
 
 state 134
-	condicion_if : IF '(' ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (76)
+	condicion_if : IF '(' ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (77)
 
 	BEGIN  shift 57
 	.  error
 
-	bloque_sentencia_ejecutable  goto 179
+	bloque_sentencia_ejecutable  goto 181
 
 
 state 135
-	condicion_if : IF '(' condicion THEN . bloque_sentencia_ejecutable END_IF ';'  (87)
-	condicion_if : IF '(' condicion THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (89)
+	condicion_if : IF '(' condicion THEN . bloque_sentencia_ejecutable END_IF ';'  (88)
+	condicion_if : IF '(' condicion THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
 
-	BEGIN  shift 57
-	.  error
-
-	bloque_sentencia_ejecutable  goto 180
-
-
-state 136
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (73)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' condicion ')' . bloque_sentencia_ejecutable END_IF ';'  (75)
-	condicion_if : IF '(' condicion ')' . THEN error END_IF ';'  (77)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ';'  (78)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable error  (79)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (83)
-	condicion_if : IF '(' condicion ')' . THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (84)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion END_IF ';'  (92)
-	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (94)
-	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (95)
-
-	THEN  shift 181
 	BEGIN  shift 57
 	.  error
 
 	bloque_sentencia_ejecutable  goto 182
 
 
+state 136
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable END_IF ';'  (74)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' condicion ')' . bloque_sentencia_ejecutable END_IF ';'  (76)
+	condicion_if : IF '(' condicion ')' . THEN error END_IF ';'  (78)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ';'  (79)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable error  (80)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE END_IF ';'  (84)
+	condicion_if : IF '(' condicion ')' . THEN ELSE bloque_sentencia_ejecutable END_IF ';'  (85)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion END_IF ';'  (93)
+	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' condicion ')' . THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' condicion ')' . THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (96)
+
+	THEN  shift 183
+	BEGIN  shift 57
+	.  error
+
+	bloque_sentencia_ejecutable  goto 184
+
+
 state 137
-	expresion : expresion '+' '+' . termino  (101)
+	expresion : expresion '+' '+' . termino  (103)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -2066,39 +2084,40 @@ state 137
 	.  error
 
 	invocacion_funcion  goto 43
-	termino  goto 183
+	termino  goto 185
 	factor  goto 47
 	id_compuesta  goto 48
 
 
 state 138
-	expresion : expresion '+' termino .  (99)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
+	expresion : expresion '+' termino .  (101)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
 
 	'*'  shift 95
 	'/'  shift 96
-	THEN  reduce 99
-	DISTINTO  reduce 99
-	MENOR_IGUAL  reduce 99
-	MAYOR_IGUAL  reduce 99
-	'+'  reduce 99
-	'-'  reduce 99
-	';'  reduce 99
-	')'  reduce 99
-	'<'  reduce 99
-	'>'  reduce 99
-	','  reduce 99
+	error  reduce 101
+	THEN  reduce 101
+	DISTINTO  reduce 101
+	MENOR_IGUAL  reduce 101
+	MAYOR_IGUAL  reduce 101
+	'+'  reduce 101
+	'-'  reduce 101
+	';'  reduce 101
+	')'  reduce 101
+	'<'  reduce 101
+	'>'  reduce 101
+	','  reduce 101
 
 
 state 139
-	expresion : expresion '-' '+' . termino  (102)
+	expresion : expresion '-' '+' . termino  (104)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -2110,127 +2129,93 @@ state 139
 	.  error
 
 	invocacion_funcion  goto 43
-	termino  goto 184
+	termino  goto 186
 	factor  goto 47
 	id_compuesta  goto 48
 
 
 state 140
-	expresion : expresion '-' termino .  (100)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
+	expresion : expresion '-' termino .  (102)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
 
 	'*'  shift 95
 	'/'  shift 96
-	THEN  reduce 100
-	DISTINTO  reduce 100
-	MENOR_IGUAL  reduce 100
-	MAYOR_IGUAL  reduce 100
-	'+'  reduce 100
-	'-'  reduce 100
-	';'  reduce 100
-	')'  reduce 100
-	'<'  reduce 100
-	'>'  reduce 100
-	','  reduce 100
+	error  reduce 102
+	THEN  reduce 102
+	DISTINTO  reduce 102
+	MENOR_IGUAL  reduce 102
+	MAYOR_IGUAL  reduce 102
+	'+'  reduce 102
+	'-'  reduce 102
+	';'  reduce 102
+	')'  reduce 102
+	'<'  reduce 102
+	'>'  reduce 102
+	','  reduce 102
 
 
 state 141
-	condicion : expresion comparador expresion .  (96)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	condicion : expresion comparador expresion .  (97)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
-	THEN  reduce 96
-	';'  reduce 96
-	')'  reduce 96
+	THEN  reduce 97
+	';'  reduce 97
+	')'  reduce 97
 
 
 state 142
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable . END_IF ';'  (86)
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable . END_IF ';'  (87)
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (92)
 
-	ELSE  shift 185
-	END_IF  shift 186
+	ELSE  shift 187
+	END_IF  shift 188
 	.  error
 
 
 state 143
-	condicion_if : IF condicion ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (88)
-	condicion_if : IF condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF condicion ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (89)
+	condicion_if : IF condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
 
 	BEGIN  shift 57
 	.  error
 
-	bloque_sentencia_ejecutable  goto 187
+	bloque_sentencia_ejecutable  goto 189
 
 
 state 144
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-	lista_expresiones : lista_expresiones ',' expresion .  (134)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+	lista_expresiones : lista_expresiones ',' expresion .  (136)
 
 	'+'  shift 87
 	'-'  shift 88
-	THEN  reduce 134
-	';'  reduce 134
-	')'  reduce 134
-	','  reduce 134
+	error  reduce 136
+	THEN  reduce 136
+	';'  reduce 136
+	')'  reduce 136
+	','  reduce 136
 
 
 state 145
-	termino : termino '*' '*' . factor  (111)
-
-	ID  shift 32
-	LONGINT  shift 33
-	HEXA  shift 34
-	DOUBLE  shift 35
-	'-'  shift 38
-	.  error
-
-	invocacion_funcion  goto 43
-	factor  goto 188
-	id_compuesta  goto 48
-
-
-state 146
-	termino : termino '*' '/' . factor  (112)
-
-	ID  shift 32
-	LONGINT  shift 33
-	HEXA  shift 34
-	DOUBLE  shift 35
-	'-'  shift 38
-	.  error
-
-	invocacion_funcion  goto 43
-	factor  goto 189
-	id_compuesta  goto 48
-
-
-state 147
-	termino : termino '*' factor .  (109)
-
-	.  reduce 109
-
-
-state 148
-	termino : termino '/' '*' . factor  (114)
+	termino : termino '*' '*' . factor  (113)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -2244,8 +2229,8 @@ state 148
 	id_compuesta  goto 48
 
 
-state 149
-	termino : termino '/' '/' . factor  (113)
+state 146
+	termino : termino '*' '/' . factor  (114)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -2259,24 +2244,89 @@ state 149
 	id_compuesta  goto 48
 
 
-state 150
-	termino : termino '/' factor .  (110)
+state 147
+	termino : termino '*' factor .  (111)
 
-	.  reduce 110
+	.  reduce 111
+
+
+state 148
+	termino : termino '/' '*' . factor  (116)
+
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	'-'  shift 38
+	.  error
+
+	invocacion_funcion  goto 43
+	factor  goto 192
+	id_compuesta  goto 48
+
+
+state 149
+	termino : termino '/' '/' . factor  (115)
+
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	'-'  shift 38
+	.  error
+
+	invocacion_funcion  goto 43
+	factor  goto 193
+	id_compuesta  goto 48
+
+
+state 150
+	termino : termino '/' factor .  (112)
+
+	.  reduce 112
 
 
 state 151
-	sentencia_print : OUTF '(' error ')' . ';'  (65)
+	sentencia_print : OUTF '(' error ')' . ';'  (66)
 
-	';'  shift 192
+	';'  shift 194
 	.  error
 
 
 state 152
-	sentencia_print : OUTF '(' CML ')' . ';'  (58)
-	sentencia_print : OUTF '(' CML ')' .  (62)
+	sentencia_print : OUTF '(' CML ')' . ';'  (59)
+	sentencia_print : OUTF '(' CML ')' .  (63)
 
-	';'  shift 193
+	';'  shift 195
+	$end  reduce 63
+	IF  reduce 63
+	ELSE  reduce 63
+	END  reduce 63
+	END_IF  reduce 63
+	OUTF  reduce 63
+	TYPEDEF  reduce 63
+	FUN  reduce 63
+	RET  reduce 63
+	REPEAT  reduce 63
+	GOTO  reduce 63
+	ID  reduce 63
+	LONGINT  reduce 63
+	HEXA  reduce 63
+	DOUBLE  reduce 63
+	ETIQUETA  reduce 63
+
+
+state 153
+	sentencia_print : OUTF '(' ')' ';' .  (61)
+
+	.  reduce 61
+
+
+state 154
+	sentencia_print : OUTF '(' expresion ')' . ';'  (60)
+	sentencia_print : OUTF '(' expresion ')' .  (62)
+
+	';'  shift 196
 	$end  reduce 62
 	IF  reduce 62
 	ELSE  reduce 62
@@ -2295,44 +2345,15 @@ state 152
 	ETIQUETA  reduce 62
 
 
-state 153
-	sentencia_print : OUTF '(' ')' ';' .  (60)
-
-	.  reduce 60
-
-
-state 154
-	sentencia_print : OUTF '(' expresion ')' . ';'  (59)
-	sentencia_print : OUTF '(' expresion ')' .  (61)
-
-	';'  shift 194
-	$end  reduce 61
-	IF  reduce 61
-	ELSE  reduce 61
-	END  reduce 61
-	END_IF  reduce 61
-	OUTF  reduce 61
-	TYPEDEF  reduce 61
-	FUN  reduce 61
-	RET  reduce 61
-	REPEAT  reduce 61
-	GOTO  reduce 61
-	ID  reduce 61
-	LONGINT  reduce 61
-	HEXA  reduce 61
-	DOUBLE  reduce 61
-	ETIQUETA  reduce 61
-
-
 state 155
 	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' . subrango ')' ';'  (21)
 
-	LONGINT  shift 195
-	HEXA  shift 196
-	DOUBLE  shift 197
+	LONGINT  shift 197
+	HEXA  shift 198
+	DOUBLE  shift 199
 	.  error
 
-	subrango  goto 198
+	subrango  goto 200
 
 
 state 156
@@ -2342,26 +2363,26 @@ state 156
 	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo . subrango ';'  (18)
 	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo . '(' ')' ';'  (19)
 
-	LONGINT  shift 195
-	HEXA  shift 196
-	DOUBLE  shift 197
-	'('  shift 199
+	LONGINT  shift 197
+	HEXA  shift 198
+	DOUBLE  shift 199
+	'('  shift 201
 	.  error
 
-	subrango  goto 200
+	subrango  goto 202
 
 
 state 157
 	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos . '>' '(' lista_variables ',' ')' ID ';'  (22)
 	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos . '>' '(' lista_variables ',' ')' ';'  (25)
-	lista_tipos : lista_tipos . ',' tipo  (136)
-	lista_tipos : lista_tipos . tipo  (137)
+	lista_tipos : lista_tipos . ',' tipo  (138)
+	lista_tipos : lista_tipos . tipo  (139)
 
 	ID  shift 104
 	LONGINT  shift 12
 	HEXA  shift 13
 	DOUBLE  shift 14
-	'>'  shift 201
+	'>'  shift 203
 	','  shift 159
 	.  error
 
@@ -2371,15 +2392,15 @@ state 157
 state 158
 	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' . lista_variables ',' ')' ID ';'  (23)
 
-	ID  shift 202
+	ID  shift 204
 	.  error
 
-	lista_variables  goto 203
+	lista_variables  goto 205
 	id_compuesta  goto 28
 
 
 state 159
-	lista_tipos : lista_tipos ',' . tipo  (136)
+	lista_tipos : lista_tipos ',' . tipo  (138)
 
 	ID  shift 104
 	LONGINT  shift 12
@@ -2387,80 +2408,80 @@ state 159
 	DOUBLE  shift 14
 	.  error
 
-	tipo  goto 204
+	tipo  goto 206
 
 
 state 160
-	lista_tipos : lista_tipos tipo .  (137)
+	lista_tipos : lista_tipos tipo .  (139)
 
-	.  reduce 137
+	.  reduce 139
 
 
 state 161
 	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' . subrango ')' ';'  (20)
 
-	LONGINT  shift 195
-	HEXA  shift 196
-	DOUBLE  shift 197
+	LONGINT  shift 197
+	HEXA  shift 198
+	DOUBLE  shift 199
 	.  error
 
-	subrango  goto 205
+	subrango  goto 207
 
 
 state 162
 	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' . '(' lista_variables ',' ')' ID ';'  (24)
 
-	'('  shift 206
+	'('  shift 208
 	.  error
 
 
 state 163
-	parametro : ID .  (67)
-	tipo : ID .  (142)
+	parametro : ID .  (68)
+	tipo : ID .  (144)
 
-	BEGIN  reduce 67
-	ID  reduce 142
-	')'  reduce 67
+	BEGIN  reduce 68
+	ID  reduce 144
+	')'  reduce 68
 
 
 state 164
-	parametro : tipo . ID  (66)
+	parametro : tipo . ID  (67)
 
-	ID  shift 207
+	ID  shift 209
 	.  error
 
 
 state 165
 	declaracion_funcion : FUN ID '(' parametro . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (34)
 
-	')'  shift 208
+	')'  shift 210
 	.  error
 
 
 state 166
-	bloque_sentencia_ejecutable : BEGIN lista_sentencias END .  (70)
-
-	.  reduce 70
-
-
-state 167
-	lista_sentencias : lista_sentencias sentencia_ejecucion .  (71)
+	bloque_sentencia_ejecutable : BEGIN lista_sentencias END .  (71)
 
 	.  reduce 71
 
 
-state 168
-	sentencia_while : REPEAT WHILE '(' condicion . ')' ';'  (57)
+state 167
+	lista_sentencias : lista_sentencias sentencia_ejecucion .  (72)
 
-	')'  shift 209
+	.  reduce 72
+
+
+state 168
+	sentencia_while : REPEAT WHILE '(' condicion . ')' ';'  (58)
+
+	')'  shift 211
 	.  error
 
 
 state 169
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ')' ';'  (50)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ')'  (52)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . ')' ';'  (53)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ';'  (55)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ')'  (53)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . ')' ';'  (54)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' . condicion ';'  (56)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -2471,12 +2492,12 @@ state 169
 	'-'  shift 38
 	'*'  shift 39
 	'/'  shift 40
-	')'  shift 210
+	')'  shift 212
 	.  error
 
 	expresion  goto 42
 	invocacion_funcion  goto 43
-	condicion  goto 211
+	condicion  goto 213
 	lista_expresiones  goto 45
 	termino  goto 46
 	factor  goto 47
@@ -2484,113 +2505,126 @@ state 169
 
 
 state 170
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion . ')' ';'  (54)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion . ';'  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion . ')' ';'  (55)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion . ';'  (57)
 
-	';'  shift 212
-	')'  shift 213
+	';'  shift 214
+	')'  shift 215
 	.  error
 
 
 state 171
-	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion . ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion . ')' ';'  (52)
 
-	')'  shift 214
+	')'  shift 216
 	.  error
 
 
 state 172
-	invocacion_funcion : ID '(' expresion ')' .  (68)
+	invocacion_funcion : ID '(' expresion ')' .  (69)
 
-	.  reduce 68
+	.  reduce 69
 
 
 state 173
 	declaracion_funcion : tipo FUN ID '(' . parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
 	declaracion_funcion : tipo FUN ID '(' . parametro ')' BEGIN cuerpo END  (33)
-	declaracion_funcion : tipo FUN ID '(' . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (38)
-	declaracion_funcion : tipo FUN ID '(' . parametro ')' cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo FUN ID '(' . parametro ')' BEGIN END  (40)
+	declaracion_funcion : tipo FUN ID '(' . parametro ')' BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN ID '(' . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (39)
+	declaracion_funcion : tipo FUN ID '(' . parametro ')' cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo FUN ID '(' . parametro ')' BEGIN END  (41)
 
 	ID  shift 163
 	LONGINT  shift 12
 	HEXA  shift 13
 	DOUBLE  shift 14
-	')'  shift 215
+	')'  shift 217
 	.  error
 
 	tipo  goto 164
-	parametro  goto 216
+	parametro  goto 218
 
 
 state 174
 	declaracion_funcion : tipo FUN ID parametro . BEGIN cuerpo RET '(' expresion ')' ';' END  (37)
 
-	BEGIN  shift 217
+	BEGIN  shift 219
 	.  error
 
 
 state 175
 	declaracion_funcion : tipo FUN '(' parametro . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (36)
 
-	')'  shift 218
+	')'  shift 220
 	.  error
 
 
 state 176
 	declaracion_funcion : tipo ID '(' parametro . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (35)
 
-	')'  shift 219
+	')'  shift 221
 	.  error
 
 
 state 177
-	asignacion : lista_variables ASIGNACION lista_expresiones ';' .  (98)
+	asignacion : lista_variables ASIGNACION lista_expresiones error .  (100)
 
-	.  reduce 98
+	.  reduce 100
 
 
 state 178
-	expresion : TOD '(' expresion ')' .  (106)
+	asignacion : lista_variables ASIGNACION lista_expresiones ';' .  (99)
 
-	.  reduce 106
+	.  reduce 99
 
 
 state 179
-	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (76)
+	condicion_if : IF THEN bloque_sentencia_ejecutable END_IF error .  (81)
 
-	END_IF  shift 220
-	.  error
+	.  reduce 81
 
 
 state 180
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable . END_IF ';'  (87)
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (89)
+	expresion : TOD '(' expresion ')' .  (108)
 
-	ELSE  shift 221
+	.  reduce 108
+
+
+state 181
+	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (77)
+
 	END_IF  shift 222
 	.  error
 
 
-state 181
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (73)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' condicion ')' THEN . error END_IF ';'  (77)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ';'  (78)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable error  (79)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE END_IF ';'  (83)
-	condicion_if : IF '(' condicion ')' THEN . ELSE bloque_sentencia_ejecutable END_IF ';'  (84)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion END_IF ';'  (92)
-	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (94)
-	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (95)
+state 182
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable . END_IF ';'  (88)
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
 
-	error  shift 223
+	ELSE  shift 223
+	END_IF  shift 224
+	.  error
+
+
+state 183
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable END_IF ';'  (74)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN . error END_IF ';'  (78)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ';'  (79)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable error  (80)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE END_IF ';'  (84)
+	condicion_if : IF '(' condicion ')' THEN . ELSE bloque_sentencia_ejecutable END_IF ';'  (85)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion END_IF ';'  (93)
+	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' condicion ')' THEN . bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' condicion ')' THEN . sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';'  (96)
+
+	error  shift 225
 	IF  shift 4
-	ELSE  shift 224
+	ELSE  shift 226
 	BEGIN  shift 57
 	OUTF  shift 6
 	REPEAT  shift 9
@@ -2599,323 +2633,326 @@ state 181
 	ETIQUETA  shift 112
 	.  error
 
-	sentencia_ejecucion  goto 225
+	sentencia_ejecucion  goto 227
 	lista_variables  goto 21
 	asignacion  goto 23
 	condicion_if  goto 24
 	sentencia_print  goto 25
 	sentencia_while  goto 26
 	invocacion_funcion  goto 27
-	bloque_sentencia_ejecutable  goto 226
+	bloque_sentencia_ejecutable  goto 228
 	id_compuesta  goto 28
 
 
-state 182
-	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable . END_IF ';'  (75)
+state 184
+	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable . END_IF ';'  (76)
 
-	END_IF  shift 227
+	END_IF  shift 229
 	.  error
 
 
-state 183
-	expresion : expresion '+' '+' termino .  (101)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
-
-	'*'  shift 95
-	'/'  shift 96
-	THEN  reduce 101
-	DISTINTO  reduce 101
-	MENOR_IGUAL  reduce 101
-	MAYOR_IGUAL  reduce 101
-	'+'  reduce 101
-	'-'  reduce 101
-	';'  reduce 101
-	')'  reduce 101
-	'<'  reduce 101
-	'>'  reduce 101
-	','  reduce 101
-
-
-state 184
-	expresion : expresion '-' '+' termino .  (102)
-	termino : termino . '*' factor  (109)
-	termino : termino . '/' factor  (110)
-	termino : termino . '*' '*' factor  (111)
-	termino : termino . '*' '/' factor  (112)
-	termino : termino . '/' '/' factor  (113)
-	termino : termino . '/' '*' factor  (114)
-	termino : termino . '/'  (115)
-	termino : termino . '*'  (116)
-
-	'*'  shift 95
-	'/'  shift 96
-	THEN  reduce 102
-	DISTINTO  reduce 102
-	MENOR_IGUAL  reduce 102
-	MAYOR_IGUAL  reduce 102
-	'+'  reduce 102
-	'-'  reduce 102
-	';'  reduce 102
-	')'  reduce 102
-	'<'  reduce 102
-	'>'  reduce 102
-	','  reduce 102
-
-
 state 185
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (91)
+	expresion : expresion '+' '+' termino .  (103)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
+
+	'*'  shift 95
+	'/'  shift 96
+	error  reduce 103
+	THEN  reduce 103
+	DISTINTO  reduce 103
+	MENOR_IGUAL  reduce 103
+	MAYOR_IGUAL  reduce 103
+	'+'  reduce 103
+	'-'  reduce 103
+	';'  reduce 103
+	')'  reduce 103
+	'<'  reduce 103
+	'>'  reduce 103
+	','  reduce 103
+
+
+state 186
+	expresion : expresion '-' '+' termino .  (104)
+	termino : termino . '*' factor  (111)
+	termino : termino . '/' factor  (112)
+	termino : termino . '*' '*' factor  (113)
+	termino : termino . '*' '/' factor  (114)
+	termino : termino . '/' '/' factor  (115)
+	termino : termino . '/' '*' factor  (116)
+	termino : termino . '/'  (117)
+	termino : termino . '*'  (118)
+
+	'*'  shift 95
+	'/'  shift 96
+	error  reduce 104
+	THEN  reduce 104
+	DISTINTO  reduce 104
+	MENOR_IGUAL  reduce 104
+	MAYOR_IGUAL  reduce 104
+	'+'  reduce 104
+	'-'  reduce 104
+	';'  reduce 104
+	')'  reduce 104
+	'<'  reduce 104
+	'>'  reduce 104
+	','  reduce 104
+
+
+state 187
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (92)
 
 	BEGIN  shift 57
 	.  error
 
-	bloque_sentencia_ejecutable  goto 228
-
-
-state 186
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable END_IF . ';'  (86)
-
-	';'  shift 229
-	.  error
-
-
-state 187
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (88)
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (90)
-
-	ELSE  shift 230
-	END_IF  shift 231
-	.  error
+	bloque_sentencia_ejecutable  goto 230
 
 
 state 188
-	termino : termino '*' '*' factor .  (111)
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable END_IF . ';'  (87)
 
-	.  reduce 111
+	';'  shift 231
+	.  error
 
 
 state 189
-	termino : termino '*' '/' factor .  (112)
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (89)
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (91)
 
-	.  reduce 112
+	ELSE  shift 232
+	END_IF  shift 233
+	.  error
 
 
 state 190
-	termino : termino '/' '*' factor .  (114)
-
-	.  reduce 114
-
-
-state 191
-	termino : termino '/' '/' factor .  (113)
+	termino : termino '*' '*' factor .  (113)
 
 	.  reduce 113
 
 
-state 192
-	sentencia_print : OUTF '(' error ')' ';' .  (65)
+state 191
+	termino : termino '*' '/' factor .  (114)
 
-	.  reduce 65
+	.  reduce 114
+
+
+state 192
+	termino : termino '/' '*' factor .  (116)
+
+	.  reduce 116
 
 
 state 193
-	sentencia_print : OUTF '(' CML ')' ';' .  (58)
+	termino : termino '/' '/' factor .  (115)
 
-	.  reduce 58
+	.  reduce 115
 
 
 state 194
-	sentencia_print : OUTF '(' expresion ')' ';' .  (59)
-
-	.  reduce 59
-
-
-state 195
-	subrango : LONGINT . ',' LONGINT  (26)
-	subrango : LONGINT . LONGINT  (27)
-
-	LONGINT  shift 232
-	','  shift 233
-	.  error
-
-
-state 196
-	subrango : HEXA . ',' HEXA  (30)
-	subrango : HEXA . HEXA  (31)
-
-	HEXA  shift 234
-	','  shift 235
-	.  error
-
-
-state 197
-	subrango : DOUBLE . ',' DOUBLE  (28)
-	subrango : DOUBLE . DOUBLE  (29)
-
-	DOUBLE  shift 236
-	','  shift 237
-	.  error
-
-
-state 198
-	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango . ')' ';'  (21)
-
-	')'  shift 238
-	.  error
-
-
-state 199
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . subrango ')' ';'  (15)
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . subrango ';'  (16)
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . ')' ';'  (19)
-
-	LONGINT  shift 195
-	HEXA  shift 196
-	DOUBLE  shift 197
-	')'  shift 239
-	.  error
-
-	subrango  goto 240
-
-
-state 200
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango . ')' ';'  (17)
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango . ';'  (18)
-
-	';'  shift 241
-	')'  shift 242
-	.  error
-
-
-state 201
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' . '(' lista_variables ',' ')' ID ';'  (22)
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' . '(' lista_variables ',' ')' ';'  (25)
-
-	'('  shift 243
-	.  error
-
-
-state 202
-	lista_variables : ID .  (132)
-	id_compuesta : ID . '.' ID  (133)
-
-	'.'  shift 62
-	','  reduce 132
-
-
-state 203
-	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables . ',' ')' ID ';'  (23)
-	lista_variables : lista_variables . ',' ID  (129)
-	lista_variables : lista_variables . ',' id_compuesta  (130)
-
-	','  shift 244
-	.  error
-
-
-state 204
-	lista_tipos : lista_tipos ',' tipo .  (136)
-
-	.  reduce 136
-
-
-state 205
-	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' subrango . ')' ';'  (20)
-
-	')'  shift 245
-	.  error
-
-
-state 206
-	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' . lista_variables ',' ')' ID ';'  (24)
-
-	ID  shift 202
-	.  error
-
-	lista_variables  goto 246
-	id_compuesta  goto 28
-
-
-state 207
-	parametro : tipo ID .  (66)
+	sentencia_print : OUTF '(' error ')' ';' .  (66)
 
 	.  reduce 66
 
 
-state 208
-	declaracion_funcion : FUN ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (34)
+state 195
+	sentencia_print : OUTF '(' CML ')' ';' .  (59)
 
-	BEGIN  shift 247
+	.  reduce 59
+
+
+state 196
+	sentencia_print : OUTF '(' expresion ')' ';' .  (60)
+
+	.  reduce 60
+
+
+state 197
+	subrango : LONGINT . ',' LONGINT  (26)
+	subrango : LONGINT . LONGINT  (27)
+
+	LONGINT  shift 234
+	','  shift 235
 	.  error
+
+
+state 198
+	subrango : HEXA . ',' HEXA  (30)
+	subrango : HEXA . HEXA  (31)
+
+	HEXA  shift 236
+	','  shift 237
+	.  error
+
+
+state 199
+	subrango : DOUBLE . ',' DOUBLE  (28)
+	subrango : DOUBLE . DOUBLE  (29)
+
+	DOUBLE  shift 238
+	','  shift 239
+	.  error
+
+
+state 200
+	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango . ')' ';'  (21)
+
+	')'  shift 240
+	.  error
+
+
+state 201
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . subrango ')' ';'  (15)
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . subrango ';'  (16)
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' . ')' ';'  (19)
+
+	LONGINT  shift 197
+	HEXA  shift 198
+	DOUBLE  shift 199
+	')'  shift 241
+	.  error
+
+	subrango  goto 242
+
+
+state 202
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango . ')' ';'  (17)
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango . ';'  (18)
+
+	';'  shift 243
+	')'  shift 244
+	.  error
+
+
+state 203
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' . '(' lista_variables ',' ')' ID ';'  (22)
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' . '(' lista_variables ',' ')' ';'  (25)
+
+	'('  shift 245
+	.  error
+
+
+state 204
+	lista_variables : ID .  (134)
+	id_compuesta : ID . '.' ID  (135)
+
+	'.'  shift 62
+	','  reduce 134
+
+
+state 205
+	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables . ',' ')' ID ';'  (23)
+	lista_variables : lista_variables . ',' ID  (131)
+	lista_variables : lista_variables . ',' id_compuesta  (132)
+
+	','  shift 246
+	.  error
+
+
+state 206
+	lista_tipos : lista_tipos ',' tipo .  (138)
+
+	.  reduce 138
+
+
+state 207
+	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' subrango . ')' ';'  (20)
+
+	')'  shift 247
+	.  error
+
+
+state 208
+	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' . lista_variables ',' ')' ID ';'  (24)
+
+	ID  shift 204
+	.  error
+
+	lista_variables  goto 248
+	id_compuesta  goto 28
 
 
 state 209
-	sentencia_while : REPEAT WHILE '(' condicion ')' . ';'  (57)
+	parametro : tipo ID .  (67)
 
-	';'  shift 248
-	.  error
+	.  reduce 67
 
 
 state 210
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' ')' . ';'  (53)
+	declaracion_funcion : FUN ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (34)
 
-	';'  shift 249
+	BEGIN  shift 249
 	.  error
 
 
 state 211
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ')' ';'  (50)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ')'  (52)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ';'  (55)
+	sentencia_while : REPEAT WHILE '(' condicion ')' . ';'  (58)
 
 	';'  shift 250
-	')'  shift 251
 	.  error
 
 
 state 212
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ';' .  (56)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' ')' . ';'  (54)
 
-	.  reduce 56
+	';'  shift 251
+	.  error
 
 
 state 213
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ')' . ';'  (54)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ')' ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ')'  (53)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion . ';'  (56)
 
 	';'  shift 252
+	')'  shift 253
 	.  error
 
 
 state 214
-	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion ')' . ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ';' .  (57)
 
-	';'  shift 253
-	.  error
+	.  reduce 57
 
 
 state 215
-	declaracion_funcion : tipo FUN ID '(' ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (38)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ')' . ';'  (55)
 
-	BEGIN  shift 254
+	';'  shift 254
 	.  error
 
 
 state 216
-	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
-	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN cuerpo END  (33)
-	declaracion_funcion : tipo FUN ID '(' parametro . ')' cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN END  (40)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion ')' . ';'  (52)
 
-	')'  shift 255
+	';'  shift 255
 	.  error
 
 
 state 217
+	declaracion_funcion : tipo FUN ID '(' ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (39)
+
+	BEGIN  shift 256
+	.  error
+
+
+state 218
+	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
+	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN cuerpo END  (33)
+	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN ID '(' parametro . ')' cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo FUN ID '(' parametro . ')' BEGIN END  (41)
+
+	')'  shift 257
+	.  error
+
+
+state 219
 	declaracion_funcion : tipo FUN ID parametro BEGIN . cuerpo RET '(' expresion ')' ';' END  (37)
 
 	IF  shift 4
@@ -2931,7 +2968,7 @@ state 217
 	ETIQUETA  shift 15
 	.  error
 
-	cuerpo  goto 256
+	cuerpo  goto 258
 	sentencia  goto 17
 	sentencia_declaracion  goto 18
 	sentencia_ejecucion  goto 19
@@ -2946,326 +2983,242 @@ state 217
 	id_compuesta  goto 28
 
 
-state 218
+state 220
 	declaracion_funcion : tipo FUN '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (36)
 
-	BEGIN  shift 257
-	.  error
-
-
-state 219
-	declaracion_funcion : tipo ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (35)
-
-	BEGIN  shift 258
-	.  error
-
-
-state 220
-	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (76)
-
-	';'  shift 259
+	BEGIN  shift 259
 	.  error
 
 
 state 221
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (89)
+	declaracion_funcion : tipo ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (35)
 
-	BEGIN  shift 57
+	BEGIN  shift 260
 	.  error
-
-	bloque_sentencia_ejecutable  goto 260
 
 
 state 222
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable END_IF . ';'  (87)
+	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (77)
 
 	';'  shift 261
 	.  error
 
 
 state 223
-	condicion_if : IF '(' condicion ')' THEN error . END_IF ';'  (77)
-
-	END_IF  shift 262
-	.  error
-
-
-state 224
-	condicion_if : IF '(' condicion ')' THEN ELSE . bloque_sentencia_ejecutable END_IF ';'  (84)
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (90)
 
 	BEGIN  shift 57
 	.  error
 
-	bloque_sentencia_ejecutable  goto 263
+	bloque_sentencia_ejecutable  goto 262
+
+
+state 224
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable END_IF . ';'  (88)
+
+	';'  shift 263
+	.  error
 
 
 state 225
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . END_IF ';'  (92)
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . ELSE bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . ELSE sentencia_ejecucion END_IF ';'  (95)
+	condicion_if : IF '(' condicion ')' THEN error . END_IF ';'  (78)
 
-	ELSE  shift 264
-	END_IF  shift 265
+	END_IF  shift 264
 	.  error
 
 
 state 226
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (73)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ';'  (78)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . error  (79)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . bloque_sentencia_ejecutable END_IF ';'  (81)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE END_IF ';'  (83)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE sentencia_ejecucion END_IF ';'  (94)
+	condicion_if : IF '(' condicion ')' THEN ELSE . bloque_sentencia_ejecutable END_IF ';'  (85)
 
-	error  shift 266
-	ELSE  shift 267
 	BEGIN  shift 57
-	END_IF  shift 268
-	';'  shift 269
 	.  error
 
-	bloque_sentencia_ejecutable  goto 270
+	bloque_sentencia_ejecutable  goto 265
 
 
 state 227
-	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable END_IF . ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . END_IF ';'  (93)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . ELSE bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion . ELSE sentencia_ejecucion END_IF ';'  (96)
 
-	';'  shift 271
+	ELSE  shift 266
+	END_IF  shift 267
 	.  error
 
 
 state 228
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (91)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . END_IF ';'  (74)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ';'  (79)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . error  (80)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . bloque_sentencia_ejecutable END_IF ';'  (82)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE END_IF ';'  (84)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable . ELSE sentencia_ejecucion END_IF ';'  (95)
 
-	END_IF  shift 272
+	error  shift 268
+	ELSE  shift 269
+	BEGIN  shift 57
+	END_IF  shift 270
+	';'  shift 271
 	.  error
+
+	bloque_sentencia_ejecutable  goto 272
 
 
 state 229
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable END_IF ';' .  (86)
+	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable END_IF . ';'  (76)
 
-	.  reduce 86
+	';'  shift 273
+	.  error
 
 
 state 230
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (90)
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (92)
+
+	END_IF  shift 274
+	.  error
+
+
+state 231
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable END_IF ';' .  (87)
+
+	.  reduce 87
+
+
+state 232
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (91)
 
 	BEGIN  shift 57
 	.  error
 
-	bloque_sentencia_ejecutable  goto 273
+	bloque_sentencia_ejecutable  goto 275
 
 
-state 231
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (88)
+state 233
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (89)
 
-	';'  shift 274
+	';'  shift 276
 	.  error
 
 
-state 232
+state 234
 	subrango : LONGINT LONGINT .  (27)
 
 	.  reduce 27
 
 
-state 233
+state 235
 	subrango : LONGINT ',' . LONGINT  (26)
 
-	LONGINT  shift 275
+	LONGINT  shift 277
 	.  error
 
 
-state 234
+state 236
 	subrango : HEXA HEXA .  (31)
 
 	.  reduce 31
 
 
-state 235
+state 237
 	subrango : HEXA ',' . HEXA  (30)
 
-	HEXA  shift 276
+	HEXA  shift 278
 	.  error
 
 
-state 236
+state 238
 	subrango : DOUBLE DOUBLE .  (29)
 
 	.  reduce 29
 
 
-state 237
+state 239
 	subrango : DOUBLE ',' . DOUBLE  (28)
 
-	DOUBLE  shift 277
-	.  error
-
-
-state 238
-	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango ')' . ';'  (21)
-
-	';'  shift 278
-	.  error
-
-
-state 239
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' ')' . ';'  (19)
-
-	';'  shift 279
+	DOUBLE  shift 279
 	.  error
 
 
 state 240
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango . ')' ';'  (15)
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango . ';'  (16)
+	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango ')' . ';'  (21)
 
 	';'  shift 280
-	')'  shift 281
 	.  error
 
 
 state 241
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' ')' . ';'  (19)
+
+	';'  shift 281
+	.  error
+
+
+state 242
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango . ')' ';'  (15)
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango . ';'  (16)
+
+	';'  shift 282
+	')'  shift 283
+	.  error
+
+
+state 243
 	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango ';' .  (18)
 
 	.  reduce 18
 
 
-state 242
+state 244
 	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango ')' . ';'  (17)
 
-	';'  shift 282
+	';'  shift 284
 	.  error
 
 
-state 243
+state 245
 	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' . lista_variables ',' ')' ID ';'  (22)
 	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' . lista_variables ',' ')' ';'  (25)
 
-	ID  shift 202
+	ID  shift 204
 	.  error
 
-	lista_variables  goto 283
+	lista_variables  goto 285
 	id_compuesta  goto 28
 
 
-state 244
+state 246
 	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' . ')' ID ';'  (23)
-	lista_variables : lista_variables ',' . ID  (129)
-	lista_variables : lista_variables ',' . id_compuesta  (130)
+	lista_variables : lista_variables ',' . ID  (131)
+	lista_variables : lista_variables ',' . id_compuesta  (132)
 
 	ID  shift 128
-	')'  shift 284
+	')'  shift 286
 	.  error
 
 	id_compuesta  goto 129
 
 
-state 245
+state 247
 	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' subrango ')' . ';'  (20)
 
-	';'  shift 285
+	';'  shift 287
 	.  error
-
-
-state 246
-	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables . ',' ')' ID ';'  (24)
-	lista_variables : lista_variables . ',' ID  (129)
-	lista_variables : lista_variables . ',' id_compuesta  (130)
-
-	','  shift 286
-	.  error
-
-
-state 247
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (34)
-
-	IF  shift 4
-	OUTF  shift 6
-	TYPEDEF  shift 7
-	FUN  shift 8
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 11
-	LONGINT  shift 12
-	HEXA  shift 13
-	DOUBLE  shift 14
-	ETIQUETA  shift 15
-	.  error
-
-	cuerpo  goto 287
-	sentencia  goto 17
-	sentencia_declaracion  goto 18
-	sentencia_ejecucion  goto 19
-	tipo  goto 20
-	lista_variables  goto 21
-	declaracion_funcion  goto 22
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	id_compuesta  goto 28
 
 
 state 248
-	sentencia_while : REPEAT WHILE '(' condicion ')' ';' .  (57)
+	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables . ',' ')' ID ';'  (24)
+	lista_variables : lista_variables . ',' ID  (131)
+	lista_variables : lista_variables . ',' id_compuesta  (132)
 
-	.  reduce 57
+	','  shift 288
+	.  error
 
 
 state 249
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' ')' ';' .  (53)
-
-	.  reduce 53
-
-
-state 250
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ';' .  (55)
-
-	.  reduce 55
-
-
-state 251
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' . ';'  (50)
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' .  (52)
-
-	';'  shift 288
-	$end  reduce 52
-	IF  reduce 52
-	ELSE  reduce 52
-	END  reduce 52
-	END_IF  reduce 52
-	OUTF  reduce 52
-	TYPEDEF  reduce 52
-	FUN  reduce 52
-	RET  reduce 52
-	REPEAT  reduce 52
-	GOTO  reduce 52
-	ID  reduce 52
-	LONGINT  reduce 52
-	HEXA  reduce 52
-	DOUBLE  reduce 52
-	ETIQUETA  reduce 52
-
-
-state 252
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ')' ';' .  (54)
-
-	.  reduce 54
-
-
-state 253
-	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion ')' ';' .  (51)
-
-	.  reduce 51
-
-
-state 254
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (38)
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (34)
 
 	IF  shift 4
 	OUTF  shift 6
@@ -3295,14 +3248,63 @@ state 254
 	id_compuesta  goto 28
 
 
+state 250
+	sentencia_while : REPEAT WHILE '(' condicion ')' ';' .  (58)
+
+	.  reduce 58
+
+
+state 251
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' ')' ';' .  (54)
+
+	.  reduce 54
+
+
+state 252
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ';' .  (56)
+
+	.  reduce 56
+
+
+state 253
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' . ';'  (51)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' .  (53)
+
+	';'  shift 290
+	$end  reduce 53
+	IF  reduce 53
+	ELSE  reduce 53
+	END  reduce 53
+	END_IF  reduce 53
+	OUTF  reduce 53
+	TYPEDEF  reduce 53
+	FUN  reduce 53
+	RET  reduce 53
+	REPEAT  reduce 53
+	GOTO  reduce 53
+	ID  reduce 53
+	LONGINT  reduce 53
+	HEXA  reduce 53
+	DOUBLE  reduce 53
+	ETIQUETA  reduce 53
+
+
+state 254
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE condicion ')' ';' .  (55)
+
+	.  reduce 55
+
+
 state 255
-	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN cuerpo END  (33)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' . cuerpo RET '(' expresion ')' ';' END  (39)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN END  (40)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable '(' condicion ')' ';' .  (52)
+
+	.  reduce 52
+
+
+state 256
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (39)
 
 	IF  shift 4
-	BEGIN  shift 290
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
@@ -3330,42 +3332,15 @@ state 255
 	id_compuesta  goto 28
 
 
-state 256
-	cuerpo : cuerpo . sentencia  (7)
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo . RET '(' expresion ')' ';' END  (37)
-
-	IF  shift 4
-	OUTF  shift 6
-	TYPEDEF  shift 7
-	FUN  shift 8
-	RET  shift 292
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 11
-	LONGINT  shift 12
-	HEXA  shift 13
-	DOUBLE  shift 14
-	ETIQUETA  shift 15
-	.  error
-
-	sentencia  goto 65
-	sentencia_declaracion  goto 18
-	sentencia_ejecucion  goto 19
-	tipo  goto 20
-	lista_variables  goto 21
-	declaracion_funcion  goto 22
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	id_compuesta  goto 28
-
-
 state 257
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (36)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN cuerpo RET '(' expresion ')' ';' END  (32)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN cuerpo END  (33)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' . cuerpo RET '(' expresion ')' ';' END  (40)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' . BEGIN END  (41)
 
 	IF  shift 4
+	BEGIN  shift 292
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
@@ -3394,273 +3369,14 @@ state 257
 
 
 state 258
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (35)
-
-	IF  shift 4
-	OUTF  shift 6
-	TYPEDEF  shift 7
-	FUN  shift 8
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 11
-	LONGINT  shift 12
-	HEXA  shift 13
-	DOUBLE  shift 14
-	ETIQUETA  shift 15
-	.  error
-
-	cuerpo  goto 294
-	sentencia  goto 17
-	sentencia_declaracion  goto 18
-	sentencia_ejecucion  goto 19
-	tipo  goto 20
-	lista_variables  goto 21
-	declaracion_funcion  goto 22
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	id_compuesta  goto 28
-
-
-state 259
-	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (76)
-
-	.  reduce 76
-
-
-state 260
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (89)
-
-	END_IF  shift 295
-	.  error
-
-
-state 261
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable END_IF ';' .  (87)
-
-	.  reduce 87
-
-
-state 262
-	condicion_if : IF '(' condicion ')' THEN error END_IF . ';'  (77)
-
-	';'  shift 296
-	.  error
-
-
-state 263
-	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable . END_IF ';'  (84)
-
-	END_IF  shift 297
-	.  error
-
-
-state 264
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE . bloque_sentencia_ejecutable END_IF ';'  (93)
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE . sentencia_ejecucion END_IF ';'  (95)
-
-	IF  shift 4
-	BEGIN  shift 57
-	OUTF  shift 6
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 111
-	ETIQUETA  shift 112
-	.  error
-
-	sentencia_ejecucion  goto 298
-	lista_variables  goto 21
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	bloque_sentencia_ejecutable  goto 299
-	id_compuesta  goto 28
-
-
-state 265
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion END_IF . ';'  (92)
-
-	';'  shift 300
-	.  error
-
-
-state 266
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable error .  (79)
-
-	.  reduce 79
-
-
-state 267
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (74)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF  (82)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . END_IF ';'  (83)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable ';'  (85)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . sentencia_ejecucion END_IF ';'  (94)
-
-	IF  shift 4
-	BEGIN  shift 57
-	END_IF  shift 301
-	OUTF  shift 6
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 111
-	ETIQUETA  shift 112
-	.  error
-
-	sentencia_ejecucion  goto 302
-	lista_variables  goto 21
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	bloque_sentencia_ejecutable  goto 303
-	id_compuesta  goto 28
-
-
-state 268
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (73)
-
-	';'  shift 304
-	.  error
-
-
-state 269
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ';' .  (78)
-
-	.  reduce 78
-
-
-state 270
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable . END_IF ';'  (81)
-
-	END_IF  shift 305
-	.  error
-
-
-state 271
-	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable END_IF ';' .  (75)
-
-	.  reduce 75
-
-
-state 272
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (91)
-
-	';'  shift 306
-	.  error
-
-
-state 273
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (90)
-
-	END_IF  shift 307
-	.  error
-
-
-state 274
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (88)
-
-	.  reduce 88
-
-
-state 275
-	subrango : LONGINT ',' LONGINT .  (26)
-
-	.  reduce 26
-
-
-state 276
-	subrango : HEXA ',' HEXA .  (30)
-
-	.  reduce 30
-
-
-state 277
-	subrango : DOUBLE ',' DOUBLE .  (28)
-
-	.  reduce 28
-
-
-state 278
-	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango ')' ';' .  (21)
-
-	.  reduce 21
-
-
-state 279
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' ')' ';' .  (19)
-
-	.  reduce 19
-
-
-state 280
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ';' .  (16)
-
-	.  reduce 16
-
-
-state 281
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ')' . ';'  (15)
-
-	';'  shift 308
-	.  error
-
-
-state 282
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango ')' ';' .  (17)
-
-	.  reduce 17
-
-
-state 283
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables . ',' ')' ID ';'  (22)
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables . ',' ')' ';'  (25)
-	lista_variables : lista_variables . ',' ID  (129)
-	lista_variables : lista_variables . ',' id_compuesta  (130)
-
-	','  shift 309
-	.  error
-
-
-state 284
-	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' ')' . ID ';'  (23)
-
-	ID  shift 310
-	.  error
-
-
-state 285
-	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' subrango ')' ';' .  (20)
-
-	.  reduce 20
-
-
-state 286
-	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' . ')' ID ';'  (24)
-	lista_variables : lista_variables ',' . ID  (129)
-	lista_variables : lista_variables ',' . id_compuesta  (130)
-
-	ID  shift 128
-	')'  shift 311
-	.  error
-
-	id_compuesta  goto 129
-
-
-state 287
 	cuerpo : cuerpo . sentencia  (7)
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (34)
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo . RET '(' expresion ')' ';' END  (37)
 
 	IF  shift 4
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
-	RET  shift 312
+	RET  shift 294
 	REPEAT  shift 9
 	GOTO  shift 10
 	ID  shift 11
@@ -3684,21 +3400,305 @@ state 287
 	id_compuesta  goto 28
 
 
-state 288
-	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' ';' .  (50)
-
-	.  reduce 50
-
-
-state 289
-	cuerpo : cuerpo . sentencia  (7)
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (38)
+state 259
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (36)
 
 	IF  shift 4
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
-	RET  shift 313
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 11
+	LONGINT  shift 12
+	HEXA  shift 13
+	DOUBLE  shift 14
+	ETIQUETA  shift 15
+	.  error
+
+	cuerpo  goto 295
+	sentencia  goto 17
+	sentencia_declaracion  goto 18
+	sentencia_ejecucion  goto 19
+	tipo  goto 20
+	lista_variables  goto 21
+	declaracion_funcion  goto 22
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	id_compuesta  goto 28
+
+
+state 260
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (35)
+
+	IF  shift 4
+	OUTF  shift 6
+	TYPEDEF  shift 7
+	FUN  shift 8
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 11
+	LONGINT  shift 12
+	HEXA  shift 13
+	DOUBLE  shift 14
+	ETIQUETA  shift 15
+	.  error
+
+	cuerpo  goto 296
+	sentencia  goto 17
+	sentencia_declaracion  goto 18
+	sentencia_ejecucion  goto 19
+	tipo  goto 20
+	lista_variables  goto 21
+	declaracion_funcion  goto 22
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	id_compuesta  goto 28
+
+
+state 261
+	condicion_if : IF '(' ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (77)
+
+	.  reduce 77
+
+
+state 262
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (90)
+
+	END_IF  shift 297
+	.  error
+
+
+state 263
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable END_IF ';' .  (88)
+
+	.  reduce 88
+
+
+state 264
+	condicion_if : IF '(' condicion ')' THEN error END_IF . ';'  (78)
+
+	';'  shift 298
+	.  error
+
+
+state 265
+	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable . END_IF ';'  (85)
+
+	END_IF  shift 299
+	.  error
+
+
+state 266
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE . bloque_sentencia_ejecutable END_IF ';'  (94)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE . sentencia_ejecucion END_IF ';'  (96)
+
+	IF  shift 4
+	BEGIN  shift 57
+	OUTF  shift 6
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 111
+	ETIQUETA  shift 112
+	.  error
+
+	sentencia_ejecucion  goto 300
+	lista_variables  goto 21
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	bloque_sentencia_ejecutable  goto 301
+	id_compuesta  goto 28
+
+
+state 267
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion END_IF . ';'  (93)
+
+	';'  shift 302
+	.  error
+
+
+state 268
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable error .  (80)
+
+	.  reduce 80
+
+
+state 269
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable END_IF  (83)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . END_IF ';'  (84)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . bloque_sentencia_ejecutable ';'  (86)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE . sentencia_ejecucion END_IF ';'  (95)
+
+	IF  shift 4
+	BEGIN  shift 57
+	END_IF  shift 303
+	OUTF  shift 6
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 111
+	ETIQUETA  shift 112
+	.  error
+
+	sentencia_ejecucion  goto 304
+	lista_variables  goto 21
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	bloque_sentencia_ejecutable  goto 305
+	id_compuesta  goto 28
+
+
+state 270
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF . ';'  (74)
+
+	';'  shift 306
+	.  error
+
+
+state 271
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ';' .  (79)
+
+	.  reduce 79
+
+
+state 272
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable . END_IF ';'  (82)
+
+	END_IF  shift 307
+	.  error
+
+
+state 273
+	condicion_if : IF '(' condicion ')' bloque_sentencia_ejecutable END_IF ';' .  (76)
+
+	.  reduce 76
+
+
+state 274
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (92)
+
+	';'  shift 308
+	.  error
+
+
+state 275
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (91)
+
+	END_IF  shift 309
+	.  error
+
+
+state 276
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (89)
+
+	.  reduce 89
+
+
+state 277
+	subrango : LONGINT ',' LONGINT .  (26)
+
+	.  reduce 26
+
+
+state 278
+	subrango : HEXA ',' HEXA .  (30)
+
+	.  reduce 30
+
+
+state 279
+	subrango : DOUBLE ',' DOUBLE .  (28)
+
+	.  reduce 28
+
+
+state 280
+	sentencia_declaracion : TYPEDEF ID ASIGNACION '(' subrango ')' ';' .  (21)
+
+	.  reduce 21
+
+
+state 281
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' ')' ';' .  (19)
+
+	.  reduce 19
+
+
+state 282
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ';' .  (16)
+
+	.  reduce 16
+
+
+state 283
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ')' . ';'  (15)
+
+	';'  shift 310
+	.  error
+
+
+state 284
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo subrango ')' ';' .  (17)
+
+	.  reduce 17
+
+
+state 285
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables . ',' ')' ID ';'  (22)
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables . ',' ')' ';'  (25)
+	lista_variables : lista_variables . ',' ID  (131)
+	lista_variables : lista_variables . ',' id_compuesta  (132)
+
+	','  shift 311
+	.  error
+
+
+state 286
+	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' ')' . ID ';'  (23)
+
+	ID  shift 312
+	.  error
+
+
+state 287
+	sentencia_declaracion : TYPEDEF ASIGNACION tipo '(' subrango ')' ';' .  (20)
+
+	.  reduce 20
+
+
+state 288
+	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' . ')' ID ';'  (24)
+	lista_variables : lista_variables ',' . ID  (131)
+	lista_variables : lista_variables ',' . id_compuesta  (132)
+
+	ID  shift 128
+	')'  shift 313
+	.  error
+
+	id_compuesta  goto 129
+
+
+state 289
+	cuerpo : cuerpo . sentencia  (7)
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (34)
+
+	IF  shift 4
+	OUTF  shift 6
+	TYPEDEF  shift 7
+	FUN  shift 8
+	RET  shift 314
 	REPEAT  shift 9
 	GOTO  shift 10
 	ID  shift 11
@@ -3723,48 +3723,20 @@ state 289
 
 
 state 290
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (32)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . cuerpo END  (33)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . END  (40)
+	sentencia_while : REPEAT bloque_sentencia_ejecutable WHILE '(' condicion ')' ';' .  (51)
 
-	IF  shift 4
-	END  shift 314
-	OUTF  shift 6
-	TYPEDEF  shift 7
-	FUN  shift 8
-	REPEAT  shift 9
-	GOTO  shift 10
-	ID  shift 11
-	LONGINT  shift 12
-	HEXA  shift 13
-	DOUBLE  shift 14
-	ETIQUETA  shift 15
-	.  error
-
-	cuerpo  goto 315
-	sentencia  goto 17
-	sentencia_declaracion  goto 18
-	sentencia_ejecucion  goto 19
-	tipo  goto 20
-	lista_variables  goto 21
-	declaracion_funcion  goto 22
-	asignacion  goto 23
-	condicion_if  goto 24
-	sentencia_print  goto 25
-	sentencia_while  goto 26
-	invocacion_funcion  goto 27
-	id_compuesta  goto 28
+	.  reduce 51
 
 
 state 291
 	cuerpo : cuerpo . sentencia  (7)
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo . RET '(' expresion ')' ';' END  (39)
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (39)
 
 	IF  shift 4
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
-	RET  shift 316
+	RET  shift 315
 	REPEAT  shift 9
 	GOTO  shift 10
 	ID  shift 11
@@ -3789,15 +3761,43 @@ state 291
 
 
 state 292
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET . '(' expresion ')' ';' END  (37)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . cuerpo RET '(' expresion ')' ';' END  (32)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . cuerpo END  (33)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . cuerpo RET expresion ';' END  (38)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN . END  (41)
 
-	'('  shift 317
+	IF  shift 4
+	END  shift 316
+	OUTF  shift 6
+	TYPEDEF  shift 7
+	FUN  shift 8
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 11
+	LONGINT  shift 12
+	HEXA  shift 13
+	DOUBLE  shift 14
+	ETIQUETA  shift 15
 	.  error
+
+	cuerpo  goto 317
+	sentencia  goto 17
+	sentencia_declaracion  goto 18
+	sentencia_ejecucion  goto 19
+	tipo  goto 20
+	lista_variables  goto 21
+	declaracion_funcion  goto 22
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	id_compuesta  goto 28
 
 
 state 293
 	cuerpo : cuerpo . sentencia  (7)
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (36)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo . RET '(' expresion ')' ';' END  (40)
 
 	IF  shift 4
 	OUTF  shift 6
@@ -3828,6 +3828,45 @@ state 293
 
 
 state 294
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET . '(' expresion ')' ';' END  (37)
+
+	'('  shift 319
+	.  error
+
+
+state 295
+	cuerpo : cuerpo . sentencia  (7)
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (36)
+
+	IF  shift 4
+	OUTF  shift 6
+	TYPEDEF  shift 7
+	FUN  shift 8
+	RET  shift 320
+	REPEAT  shift 9
+	GOTO  shift 10
+	ID  shift 11
+	LONGINT  shift 12
+	HEXA  shift 13
+	DOUBLE  shift 14
+	ETIQUETA  shift 15
+	.  error
+
+	sentencia  goto 65
+	sentencia_declaracion  goto 18
+	sentencia_ejecucion  goto 19
+	tipo  goto 20
+	lista_variables  goto 21
+	declaracion_funcion  goto 22
+	asignacion  goto 23
+	condicion_if  goto 24
+	sentencia_print  goto 25
+	sentencia_while  goto 26
+	invocacion_funcion  goto 27
+	id_compuesta  goto 28
+
+
+state 296
 	cuerpo : cuerpo . sentencia  (7)
 	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (35)
 
@@ -3835,7 +3874,7 @@ state 294
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
-	RET  shift 319
+	RET  shift 321
 	REPEAT  shift 9
 	GOTO  shift 10
 	ID  shift 11
@@ -3859,160 +3898,161 @@ state 294
 	id_compuesta  goto 28
 
 
-state 295
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (89)
-
-	';'  shift 320
-	.  error
-
-
-state 296
-	condicion_if : IF '(' condicion ')' THEN error END_IF ';' .  (77)
-
-	.  reduce 77
-
-
 state 297
-	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF . ';'  (84)
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (90)
 
-	';'  shift 321
+	';'  shift 322
 	.  error
 
 
 state 298
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion . END_IF ';'  (95)
+	condicion_if : IF '(' condicion ')' THEN error END_IF ';' .  (78)
 
-	END_IF  shift 322
-	.  error
+	.  reduce 78
 
 
 state 299
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable . END_IF ';'  (93)
+	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF . ';'  (85)
 
-	END_IF  shift 323
+	';'  shift 323
 	.  error
 
 
 state 300
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion END_IF ';' .  (92)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion . END_IF ';'  (96)
 
-	.  reduce 92
-
-
-state 301
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF . ';'  (83)
-
-	';'  shift 324
+	END_IF  shift 324
 	.  error
 
 
-state 302
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion . END_IF ';'  (94)
+state 301
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable . END_IF ';'  (94)
 
 	END_IF  shift 325
 	.  error
 
 
-state 303
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (74)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF  (82)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . ';'  (85)
+state 302
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion END_IF ';' .  (93)
 
-	END_IF  shift 326
-	';'  shift 327
+	.  reduce 93
+
+
+state 303
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF . ';'  (84)
+
+	';'  shift 326
 	.  error
 
 
 state 304
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (73)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion . END_IF ';'  (95)
 
-	.  reduce 73
-
-
-state 305
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF . ';'  (81)
-
-	';'  shift 328
+	END_IF  shift 327
 	.  error
 
 
-state 306
-	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (91)
+state 305
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . END_IF  (83)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable . ';'  (86)
 
-	.  reduce 91
-
-
-state 307
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (90)
-
+	END_IF  shift 328
 	';'  shift 329
 	.  error
 
 
-state 308
-	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ')' ';' .  (15)
+state 306
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable END_IF ';' .  (74)
 
-	.  reduce 15
+	.  reduce 74
+
+
+state 307
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF . ';'  (82)
+
+	';'  shift 330
+	.  error
+
+
+state 308
+	condicion_if : IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (92)
+
+	.  reduce 92
 
 
 state 309
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' . ')' ID ';'  (22)
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' . ')' ';'  (25)
-	lista_variables : lista_variables ',' . ID  (129)
-	lista_variables : lista_variables ',' . id_compuesta  (130)
-
-	ID  shift 128
-	')'  shift 330
-	.  error
-
-	id_compuesta  goto 129
-
-
-state 310
-	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' ')' ID . ';'  (23)
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (91)
 
 	';'  shift 331
 	.  error
 
 
-state 311
-	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' ')' . ID ';'  (24)
+state 310
+	sentencia_declaracion : TYPEDEF ID ASIGNACION tipo '(' subrango ')' ';' .  (15)
 
-	ID  shift 332
+	.  reduce 15
+
+
+state 311
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' . ')' ID ';'  (22)
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' . ')' ';'  (25)
+	lista_variables : lista_variables ',' . ID  (131)
+	lista_variables : lista_variables ',' . id_compuesta  (132)
+
+	ID  shift 128
+	')'  shift 332
 	.  error
+
+	id_compuesta  goto 129
 
 
 state 312
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (34)
+	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' ')' ID . ';'  (23)
 
-	'('  shift 333
+	';'  shift 333
 	.  error
 
 
 state 313
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (38)
+	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' ')' . ID ';'  (24)
 
-	'('  shift 334
+	ID  shift 334
 	.  error
 
 
 state 314
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN END .  (40)
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (34)
 
-	.  reduce 40
+	'('  shift 335
+	.  error
 
 
 state 315
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (39)
+
+	'('  shift 336
+	.  error
+
+
+state 316
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN END .  (41)
+
+	.  reduce 41
+
+
+state 317
 	cuerpo : cuerpo . sentencia  (7)
 	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo . RET '(' expresion ')' ';' END  (32)
 	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo . END  (33)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo . RET expresion ';' END  (38)
 
 	IF  shift 4
-	END  shift 335
+	END  shift 337
 	OUTF  shift 6
 	TYPEDEF  shift 7
 	FUN  shift 8
-	RET  shift 336
+	RET  shift 338
 	REPEAT  shift 9
 	GOTO  shift 10
 	ID  shift 11
@@ -4036,14 +4076,14 @@ state 315
 	id_compuesta  goto 28
 
 
-state 316
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET . '(' expresion ')' ';' END  (39)
+state 318
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET . '(' expresion ')' ';' END  (40)
 
-	'('  shift 337
+	'('  shift 339
 	.  error
 
 
-state 317
+state 319
 	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' . expresion ')' ';' END  (37)
 
 	ID  shift 32
@@ -4057,130 +4097,130 @@ state 317
 	'/'  shift 40
 	.  error
 
-	expresion  goto 338
+	expresion  goto 340
 	invocacion_funcion  goto 43
 	termino  goto 46
 	factor  goto 47
 	id_compuesta  goto 48
 
 
-state 318
+state 320
 	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (36)
 
-	'('  shift 339
+	'('  shift 341
 	.  error
-
-
-state 319
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (35)
-
-	'('  shift 340
-	.  error
-
-
-state 320
-	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (89)
-
-	.  reduce 89
 
 
 state 321
-	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';' .  (84)
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (35)
 
-	.  reduce 84
+	'('  shift 342
+	.  error
 
 
 state 322
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF . ';'  (95)
+	condicion_if : IF '(' condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (90)
 
-	';'  shift 341
-	.  error
+	.  reduce 90
 
 
 state 323
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF . ';'  (93)
+	condicion_if : IF '(' condicion ')' THEN ELSE bloque_sentencia_ejecutable END_IF ';' .  (85)
 
-	';'  shift 342
-	.  error
+	.  reduce 85
 
 
 state 324
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';' .  (83)
-
-	.  reduce 83
-
-
-state 325
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF . ';'  (94)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF . ';'  (96)
 
 	';'  shift 343
 	.  error
 
 
-state 326
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (74)
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF .  (82)
+state 325
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF . ';'  (94)
 
 	';'  shift 344
-	$end  reduce 82
-	IF  reduce 82
-	ELSE  reduce 82
-	END  reduce 82
-	END_IF  reduce 82
-	OUTF  reduce 82
-	TYPEDEF  reduce 82
-	FUN  reduce 82
-	RET  reduce 82
-	REPEAT  reduce 82
-	GOTO  reduce 82
-	ID  reduce 82
-	LONGINT  reduce 82
-	HEXA  reduce 82
-	DOUBLE  reduce 82
-	ETIQUETA  reduce 82
-
-
-state 327
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';' .  (85)
-
-	.  reduce 85
-
-
-state 328
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';' .  (81)
-
-	.  reduce 81
-
-
-state 329
-	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (90)
-
-	.  reduce 90
-
-
-state 330
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' . ID ';'  (22)
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' . ';'  (25)
-
-	ID  shift 345
-	';'  shift 346
 	.  error
 
 
+state 326
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE END_IF ';' .  (84)
+
+	.  reduce 84
+
+
+state 327
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF . ';'  (95)
+
+	';'  shift 345
+	.  error
+
+
+state 328
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF . ';'  (75)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF .  (83)
+
+	';'  shift 346
+	$end  reduce 83
+	IF  reduce 83
+	ELSE  reduce 83
+	END  reduce 83
+	END_IF  reduce 83
+	OUTF  reduce 83
+	TYPEDEF  reduce 83
+	FUN  reduce 83
+	RET  reduce 83
+	REPEAT  reduce 83
+	GOTO  reduce 83
+	ID  reduce 83
+	LONGINT  reduce 83
+	HEXA  reduce 83
+	DOUBLE  reduce 83
+	ETIQUETA  reduce 83
+
+
+state 329
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ';' .  (86)
+
+	.  reduce 86
+
+
+state 330
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable bloque_sentencia_ejecutable END_IF ';' .  (82)
+
+	.  reduce 82
+
+
 state 331
+	condicion_if : IF condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (91)
+
+	.  reduce 91
+
+
+state 332
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' . ID ';'  (22)
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' . ';'  (25)
+
+	ID  shift 347
+	';'  shift 348
+	.  error
+
+
+state 333
 	sentencia_declaracion : TYPEDEF STRUCT lista_tipos '(' lista_variables ',' ')' ID ';' .  (23)
 
 	.  reduce 23
 
 
-state 332
+state 334
 	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' ')' ID . ';'  (24)
 
-	';'  shift 347
+	';'  shift 349
 	.  error
 
 
-state 333
+state 335
 	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (34)
 
 	ID  shift 32
@@ -4194,49 +4234,15 @@ state 333
 	'/'  shift 40
 	.  error
 
-	expresion  goto 348
+	expresion  goto 350
 	invocacion_funcion  goto 43
 	termino  goto 46
 	factor  goto 47
 	id_compuesta  goto 48
-
-
-state 334
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (38)
-
-	ID  shift 32
-	LONGINT  shift 33
-	HEXA  shift 34
-	DOUBLE  shift 35
-	TOD  shift 36
-	'+'  shift 37
-	'-'  shift 38
-	'*'  shift 39
-	'/'  shift 40
-	.  error
-
-	expresion  goto 349
-	invocacion_funcion  goto 43
-	termino  goto 46
-	factor  goto 47
-	id_compuesta  goto 48
-
-
-state 335
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo END .  (33)
-
-	.  reduce 33
 
 
 state 336
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (32)
-
-	'('  shift 350
-	.  error
-
-
-state 337
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' . expresion ')' ';' END  (39)
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (39)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -4256,23 +4262,15 @@ state 337
 	id_compuesta  goto 48
 
 
+state 337
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo END .  (33)
+
+	.  reduce 33
+
+
 state 338
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion . ')' ';' END  (37)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-
-	'+'  shift 87
-	'-'  shift 88
-	')'  shift 352
-	.  error
-
-
-state 339
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (36)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET . '(' expresion ')' ';' END  (32)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET . expresion ';' END  (38)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -4283,6 +4281,7 @@ state 339
 	'-'  shift 38
 	'*'  shift 39
 	'/'  shift 40
+	'('  shift 352
 	.  error
 
 	expresion  goto 353
@@ -4292,8 +4291,8 @@ state 339
 	id_compuesta  goto 48
 
 
-state 340
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (35)
+state 339
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' . expresion ')' ';' END  (40)
 
 	ID  shift 32
 	LONGINT  shift 33
@@ -4313,80 +4312,137 @@ state 340
 	id_compuesta  goto 48
 
 
-state 341
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';' .  (95)
+state 340
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion . ')' ';' END  (37)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
-	.  reduce 95
+	'+'  shift 87
+	'-'  shift 88
+	')'  shift 355
+	.  error
+
+
+state 341
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (36)
+
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	TOD  shift 36
+	'+'  shift 37
+	'-'  shift 38
+	'*'  shift 39
+	'/'  shift 40
+	.  error
+
+	expresion  goto 356
+	invocacion_funcion  goto 43
+	termino  goto 46
+	factor  goto 47
+	id_compuesta  goto 48
 
 
 state 342
-	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';' .  (93)
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (35)
 
-	.  reduce 93
+	ID  shift 32
+	LONGINT  shift 33
+	HEXA  shift 34
+	DOUBLE  shift 35
+	TOD  shift 36
+	'+'  shift 37
+	'-'  shift 38
+	'*'  shift 39
+	'/'  shift 40
+	.  error
+
+	expresion  goto 357
+	invocacion_funcion  goto 43
+	termino  goto 46
+	factor  goto 47
+	id_compuesta  goto 48
 
 
 state 343
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';' .  (94)
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ';' .  (96)
+
+	.  reduce 96
+
+
+state 344
+	condicion_if : IF '(' condicion ')' THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ';' .  (94)
 
 	.  reduce 94
 
 
-state 344
-	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (74)
-
-	.  reduce 74
-
-
 state 345
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' ID . ';'  (22)
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ';' .  (95)
 
-	';'  shift 355
-	.  error
+	.  reduce 95
 
 
 state 346
+	condicion_if : IF '(' condicion ')' THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ';' .  (75)
+
+	.  reduce 75
+
+
+state 347
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' ID . ';'  (22)
+
+	';'  shift 358
+	.  error
+
+
+state 348
 	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' ';' .  (25)
 
 	.  reduce 25
 
 
-state 347
+state 349
 	sentencia_declaracion : TYPEDEF '<' lista_tipos '>' '(' lista_variables ',' ')' ID ';' .  (24)
 
 	.  reduce 24
 
 
-state 348
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (34)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-
-	'+'  shift 87
-	'-'  shift 88
-	')'  shift 356
-	.  error
-
-
-state 349
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (38)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-
-	'+'  shift 87
-	'-'  shift 88
-	')'  shift 357
-	.  error
-
-
 state 350
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (34)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+
+	'+'  shift 87
+	'-'  shift 88
+	')'  shift 359
+	.  error
+
+
+state 351
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (39)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
+
+	'+'  shift 87
+	'-'  shift 88
+	')'  shift 360
+	.  error
+
+
+state 352
 	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' . expresion ')' ';' END  (32)
 
 	ID  shift 32
@@ -4400,93 +4456,58 @@ state 350
 	'/'  shift 40
 	.  error
 
-	expresion  goto 358
+	expresion  goto 361
 	invocacion_funcion  goto 43
 	termino  goto 46
 	factor  goto 47
 	id_compuesta  goto 48
 
 
-state 351
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion . ')' ';' END  (39)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
-
-	'+'  shift 87
-	'-'  shift 88
-	')'  shift 359
-	.  error
-
-
-state 352
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' . ';' END  (37)
-
-	';'  shift 360
-	.  error
-
-
 state 353
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (36)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET expresion . ';' END  (38)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
-	')'  shift 361
+	';'  shift 362
 	.  error
 
 
 state 354
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (35)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion . ')' ';' END  (40)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
-	')'  shift 362
+	')'  shift 363
 	.  error
 
 
 state 355
-	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' ID ';' .  (22)
-
-	.  reduce 22
-
-
-state 356
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (34)
-
-	';'  shift 363
-	.  error
-
-
-state 357
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (38)
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' . ';' END  (37)
 
 	';'  shift 364
 	.  error
 
 
-state 358
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (32)
-	expresion : expresion . '+' termino  (99)
-	expresion : expresion . '-' termino  (100)
-	expresion : expresion . '+' '+' termino  (101)
-	expresion : expresion . '-' '+' termino  (102)
-	expresion : expresion . '+'  (104)
-	expresion : expresion . '-'  (105)
+state 356
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (36)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
 	'+'  shift 87
 	'-'  shift 88
@@ -4494,124 +4515,187 @@ state 358
 	.  error
 
 
-state 359
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' . ';' END  (39)
+state 357
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (35)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
-	';'  shift 366
+	'+'  shift 87
+	'-'  shift 88
+	')'  shift 366
+	.  error
+
+
+state 358
+	sentencia_declaracion : TYPEDEF STRUCT '<' lista_tipos '>' '(' lista_variables ',' ')' ID ';' .  (22)
+
+	.  reduce 22
+
+
+state 359
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (34)
+
+	';'  shift 367
 	.  error
 
 
 state 360
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' . END  (37)
-
-	END  shift 367
-	.  error
-
-
-state 361
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (36)
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (39)
 
 	';'  shift 368
 	.  error
 
 
-state 362
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (35)
+state 361
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion . ')' ';' END  (32)
+	expresion : expresion . '+' termino  (101)
+	expresion : expresion . '-' termino  (102)
+	expresion : expresion . '+' '+' termino  (103)
+	expresion : expresion . '-' '+' termino  (104)
+	expresion : expresion . '+'  (106)
+	expresion : expresion . '-'  (107)
 
-	';'  shift 369
+	'+'  shift 87
+	'-'  shift 88
+	')'  shift 369
 	.  error
 
 
-state 363
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (34)
+state 362
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET expresion ';' . END  (38)
 
 	END  shift 370
 	.  error
 
 
-state 364
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (38)
+state 363
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' . ';' END  (40)
 
-	END  shift 371
+	';'  shift 371
+	.  error
+
+
+state 364
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' . END  (37)
+
+	END  shift 372
 	.  error
 
 
 state 365
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (32)
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (36)
 
-	';'  shift 372
+	';'  shift 373
 	.  error
 
 
 state 366
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' . END  (39)
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (35)
 
-	END  shift 373
+	';'  shift 374
 	.  error
 
 
 state 367
-	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' END .  (37)
-
-	.  reduce 37
-
-
-state 368
-	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (36)
-
-	END  shift 374
-	.  error
-
-
-state 369
-	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (35)
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (34)
 
 	END  shift 375
 	.  error
 
 
-state 370
-	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (34)
-
-	.  reduce 34
-
-
-state 371
-	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (38)
-
-	.  reduce 38
-
-
-state 372
-	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (32)
+state 368
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (39)
 
 	END  shift 376
 	.  error
 
 
+state 369
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' . ';' END  (32)
+
+	';'  shift 377
+	.  error
+
+
+state 370
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET expresion ';' END .  (38)
+
+	.  reduce 38
+
+
+state 371
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' . END  (40)
+
+	END  shift 378
+	.  error
+
+
+state 372
+	declaracion_funcion : tipo FUN ID parametro BEGIN cuerpo RET '(' expresion ')' ';' END .  (37)
+
+	.  reduce 37
+
+
 state 373
-	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END .  (39)
+	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (36)
+
+	END  shift 379
+	.  error
+
+
+state 374
+	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (35)
+
+	END  shift 380
+	.  error
+
+
+state 375
+	declaracion_funcion : FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (34)
+
+	.  reduce 34
+
+
+state 376
+	declaracion_funcion : tipo FUN ID '(' ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (39)
 
 	.  reduce 39
 
 
-state 374
+state 377
+	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' . END  (32)
+
+	END  shift 381
+	.  error
+
+
+state 378
+	declaracion_funcion : tipo FUN ID '(' parametro ')' cuerpo RET '(' expresion ')' ';' END .  (40)
+
+	.  reduce 40
+
+
+state 379
 	declaracion_funcion : tipo FUN '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (36)
 
 	.  reduce 36
 
 
-state 375
+state 380
 	declaracion_funcion : tipo ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (35)
 
 	.  reduce 35
 
 
-state 376
+state 381
 	declaracion_funcion : tipo FUN ID '(' parametro ')' BEGIN cuerpo RET '(' expresion ')' ';' END .  (32)
 
 	.  reduce 32
 
 
 40 terminals, 26 nonterminals
-148 grammar rules, 377 states
+150 grammar rules, 382 states

@@ -57,12 +57,13 @@ subrango 						: LONGINT "," LONGINT	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
                                 | HEXA HEXA {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
                                 ;
 
-declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END
+declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {System.out.println("Declaracion de Funcion");}
                                 | tipo FUN ID "(" parametro ")" BEGIN cuerpo END {yyerror("ERROR, Falta sentencia return en la linea: " + lector.getNroLinea());}
                                 | FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta la declaracion del tipo de la FUN en la linea: " + lector.getNroLinea());}
                                 | tipo  ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta la declaracion de la palabra reservada FUN en la linea: " + lector.getNroLinea());}
                                 | tipo FUN "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta el ID de la funcion en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID parametro  BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta de () a la hora de los parametros en la linea: " + lector.getNroLinea());}
+                                | tipo FUN ID "(" parametro ")"  BEGIN cuerpo RET expresion ";" END {yyerror("ERROR, Falta de () a la hora de la expresion en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID "("  ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta de parametros en la FUN en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID "(" parametro ")"  cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta de BEGIN en la FUN en la linea: " + lector.getNroLinea());}
                                 //| tipo FUN ID "(" parametro ")" BEGIN cuerpo error {System.out.println("ERROR,Falta de END en la FUN en la linea: " + lector.getNroLinea());}
@@ -92,14 +93,14 @@ sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" c
                                 ;
 
 sentencia_print					: OUTF "(" CML ")" ";" //{System.out.println($3.sval);}
-                                 | OUTF "(" expresion ")" ";"
-                                 | OUTF "(" ")" ";" {yyerror("ERROR, Falta parámetro en sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 | OUTF "(" expresion ")" {yyerror("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 | OUTF "(" CML ")" {yyerror("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 | OUTF CML ";" {yyerror("ERROR, Faltan los parentesis en la sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 | OUTF expresion ";" {yyerror("ERROR, Faltan los parentesis en la sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 | OUTF "(" error ")" ";" {yyerror("ERROR, tipo invalido como parametro para la sentencia OUTF en la linea: " + lector.getNroLinea());}
-                                 ;
+                                | OUTF "(" expresion ")" ";"
+                                | OUTF "(" ")" ";" {yyerror("ERROR, Falta parámetro en sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                | OUTF "(" expresion ")" {yyerror("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                | OUTF "(" CML ")" {yyerror("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                | OUTF CML ";" {yyerror("ERROR, Faltan los parentesis en la sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                | OUTF expresion ";" {yyerror("ERROR, Faltan los parentesis en la sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                | OUTF "(" error ")" ";" {yyerror("ERROR, tipo invalido como parametro para la sentencia OUTF en la linea: " + lector.getNroLinea());}
+                                ;
 
 parametro						: tipo ID
                             	| ID {yyerror("ERROR, falta declaracion de TIPO en la linea: " + lector.getNroLinea());}
@@ -125,7 +126,7 @@ condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF
                                 | IF "(" condicion ")" THEN error END_IF ";" {yyerror("ERROR,falta el bloque ejecutable en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable error {yyerror("ERROR,falta END_IF; al final de la declaracion en la linea: " + lector.getNroLinea());}
-                                | IF THEN bloque_sentencia_ejecutable END_IF  {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF THEN bloque_sentencia_ejecutable END_IF error {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable  bloque_sentencia_ejecutable END_IF ";"  {yyerror("ERROR, falta ELSE luego de la sentencias de ejecucion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE  END_IF ";" {yyerror("ERROR, falta el bloque ejecutable en el ELSE en la linea: " + lector.getNroLinea());}
@@ -148,7 +149,9 @@ condicion						:  expresion comparador expresion
                                 |  lista_expresiones {yyerror("ERROR, falta comparador en comparacion en la linea: " + lector.getNroLinea());}
                                 ;
 
-asignacion : 					lista_variables ASIGNACION lista_expresiones ";" {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
+asignacion                      : lista_variables ASIGNACION lista_expresiones ";" {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
+                                | lista_variables ASIGNACION lista_expresiones error {yyerror("ERROR, falta de ';' en la asignacion de la linea: " + lector.getNroLinea());}
+                                ;
 
 expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
@@ -182,7 +185,7 @@ termino							: termino "*" factor
 factor							: invocacion_funcion	//{$$ = $1;}
                                 |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;}
                                 | id_compuesta
-                                | LONGINT 	{
+                                | LONGINT 	    {
                                                     $$ = $1;
                                                     Long valor = Long.parseLong($1.sval);
                                                     if (valor == 2147483648L){

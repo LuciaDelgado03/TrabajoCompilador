@@ -157,10 +157,6 @@ public class AnalizadorLexico {
                 instanciaAS11.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
                 break;
             case 12:
-                AccionesSemantica.AS12 instanciaAS12 = AccionesSemantica.AS12.obtenerInstancia(lector);
-                instanciaAS12.ejecutarAccionSemantica(accionSemantica, cadena, caracter);
-                break;
-            case 13:
                 break;
             default:
                 System.out.println("Acción no válida. El número debe estar entre 1 y 11.");

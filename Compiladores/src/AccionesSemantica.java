@@ -179,20 +179,6 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            /*BigDecimal LIMITE_INFERIOR = new BigDecimal(2.2250738585072014e-308);
-            BigDecimal LIMITE_SUPERIOR = new BigDecimal(1.7976931348623157e+308);
-            String valor = cadena.toString();
-            String valorConvertido = valor.replace("d", "E");
-            try {
-                BigDecimal numero = new BigDecimal(valorConvertido);
-                System.out.println("convertido" + numero);
-                if(LIMITE_SUPERIOR.compareTo(numero) < 0 || LIMITE_INFERIOR.compareTo(numero) > 0){
-                    System.out.println("ERROR: Supera el limite indicado para los DOUBLE en la linea: "
-                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Error en formato double para "+ cadena);
-            }*/
             // Retroceder un carácter
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
@@ -304,27 +290,6 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
-            if (!caracter.equals('?')) {
-                lector.retrocederCaracter();
-            }
-        }
-    }
-
-    public static class AS12 extends AccionesSemantica {
-        private static AS12 instancia;
-
-        private AS12(LectorDeTexto lector) {
-            super(lector);
-        }
-
-        public static AS12 obtenerInstancia(LectorDeTexto lector) {
-            if (instancia == null) {
-                instancia = new AS12(lector);
-            }
-            return instancia;
-        }
-
-        public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             cadena.append(caracter);
             String c= cadena.toString();
             String result = cadena.toString().replaceAll("[\\t\\n]", "");
@@ -334,5 +299,6 @@ public abstract class AccionesSemantica {
             cadena.append(result);
         }
     }
+
 }
 
