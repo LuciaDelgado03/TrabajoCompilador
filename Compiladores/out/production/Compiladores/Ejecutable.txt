@@ -1,8 +1,7 @@
 parte1
 BEGIN
     ##======================================== PARTE 1 ===========================================
-    LONGINT j};
-    #comentario mal
+
     ##---------------------------LONGINT DENTRO DEL RANGO-----------------------------------------
     LONGINT j;
     J := x;
@@ -41,44 +40,115 @@ BEGIN
     P := 1.1d-2;
 
     ##---------------------------HEXADECIMAL DENTRO DEL RANGO-------------------------------------
-    HEXA HEX;
+    LONGINT HEX;
     HEX := -0x80000000;
     HEX := 0x7FFFFFFF;
 
     ##---------------------------HEXADECIMAL FUERA DEL RANGO---------------------------------------
     HEX := -0x80000001;
     HEX := 0x8FFFFFFF;
-    HEX := 0x80000000;
 
-    ###################################### PARTE 2 ######################################
+
+    ##---------------------------IDENTIFICADOR MAS Y MENOS DE 15 CARACTERES-----------------------
+
+    LONGINT aux;
+    LoNgInT auxiliar1234_asde;
+    longint aux};
+    ##-----------------------------COMENTARIOS DE UNA LINEA---------------------------------------
+
+    ## Comentario bien
+
+    # Comentario mal
+
+    ##-----------------------------CADENAS BIEN Y MAL ESCRITAS-------------------------------------
+    {Hola
+    MUNDO}
+    HOLA MUNDO}
+
+    ##======================================== PARTE 2 ===========================================
 
     ##---------------------------FALTA ; AL FINAL------------------------------------------------
-    OUTF ({P := 1.2d5
+    ##P := 1.2d5
     LONGINT a
     OUTF (a)
     if ( HEX <= 10) then BEGIN
         hex := 1;
     END
-    END_IF });
+    END_IF
 
-    ##---------------------------EXPRESIONES-------------------------------------------------------
-    ##---------------COMPLETA---------------
-    x := 1 + 1;
-    x := J / 1;
-    ##---------------SIN OPERANDO-----------
-    x :=  + 1;
-    ##---------------SIN OPERADOR-----------
-    x := 1 * J;
+    ##---------------------------DECLARACION DE FUNCION--------------------------------------------
+    LONGINT fun sumar( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+        DOUBLE fun dividir ( DOUBLE a )
+        begin
+            x := a/2;
+            ret (x);
+        end
+        ret (x);
+    END
+
+
+    ##---------------------------FALTA NOMBRE DE FUNCION-------------------------------------------
+    LONGINT fun ( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA RET DE FUNCION---------------------------------------------
+    LONGINT fun sumar( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+    END
+
+    ##---------------------------FALTA NOMBRE PARAMETRO DE FUNCION----------------------------------
+    LONGINT fun sumar(DOUBLE )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA TIPO PARAMETRO DE FUNCION------------------------------------
+    LONGINT fun sumar( x)
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA PARAMETRO DE FUNCION----------------------------------------
+    LONGINT fun sumar( )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##------------------------INVOCACION DE FUNCION-------------------------------------------------
+    int := sumar ( 1 ) + a ;
+    sumar ( b + a );
+
+    ##-------------------------FALTA DE , EN LAS LISTAS---------------------------------------------
+
+    ##LONGINT a b,c;
+
+
 
     ##---------------------------IMPRESIONES POR PANTALLA-------------------------------------------
-
-    OUTF ();
+    ##---------------COMPLETA---------------
     OUTF (5);
     OUTF ({OUTF
             ML});
-    OUTF (OUTF);
     OUTF(hola);
     OUTF (a+b);
+
+    ##---------FALTA DE PARAMETRO-----------
+    OUTF ();
+
+    ##---------PARAMETRO INCORRECTO---------
+    OUTF (OUTF);
+
+    ##---------FALTA DE PARENTESIS---------
+    OUTF a+b;
 
     ##--------------------------CASOS DE DECLARACION IF----------------------------------------------
 
@@ -109,6 +179,7 @@ BEGIN
        HEX := HEX + 2;
     end
     END_IF;
+
     ##---COMPLETO Y DE CUERPO  OTRO IF -----
     IF(HEX > 10) THEN begin
         HEX := HEX + 2;
@@ -118,25 +189,88 @@ BEGIN
     end
     end_if;
 
-    ##----------------------------------STRUCT------------------------------------------------------
+    OUTF({##--------FALTA DE COMPARADOR ----------
+    if ( HEX  10) then BEGIN
+        hex := 1;
+    END
+    END_IF;});
+
+    ##---------------------------EXPRESIONES-------------------------------------------------------
+    ##---------------COMPLETA---------------
+    x := 1 + 1;
+    x := J / 1;
+    ##---------------SIN OPERANDO-----------
+    x :=  + 1;
+    ##---------------SIN OPERADOR-----------
+    ##x := 1  J; ##No anda
+
+    ##---------OPERADOR REPETIDO-----------
+    x := 1 -+ 4; ##No anda, toma que falta operador
+
+    ##----------------------------------TEMA 11: DECLARACION TIPOS----------------------------------
+    ##---------------COMPLETO-----------
+    TYPEDEF enterito := LONGINT [-10,10];
+    TYPEDEF doublecito := double [-1.2,3.5];
+
+    enterito e;
+    doublecito d, a, b;
+
+    ##---------FALTA DE []--------------
+    TYPEDEF enterito := LONGINT -10,10;
+
+    ##--------FALTA DE RANGO------------
+    TYPEDEF enterito := LONGINT [];
+
+    ##-------FALTA DE NOMBRE------------
+    TYPEDEF  := LONGINT [-10,10];
+
+    ##-------FALTA DE TIPO------------
+    TYPEDEF enterito :=  [-10,10];
+
+    ##----------------------------------TEMA 15: REPEAT WHILE--------------------------------------
+    ##----------------REPEAT WHILE COMPLETO----------------
+    REPEAT BEGIN
+    HEX := HEX +1;
+    END
+    WHILE (HEX <10);
+
+    ##----------------REPEAT WHILE SIN PARENTESIS----------------
+    REPEAT BEGIN
+    HEX := HEX + 2;
+    END
+    WHILE HEX < 20;
+
+    ##----------------REPEAT WHILE SIN CUERPO----------------
+    repeat
+    while (x > 30);
+
+    ##----------------------------------TEMA 17: ASIGNACION MULTIPLE--------------------------------
+
+    a,b,c := 1+d, e, f+5;
+
+    ##a b, c := 4, a, c+1;
+
+    ##a,b,c := 4, a c+1;
+
+    ##----------------------------------TEMA 20: STRUCT---------------------------------------------
     ##---------------COMPLETO -------------
-    TYPEDEF Struct  <LONGINT,DOUBLE,HEXA> (
+    OUTF({TYPEDEF Struct  <LONGINT,DOUBLE,DOUBLE> (
         a,
         b,
         c,
-    ) s1;
+    ) s1;});
 
     ##-------FALTA DE STRUCT -------------
-    TYPEDEF <LONGINT,DOUBLE, HEXA>(
+    TYPEDEF <LONGINT,DOUBLE, LONGINT>(
         a,
     ) s2;
     ##-------FALTA DE <> -----------------
-    TYPEDEF STRUCT LONGINT,DOUBLE, HEXA(
+    TYPEDEF STRUCT LONGINT,DOUBLE, LONGINT(
             a,
         ) s2;
 
     ##-------FALTA DE ID AL FINAL-------------
-         TYPEDEF STRUCT<LONGINT,DOUBLE, HEXA>(
+         TYPEDEF STRUCT<LONGINT,DOUBLE, LONGINT>(
              a,
          );
 
@@ -146,39 +280,22 @@ BEGIN
         x := y;
         int := y.b;
 
-    ##---------------------------REPEAT WHILE COMPLETO----------------------------------------------
-    REPEAT BEGIN
-    HEX := HEX +1;
-    END
-    WHILE (HEX <10);
+    ##----------------------------------TEMA 23: ETIQUETA-----------------------------------------
+    IF(HEX > 10) THEN begin
+        HEX := HEX + 2;
+        IF (HEX > 10) THEN
+        BEGIN
+            HEX:= HEX+2;
+            GOTO afuera@;
+        END
+        end_if;
+        afuera@
+    end
+    end_if;
 
-    ##---------------------------REPEAT WHILE SIN PARENTESIS-----------------------------------------
-    REPEAT BEGIN
-    HEX := HEX + 2;
-    END
-    WHILE HEX < 20;
+    ##--------------------------------TEMA 25: CONVERSION EXPLICITA--------------------------------
+    a := TOD (a);
+    a := TOD ( );
 
-    ##---------------------------REPEAT WHILE SIN CUERPO----------------------------------------------
-    repeat
-    while (x > 30);
-
-    ##---------------------------DECLARACION DE FUNCION-----------------------------------------------
-    LONGINT fun sumar( LONGINT X )
-    BEGIN
-        x := 1 + 1;
-        DOUBLE fun dividir ( DOUBLE a )
-        begin
-            x := a/2;
-            ret (x);
-        end
-        ret (x);
-    END
-
-    ##---------------------------DECLARACION DE FUNCION------------------------------------------------
-
-
-    ##---------------------------INVOCACION DE FUNCION-------------------------------------------------
-    int := sumar ( 1 ) + a ;
-    sumar ( b + a );
 
 END

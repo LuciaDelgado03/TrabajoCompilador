@@ -12,11 +12,37 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            String path;
+            int seleccion = 0;
+            path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+            while(seleccion != 4) {
+                seleccion = 0;
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Elija una de las opciones para codigo ejecutable");
+                System.out.println("1) Ejecutable 1");
+                System.out.println("2) Ejecutable 2");
+                System.out.println("3) Ingresar el path de un ejecutable");
+                System.out.println("4) FIN");
 
-            par = new Parser(false);
-            lex = new AnalizadorLexico(par);
-            par.run(lex);
-            System.out.println("Fin de compilación");
+                while (seleccion == 0) {
+                    seleccion = scanner.nextInt();
+                }
+                if (seleccion == 1) {
+                    path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+                }
+                if (seleccion == 2) {
+                    path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+                }
+                if (seleccion == 3) {
+                    path = scanner.nextLine();
+                }
+                if (seleccion != 4) {
+                    par = new Parser(false);
+                    lex = new AnalizadorLexico(par, path);
+                    par.run(lex);
+                    System.out.println("Fin de compilación");
+                }
+            }
         } catch (Exception var2) {
             System.err.println("Error durante la ejecución: " + var2.getMessage());
         }

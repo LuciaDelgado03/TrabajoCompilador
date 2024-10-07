@@ -30,31 +30,26 @@ cuerpo							: cuerpo sentencia
 
 sentencia						: sentencia_declaracion
                                 | sentencia_ejecucion
-                                | ETIQUETA
                                 ;
 
 sentencia_declaracion			: tipo lista_variables ";" {/*System.out.println($2);*/}
 							    | tipo lista_variables {yyerror("ERROR, Falta ; en la sentencia de declaracion en la linea: " + lector.getNroLinea());}
 						    	| declaracion_funcion
-						    	| TYPEDEF ID ASIGNACION tipo "(" subrango ")" ";" {System.out.println("Declaracion de Subtipo");}
-						    	| TYPEDEF ID ASIGNACION tipo "(" subrango ";" {yyerror("ERROR, Falta de parentesis en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ID ASIGNACION tipo subrango  ")" ";" {yyerror("ERROR, Falta de parentesis en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ID ASIGNACION tipo  subrango  ";" {yyerror("ERROR, Falta de llaves parentesis en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ID ASIGNACION tipo "(" ")" ";" {yyerror("ERROR, Falta de rango en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ASIGNACION tipo "(" subrango ")" ";" {yyerror("ERROR, Falta nombre del tipo definido en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ID ASIGNACION "(" subrango ")" ";" {yyerror("ERROR, Falta el tipo base en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION tipo "[" subrango "]" ";" {System.out.println("Declaracion de Subtipo");}
+						    	| TYPEDEF ID ASIGNACION tipo "[" subrango ";" {yyerror("ERROR, Falta de ']' en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION tipo subrango  "]" ";" {yyerror("ERROR, Falta de '[' en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION tipo  subrango  ";" {yyerror("ERROR, Falta de llaves '[]' en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION tipo "[" "]" ";" {yyerror("ERROR, Falta de rango en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ASIGNACION tipo "[" subrango "]" ";" {yyerror("ERROR, Falta nombre del tipo definido en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION "[" subrango "]" ";" {yyerror("ERROR, Falta el tipo base en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF STRUCT "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {System.out.println("Declaracion de Struct");}
 						    	| TYPEDEF STRUCT lista_tipos  "(" lista_variables "," ")" ID ";" {yyerror("ERROR, Falta <> en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {yyerror("ERROR, Falta la palabra STRUCT en la linea: " + lector.getNroLinea());}
                                 | TYPEDEF STRUCT "<" lista_tipos ">"  "(" lista_variables "," ")"  ";" {yyerror("ERROR, Falta ID al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 ;
 
-subrango 						: LONGINT "," LONGINT	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
-                                | LONGINT LONGINT {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
-                                | DOUBLE "," DOUBLE	/*TODO: A.S CHEQUEAR VALOR CON TIPO*/
-                                | DOUBLE DOUBLE {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
-                                | HEXA "," HEXA
-                                | HEXA HEXA {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
+subrango 						: factor "," factor
+                                | factor factor {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
                                 ;
 
 declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {System.out.println("Declaracion de Funcion");}
@@ -66,7 +61,7 @@ declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expr
                                 | tipo FUN ID "(" parametro ")"  BEGIN cuerpo RET expresion ";" END {yyerror("ERROR, Falta de () a la hora de la expresion en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID "("  ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta de parametros en la FUN en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID "(" parametro ")"  cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta de BEGIN en la FUN en la linea: " + lector.getNroLinea());}
-                                //| tipo FUN ID "(" parametro ")" BEGIN cuerpo error {System.out.println("ERROR,Falta de END en la FUN en la linea: " + lector.getNroLinea());}
+                                | tipo FUN ID "(" parametro ")" BEGIN cuerpo error {System.out.println("ERROR,Falta de END en la FUN en la linea: " + lector.getNroLinea());}
                                 | tipo FUN ID "(" parametro ")" BEGIN  END {yyerror("ERROR, Falsa cuerpo de funcion en la linea: " + lector.getNroLinea());}
                                 ;
 
@@ -76,13 +71,14 @@ sentencia_ejecucion				: asignacion
                                 | sentencia_while
                                 | invocacion_funcion ";"
 						    	| GOTO ETIQUETA ";" {System.out.println("Declaracion de GOTO");}
-						    	| GOTO ETIQUETA  {yyerror("ERROR, Falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
+						    	| GOTO ETIQUETA  {yyerror("ERROR, Falta ';' al final de la sentencia en la linea: " + lector.getNroLinea());}
 						    	| GOTO  ";" {yyerror("ERROR, falta la ETIQUETA en la linea: " + lector.getNroLinea());}
-						    	| ETIQUETA ";" {yyerror("ERROR, falta el GOTO en la linea: " + lector.getNroLinea());}
+						    	//| ETIQUETA ";" {yyerror("ERROR, falta el GOTO en la linea: " + lector.getNroLinea());}
+                                | ETIQUETA
+                                | CML
 							    ;
 
 sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";" {System.out.println("Declaracion REPEAT-WHILE");}
-                                //| bloque_sentencia_ejecutable WHILE "(" condicion ")" ";"  {yyerror("ERROR, falta palabra REPEAT en la linea: " + lector.getNroLinea());}
                                 | REPEAT bloque_sentencia_ejecutable  "(" condicion ")" ";" {yyerror("ERROR, falta palabra WHILE en la linea: " + lector.getNroLinea());}
                                 | REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")"  {yyerror("ERROR, falta palabra ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | REPEAT bloque_sentencia_ejecutable WHILE "(" ")" ";" {yyerror("ERROR, falta la condicion del WHILE en la linea: " + lector.getNroLinea());}
@@ -103,8 +99,7 @@ sentencia_print					: OUTF "(" CML ")" ";" //{System.out.println($3.sval);}
                                 ;
 
 parametro						: tipo ID
-                            	| ID {yyerror("ERROR, falta declaracion de TIPO en la linea: " + lector.getNroLinea());}
-                                //| tipo {yyerror("ERROR, falta ID del parametro en la linea: " + lector.getNroLinea());}
+                            	| tipo {yyerror("ERROR, falta declaracion de TIPO o NOMBRE en el parametro de la linea: " + lector.getNroLinea());}
                                 ;
 
 invocacion_funcion          	: ID "(" expresion ")" {if ($1.sval.equals(null)){ yyerror("No existe una funcion con ese nombre en la linea: " + lector.getNroLinea());}}
@@ -125,7 +120,7 @@ condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF
                                 | IF "(" ")" THEN bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta de Condicion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN error END_IF ";" {yyerror("ERROR,falta el bloque ejecutable en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable error {yyerror("ERROR,falta END_IF; al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable error {yyerror("ERROR,falta ; al final de la declaracion del bloque IF en la linea: " + lector.getNroLinea());}
                                 | IF THEN bloque_sentencia_ejecutable END_IF error {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable  bloque_sentencia_ejecutable END_IF ";"  {yyerror("ERROR, falta ELSE luego de la sentencias de ejecucion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
@@ -146,18 +141,17 @@ condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF
                                 ;
 
 condicion						:  expresion comparador expresion
-                                |  lista_expresiones {yyerror("ERROR, falta comparador en comparacion en la linea: " + lector.getNroLinea());}
+                                |  expresion error expresion {yyerror("ERROR, falta comparador en comparacion en la linea: " + lector.getNroLinea());}
                                 ;
 
-asignacion                      : lista_variables ASIGNACION lista_expresiones ";" {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
-                                | lista_variables ASIGNACION lista_expresiones error {yyerror("ERROR, falta de ';' en la asignacion de la linea: " + lector.getNroLinea());}
+asignacion                      : lista_variables ASIGNACION lista_expresiones ';' {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
                                 ;
 
-expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
+expresion						: expresion "+" termino 		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
 						    	| expresion "+" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
-						    	//| expresion error termino		{yyerror("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
+						    	//| expresion termino		{yyerror("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
 						    	| "+" termino {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "+" {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
@@ -178,7 +172,7 @@ termino							: termino "*" factor
                                 | "/" factor {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
                                 | "*" factor {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
                                 | factor {$$ = $1;}
-                                //| termino error factor {yyerror("ERROR, falta operador en la linea: " + lector.getNroLinea());}
+                                //| error {yyerror("ERROR, mal escrita la expresion en la linea: " + lector.getNroLinea());}
                                 ;
 
 
@@ -284,8 +278,9 @@ lista_variables					: lista_variables "," ID
                                 | lista_variables "," id_compuesta
                                 | id_compuesta
                                 | ID {/*System.out.println($1.sval);*/}
-                                //| lista_variables error ID {yyerror("ERROR, falta ',' en la lista ");}
-                                //| lista_variables error id_compuesta {yyerror("ERROR, falta ',' en la lista ");}
+                                //| lista_variables  ID {yyerror("ERROR, falta ',' en la lista ");}
+                                //| lista_variables  id_compuesta {yyerror("ERROR, falta ',' en la lista ");}
+                                //| error {yyerror("ERROR, mal escrita la lista de variables en la linea: "+ lector.getNroLinea());}
                                 ;
 
 id_compuesta                	: ID "." ID
@@ -294,6 +289,7 @@ id_compuesta                	: ID "." ID
 lista_expresiones				: lista_expresiones ',' expresion
                                 //| lista_expresiones expresion {yyerror("ERROR, falta de ',' en la lista en la linea: " + lector.getNroLinea());}
                                 | expresion
+                                //| expresion error ";"
                                 ;
 
 lista_tipos						: lista_tipos "," tipo
@@ -303,8 +299,8 @@ lista_tipos						: lista_tipos "," tipo
 
 tipo		 					: DOUBLE
                                 | LONGINT
-                                | HEXA
                                 | ID    %prec ID
+                                | TYPEDEF ID
                                 ;
 
 comparador 					    : "<"
@@ -320,4 +316,10 @@ void yyerror(String mensaje) {
   // funcion utilizada para imprimir errores que produce yacc
   System.out.println(ANSI_RED + mensaje + ANSI_RESET);
 
+}
+
+AnalizadorLexico lector;
+
+int yylex(){
+    return lector.yylex();
 }

@@ -38,6 +38,8 @@ public class AnalizadorLexico {
             case ')':
             case ',':
             case ';':
+            case '[':
+            case ']':
                 return 0;
             case ':':
             case '!':
