@@ -117,7 +117,6 @@ invocacion_funcion          	: ID "(" expresion ")"  {if ($1.sval.equals(null)){
                             	;
 
 bloque_sentencia_ejecutable     : BEGIN lista_sentencias END
-                                //| sentencia_ejecucion
 					  		    ;
 
 lista_sentencias                : lista_sentencias sentencia_ejecucion
@@ -161,7 +160,7 @@ expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
 						    	| expresion "+" "+" termino {System.out.println("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" "+" termino {System.out.println("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
-						    	| expresion error termino		{System.out.println("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
+						    	//| expresion error termino		{System.out.println("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
 						    	| "+" termino {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "+" {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
@@ -188,7 +187,8 @@ termino							: termino "*" factor
 
 factor							: invocacion_funcion	//{$$ = $1;}
                                 |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;}
-                                    | LONGINT 	{
+                                | id_compuesta
+                                | LONGINT 	{
                                                     $$ = $1;
                                                     Long valor = Long.parseLong($1.sval);
                                                     if (valor == 2147483648L){

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 
 %%
-prog							: ID BEGIN cuerpo END {System.out.println($1);}
+prog							: ID BEGIN cuerpo END {System.out.println("Fin sentencia prog");}
 							    | ID cuerpo END {System.out.println("ERROR,falta begin programa principal en la linea: " + lector.getNroLinea());}
                                 | BEGIN END {System.out.println("ERROR,falta el ID del programa principal en la linea: " + lector.getNroLinea());}
                                 | ID BEGIN cuerpo {System.out.println("ERROR,falta END del programa principal en la linea: " + lector.getNroLinea());}
@@ -33,20 +33,20 @@ sentencia						: sentencia_declaracion
                                 | ETIQUETA
                                 ;
 
-sentencia_declaracion			: tipo lista_variables ";" {System.out.println($2);}
+sentencia_declaracion			: tipo lista_variables ";" {/*System.out.println($2);*/}
 							    | tipo lista_variables {System.out.println("ERROR, Falta ; en la sentencia de declaracion en la linea: " + lector.getNroLinea());}
 						    	| declaracion_funcion
 						    	| TYPEDEF ID ASIGNACION tipo "(" subrango ")" ";" {System.out.println("Declaracion de Subtipo");}
 						    	| TYPEDEF ID ASIGNACION tipo "(" subrango ";" {System.out.println("Error, Falta de parentesis en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF ID ASIGNACION tipo "" subrango  ")" ";" {System.out.println("Error, Falta de parentesis en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF ID ASIGNACION tipo subrango  ")" ";" {System.out.println("Error, Falta de parentesis en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION tipo  subrango  ";" {System.out.println("Error, Falta de llaves parentesis en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION tipo "(" ")" ";" {System.out.println("ERROR, Falta de rango en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ASIGNACION tipo "(" subrango ")" ";" {System.out.println("ERROR, Falta nombre del tipo definido en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION "(" subrango ")" ";" {System.out.println("ERROR, Falta el tipo base en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF STRUCT "<" lista_tipos ">" "(" lista_variables ")" ID ";" {System.out.println("Declaracion de Struct");}
-						    	| TYPEDEF STRUCT lista_tipos  "(" lista_variables ")" ID ";" {System.out.println("ERROR, Falta <> en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF "<" lista_tipos ">" "(" lista_variables ")" ID ";" {System.out.println("ERROR, Falta la palabra STRUCT en la linea: " + lector.getNroLinea());}
-                                | TYPEDEF STRUCT "<" lista_tipos ">"  "(" lista_variables ")"  ";" {System.out.println("ERROR,Falta  ID al final de la declaracion en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF STRUCT "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {System.out.println("Declaracion de Struct");}
+						    	| TYPEDEF STRUCT lista_tipos  "(" lista_variables "," ")" ID ";" {System.out.println("ERROR, Falta <> en la linea: " + lector.getNroLinea());}
+						    	| TYPEDEF "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {System.out.println("ERROR, Falta la palabra STRUCT en la linea: " + lector.getNroLinea());}
+                                | TYPEDEF STRUCT "<" lista_tipos ">"  "(" lista_variables "," ")"  ";" {System.out.println("ERROR,Falta  ID al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 ;
 
 subrango 						: LONGINT "," LONGINT	/*TODO: CHEQUERA RANGO VALIDO V1< V2*/
@@ -73,6 +73,7 @@ sentencia_ejecucion				: asignacion
                                 | condicion_if
                                 | sentencia_print
                                 | sentencia_while
+                                | invocacion_funcion ";"
 						    	| GOTO ETIQUETA ";" {System.out.println("Declaracion de GOTO");}
 						    	| GOTO ETIQUETA  {System.out.println("ERROR, Falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
 						    	| GOTO  ";" {System.out.println("ERROR,falta la ETIQUETA en la linea: " + lector.getNroLinea());}
@@ -90,7 +91,7 @@ sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" c
                                 | REPEAT WHILE "(" condicion ")" ";" {System.out.println("ERRROR, falta el cuerpo de la iteracion repeat en la linea: " + lector.getNroLinea());}
                                 ;
 
-sentencia_print					: OUTF "(" CML ")" ";" {System.out.println($3.sval);}
+sentencia_print					: OUTF "(" CML ")" ";" //{System.out.println($3.sval);}
                                 | OUTF "(" expresion ")" ";"
                                 | OUTF "(" ")" ";"      {System.out.println("ERROR, Falta parámetro en sentencia OUTF en la linea: " + lector.getNroLinea());}
                                 | OUTF "(" expresion ")" {System.out.println("ERROR, Falta ';' en la sentencia OUTF en la linea: " + lector.getNroLinea());}
@@ -100,24 +101,18 @@ sentencia_print					: OUTF "(" CML ")" ";" {System.out.println($3.sval);}
                                 | OUTF "(" error ")" ";" {System.out.println("ERROR, tipo invalido como parametro para la sentencia OUTF en la linea: " + lector.getNroLinea());}
                                 ;
 
-
-
-
-
-
 parametro						: tipo ID
                             	| ID {System.out.println("ERROR, falta declaracion de TIPO en la linea: " + lector.getNroLinea());}
                                 //| tipo {System.out.println("ERROR, falta ID del parametro en la linea: " + lector.getNroLinea());}
                                 ;
 
 
-invocacion_funcion          	: ID "(" expresion ")"  {if ($1.sval.equals(null)){ System.out.println("No existe una funcion con ese nombre en la linea: " + lector.getNroLinea());}}
-                            	//| "(" expresion ")" {System.out.println("ERROR, falta ID en la invocacion en la linea: " + lector.getNroLinea());} //TODO: algunos casos este choca con el de cuerpo_funcion
-                            	| ID "(" ")" {System.out.println("ERROR, falta parametro en la invocacion de la funcion en la linea: " + lector.getNroLinea());}
+invocacion_funcion          	: ID "(" expresion ")" {if ($1.sval.equals(null)){ System.out.println("No existe una funcion con ese nombre en la linea: " + lector.getNroLinea());}}
+                            	//| "(" expresion ")" {System.out.println("ERROR, falta ID en la invocacion en la linea: " + lector.getNroLinea());}
+                            	| ID "(" ")"{System.out.println("ERROR, falta parametro en la invocacion de la funcion en la linea: " + lector.getNroLinea());}
                             	;
 
 bloque_sentencia_ejecutable     : BEGIN lista_sentencias END
-                                //| sentencia_ejecucion
 					  		    ;
 
 lista_sentencias                : lista_sentencias sentencia_ejecucion
@@ -127,7 +122,7 @@ lista_sentencias                : lista_sentencias sentencia_ejecucion
 condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("Declaracion de IF");}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
                                 | IF "(" condicion ")" bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR, Falta THEN luego de la condicion en la linea: " + lector.getNroLinea());}
-                                | IF "(" ")"THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta de Condicion en la linea: " + lector.getNroLinea());}
+                                | IF "(" ")" THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("ERROR,falta de Condicion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN error END_IF ";" {System.out.println("ERROR,falta el bloque ejecutable en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ";" {System.out.println("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable error {System.out.println("ERROR,falta END_IF; al final de la declaracion en la linea: " + lector.getNroLinea());}
@@ -154,20 +149,20 @@ condicion						:  expresion comparador expresion
                                 |  lista_expresiones {System.out.println("ERROR, falta comparador en comparacion en la linea: " + lector.getNroLinea());}
                                 ;
 
-asignacion : 					lista_variables ASIGNACION lista_expresiones ";"{$$= $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
+asignacion : 					lista_variables ASIGNACION lista_expresiones ";" {$$= $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
 
 
 expresion						: expresion "+" termino		{$$.ival = $1.ival + $3.ival;}
 						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
 						    	| expresion "+" "+" termino {System.out.println("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" "+" termino {System.out.println("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
-						    	| expresion error termino		{System.out.println("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
+						    	//| expresion error termino		{System.out.println("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
 						    	| "+" termino {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "+" {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "-" {System.out.println("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| TOD "(" expresion ")" {System.out.println("Declaracion de TOD");}
 						    	| TOD "("  ")" {System.out.println("ERROR, falta de expresion en la linea: " + lector.getNroLinea());}
-						    	| termino {$$.ival = $1.ival;}
+						    	| termino {$$ = $1;}
 						    	;
 
 
@@ -188,7 +183,8 @@ termino							: termino "*" factor
 
 factor							: invocacion_funcion	//{$$ = $1;}
                                 |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;}
-                                    | LONGINT 	{
+                                | id_compuesta
+                                | LONGINT 	{
                                                     $$ = $1;
                                                     Long valor = Long.parseLong($1.sval);
                                                     if (valor == 2147483648L){
@@ -287,9 +283,9 @@ factor							: invocacion_funcion	//{$$ = $1;}
 lista_variables					: lista_variables "," ID
                                 | lista_variables "," id_compuesta
                                 | id_compuesta
-                                | ID {System.out.println($1.sval);}
-                                | lista_variables error ID {System.out.println("ERROR, falta ',' en la lista ");}
-                                | lista_variables error id_compuesta {System.out.println("ERROR, falta ',' en la lista ");}
+                                | ID {/*System.out.println($1.sval);*/}
+                                //| lista_variables error ID {System.out.println("ERROR, falta ',' en la lista ");}
+                                //| lista_variables error id_compuesta {System.out.println("ERROR, falta ',' en la lista ");}
                                 ;
 
 id_compuesta                	: ID "." ID
@@ -319,8 +315,6 @@ comparador 					    : "<"
                                 | DISTINTO
                                 ;
 %%
-
-
 void yyerror(String mensaje) {
   // funcion utilizada para imprimir errores que produce yacc
   System.out.println("Error yacc: " + mensaje);

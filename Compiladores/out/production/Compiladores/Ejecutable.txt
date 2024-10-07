@@ -80,15 +80,12 @@ BEGIN
     END
 
     ##----------------------------------STRUCT------------------------------------------------------
+    ##---------------COMPLETO -------------
     TYPEDEF Struct  <LONGINT,DOUBLE,HEXA> (
         a,
         b,
         c,
     ) s1;
-    s1 x, y, z;
-    x.a := 8;
-    x := y;
-    int := y.b;
 
     TYPEDEF <LONGINT,DOUBLE,HEXA >(
         a,
@@ -120,4 +117,9 @@ BEGIN
             ret (x);
         end
     END
+
+    ##---------------------------INVOCACION DE FUNCION-------------------------------------------------
+    int := sumar ( 1 ) + a ;
+    sumar ( b + a );
+
 END

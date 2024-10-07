@@ -99,6 +99,7 @@ public abstract class AccionesSemantica {
         }
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            System.out.println("");
             System.out.println(cadena);
             System.out.println("");
             cadena.setLength(0);
@@ -304,6 +305,31 @@ public abstract class AccionesSemantica {
             if (!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
+        }
+    }
+
+    public static class AS12 extends AccionesSemantica {
+        private static AS12 instancia;
+
+        private AS12(LectorDeTexto lector) {
+            super(lector);
+        }
+
+        public static AS12 obtenerInstancia(LectorDeTexto lector) {
+            if (instancia == null) {
+                instancia = new AS12(lector);
+            }
+            return instancia;
+        }
+
+        public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
+            cadena.append(caracter);
+            String c= cadena.toString();
+            String result = cadena.toString().replaceAll("[\\t\\n]", "");
+            result = result.replaceAll("\\s+", " ");
+
+            cadena.setLength(0);  // Limpiamos el contenido del StringBuilder
+            cadena.append(result);
         }
     }
 }

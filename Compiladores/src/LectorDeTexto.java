@@ -30,6 +30,7 @@ public class LectorDeTexto {
 
     public void getNuevaLinea() {
         try {
+            System.out.println("");
             this.linea = br.readLine();
             nroLinea++;
         } catch (IOException e) {

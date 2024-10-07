@@ -118,7 +118,6 @@ public class TablaSimbolos {
             return etiqueta;
 
         } else if (cadena.matches("\\{[\\s\\S]*\\}")){
-            cadena = cadena.replaceAll("\\n", "");
             int cadenaMultilinea = obtenerToken("CML");
             this.addToken(cadena,cadenaMultilinea, null);
             return cadenaMultilinea;
