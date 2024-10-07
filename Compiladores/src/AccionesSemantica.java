@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 public abstract class AccionesSemantica {
     //protected String Token;
     protected LectorDeTexto lector;
+    String ANSI_RESET = "\u001B[0m";
+    String ANSI_RED = "\u001B[31m";
 
     public AccionesSemantica(LectorDeTexto lector) {
         this.lector = lector;
@@ -47,7 +49,7 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             if (cadena.length() > 15) {
-                System.out.println("ERROR: Supera el limite indicado para los id en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                System.out.println(ANSI_RED+"ERROR: Supera el limite indicado para los id en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna()+ANSI_RESET);
                 // Truncar el StringBuilder a 15 caracteres
                 cadena.setLength(15); // Establece la longitud máxima de la cadena a 15
             }
@@ -74,7 +76,7 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informar linea se esperaba un igual y llego otro caracter
-            System.out.println("ERROR: Se esperaba un simbolo '=' en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter);
+            System.out.println(ANSI_RED+"ERROR: Se esperaba un simbolo '=' en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ caracter+ANSI_RESET);
 
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
@@ -127,8 +129,8 @@ public abstract class AccionesSemantica {
             Long numero = Long.decode(numeroEnCadena);
             long maxValorAbsoluto = 2147483648L;
             if (numero > maxValorAbsoluto) { //TODO: como hacemos con el negativo?
-                System.out.println("ERROR: Supera el limite indicado para los longint en la linea: "
-                        + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                System.out.println(ANSI_RED+"ERROR: Supera el limite indicado para los longint en la linea: "
+                        + lector.getNroLinea() + " en la columna: " + lector.getColumna()+ANSI_RESET);
             }
 
             if(!caracter.equals('?')) {
@@ -154,7 +156,7 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //informa error ya que se esperaba un numero, inserta el caracter
-            System.out.println("ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'");
+            System.out.println(ANSI_RED+"ERROR: Se esperaba un numero en la linea: " + lector.getNroLinea() + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'"+ANSI_RESET);
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
@@ -215,8 +217,8 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             //se esperaba un numero o una letra A,B,C,D,E,F , y inserto en la linea
-            System.out.println("ERROR: Se esperaba un digito o una letra de la A-F en la linea: " + lector.getNroLinea()
-                                + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'");
+            System.out.println(ANSI_RED+"ERROR: Se esperaba un digito o una letra de la A-F en la linea: " + lector.getNroLinea()
+                                + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+"'"+ caracter+"'"+ANSI_RESET);
             if(!caracter.equals('?')) {
                 lector.retrocederCaracter();
             }
@@ -239,8 +241,8 @@ public abstract class AccionesSemantica {
 
         public void ejecutarAccionSemantica(int accionSemantica, StringBuilder cadena, Character caracter) {
             // se esperaba un # para comentario, pero no llego, inserta el ultimo caracter
-            System.out.println("ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
-                    + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ "'"+ caracter+"'");
+            System.out.println(ANSI_RED+"ERROR: Se esperaba un simbolo '#' en la linea: " + lector.getNroLinea()
+                    + " en la columna: " + lector.getColumna() +" y se obtuvo el simbolo: "+ "'"+ caracter+"'"+ANSI_RESET);
             lector.retrocederCaracter();
         }
 
@@ -273,8 +275,8 @@ public abstract class AccionesSemantica {
                 long maxValorAbsoluto = 2147483648L;
                 // Verificación del rango
                 if (num > maxValorAbsoluto) {
-                    System.out.println("ERROR: Supera el limite indicado para los HEXA en la linea: "
-                            + lector.getNroLinea() + " en la columna: " + lector.getColumna());
+                    System.out.println(ANSI_RED+"ERROR: Supera el limite indicado para los HEXA en la linea: "
+                            + lector.getNroLinea() + " en la columna: " + lector.getColumna()+ANSI_RESET);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Formato de número inválido.");
