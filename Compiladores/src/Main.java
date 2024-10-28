@@ -14,8 +14,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             String path;
-
-            path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+            path = "out/production/TrabajoCompilador/Ejecutable.txt";
 
             int seleccion = 0;
             Scanner scanner = new Scanner(System.in);
@@ -29,18 +28,19 @@ public class Main {
                 seleccion = scanner.nextInt();
             }
             if (seleccion == 1) {
-                path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+                path = "Ejecutable.txt";
             }
             if (seleccion == 2) {
-                path = "Compiladores/out/production/Compiladores/Ejecutable.txt";
+                path = "out/production/TrabajoCompilador/Ejecutable.txt";
             }
             if (seleccion == 3) {
                 path = scanner.nextLine();
             }
 
-            par = new Parser(false);
-            lex = new AnalizadorLexico(par, path);
+            Parser par = new Parser(false);
+            AnalizadorLexico lex = new AnalizadorLexico(par, path);
             par.run(lex);
+            lex.tablaSimbolos.imprimir();
             System.out.println("Fin de compilación");
 
 

@@ -75,7 +75,7 @@ BEGIN
     if ( HEX <= 10) then BEGIN
         hex := 1;
     END
-    END_IF
+    END_IF;
 
     ##---------------------------DECLARACION DE FUNCION--------------------------------------------
     LONGINT fun sumar( LONGINT X )

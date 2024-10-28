@@ -1,52 +1,302 @@
 parte1
 BEGIN
-    LONGINT J;
-    ## Dentro del rango
-    J := 2147483647;
-    J := -2147483648;
+    ##======================================== PARTE 1 ===========================================
 
-    ##Fuera de rango
+    ##---------------------------LONGINT DENTRO DEL RANGO-----------------------------------------
+    LONGINT j;
+    J := x;
+    J := -2147483648;
+    J := 2147483647;
+    ##---------------------------LONGINT FUERA DEL RANGO------------------------------------------
     J := 2147483648;
     J := -2147483649;
 
+    ##---------------------------LISTA DE VARIABLES-----------------------------------------------
+    LONGINT a,b,c ;
+
+
+    ##---------------------------DOUBLE DENTRO DEL RANGO------------------------------------------
     DOUBLE D;
-    ## Dentro del rango
-    D := 2.2250738585072014e-308;
-    D := 1.7976931348623157e+308;
-    D := -1.7976931348623157e+308;
-    D := -2.2250738585072014e-308;
+    D := 2.2250738585072014d-308;
+    D := 1.7976931348623157d+308;
+    D := -1.7976931348623157d+308;
+    D := -2.2250738585072014d-308;
 
-    ##Fuera de rango
-    D := 2.2250738585072015e-308;
-    D := 1.7976931348623158e+308;
-    D := -1.7976931348623158e+308;
-    D := -2.2250738585072015e-308;
+    ##---------------------------DOUBLE FUERA DEL RANGO-------------------------------------------
+    D := 2.2250738585072013d-308;
+    D := 1.7976931348623158d+308;
+    D := -1.7976931348623158d+308;
+    D := -2.2250738585072013d-308;
 
-    LONGINT HEX;
-    ## Dentro del rango
-    HEX:= -80000000;
-    HEX := 0x7FFFFFFF
-
-    ##Fuera de rango
-    HEX := -80000001;
-    HEX:= 0x8FFFFFFF;
-
-    ## Parte entera con y sin parte decimal
+    ##---------------------------DOUBLE CON Y SIN PARTE ENTERA-------------------------------------
     DOUBLE P;
     P := 1.0;
     P := 1;
-    P := .5;
-    P := 0.0d–5;
-    P := 1.2d5;
+    P := 0.0;
+    P := 0.6;
 
-    LONGINT tengomenosde;
-    LONGINT tengomenosd_15;
-    IF
-    if
-    LONGINT iden!/;
-    # comentario mal
-    {soy una
-    cadena multilinea}
+    ##---------------------------DOUBLE CON EXPONENTE----------------------------------------------
+    P := 0.6d+5;
+    P := 1.2d5;
+    P := 1.1d-2;
+
+    ##---------------------------HEXADECIMAL DENTRO DEL RANGO-------------------------------------
+    LONGINT HEX;
+    HEX := -0x80000000;
+    HEX := 0x7FFFFFFF;
+
+    ##---------------------------HEXADECIMAL FUERA DEL RANGO---------------------------------------
+    HEX := -0x80000001;
+    HEX := 0x8FFFFFFF;
+
+
+    ##---------------------------IDENTIFICADOR MAS Y MENOS DE 15 CARACTERES-----------------------
+
+    LONGINT aux;
+    LoNgInT auxiliar1234_asde;
+    longint aux};
+    ##-----------------------------COMENTARIOS DE UNA LINEA---------------------------------------
+
+    ## Comentario bien
+
+    # Comentario mal
+
+    ##-----------------------------CADENAS BIEN Y MAL ESCRITAS-------------------------------------
+    {Hola
+    MUNDO}
+    HOLA MUNDO}
+
+    ##======================================== PARTE 2 ===========================================
+
+    ##---------------------------FALTA ; AL FINAL------------------------------------------------
+    ##P := 1.2d5
+    LONGINT a
+    OUTF (a)
+    if ( HEX <= 10) then BEGIN
+        hex := 1;
+    END
+    END_IF;
+
+    ##---------------------------DECLARACION DE FUNCION--------------------------------------------
+    LONGINT fun sumar( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+        DOUBLE fun dividir ( DOUBLE a )
+        begin
+            x := a/2;
+            ret (x);
+        end
+        ret (x);
+    END
+
+
+    ##---------------------------FALTA NOMBRE DE FUNCION-------------------------------------------
+    LONGINT fun ( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA RET DE FUNCION---------------------------------------------
+    LONGINT fun sumar( LONGINT X )
+    BEGIN
+        x := 1 + 1;
+    END
+
+    ##---------------------------FALTA NOMBRE PARAMETRO DE FUNCION----------------------------------
+    LONGINT fun sumar(DOUBLE )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA TIPO PARAMETRO DE FUNCION------------------------------------
+    LONGINT fun sumar( x)
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##---------------------------FALTA PARAMETRO DE FUNCION----------------------------------------
+    LONGINT fun sumar( )
+    BEGIN
+        x := 1 + 1;
+        ret (x);
+    END
+
+    ##------------------------INVOCACION DE FUNCION-------------------------------------------------
+    int := sumar ( 1 ) + a ;
+    sumar ( b + a );
+
+    ##-------------------------FALTA DE , EN LAS LISTAS---------------------------------------------
+
+    ##LONGINT a b,c;
+
+
+
+    ##---------------------------IMPRESIONES POR PANTALLA-------------------------------------------
+    ##---------------COMPLETA---------------
+    OUTF (5);
+    OUTF ({OUTF
+            ML});
+    OUTF(hola);
+    OUTF (a+b);
+
+    ##---------FALTA DE PARAMETRO-----------
+    OUTF ();
+
+    ##---------PARAMETRO INCORRECTO---------
+    OUTF (OUTF);
+
+    ##---------FALTA DE PARENTESIS---------
+    OUTF a+b;
+
+    ##--------------------------CASOS DE DECLARACION IF----------------------------------------------
+
+    ##---------------COMPLETO------------
+
+    if ( HEX <= 10) then BEGIN
+        hex := 1;
+    END
+    END_IF;
+
+    ##---------FALTA DE THEN--------
+        if ( HEX < 10) BEGIN
+           HEX := HEX + 3;
+        END
+        END_IF;
+
+    ##----------SIN PARENTESIS------------
+    if  HEX >= 10 then BEGIN
+        HEX := HEX + 2;
+    end
+    end_if;
+
+    ##-------COMPLETO IF-ELSE -------------
+    if ( HEX > 10) then BEGIN
+        HEX := HEX + 2;
+    END
+    else begin
+       HEX := HEX + 2;
+    end
+    END_IF;
+
+    ##---COMPLETO Y DE CUERPO  OTRO IF -----
+    IF(HEX > 10) THEN begin
+        HEX := HEX + 2;
+        IF (HEX > 10) THEN
+            HEX:= HEX+2;
+        end_if;
+    end
+    end_if;
+
+    OUTF({##--------FALTA DE COMPARADOR ----------
+    if ( HEX  10) then BEGIN
+        hex := 1;
+    END
+    END_IF;});
+
+    ##---------------------------EXPRESIONES-------------------------------------------------------
+    ##---------------COMPLETA---------------
+    x := 1 + 1;
+    x := J / 1;
+    ##---------------SIN OPERANDO-----------
+    x :=  + 1;
+    ##---------------SIN OPERADOR-----------
+    ##x := 1  J; ##No anda
+
+    ##---------OPERADOR REPETIDO-----------
+    x := 1 -+ 4; ##No anda, toma que falta operador
+
+    ##----------------------------------TEMA 11: DECLARACION TIPOS----------------------------------
+    ##---------------COMPLETO-----------
+    TYPEDEF enterito := LONGINT [-10,10];
+    TYPEDEF doublecito := double [-1.2,3.5];
+
+    enterito e;
+    doublecito d, a, b;
+
+    ##---------FALTA DE []--------------
+    TYPEDEF enterito := LONGINT -10,10;
+
+    ##--------FALTA DE RANGO------------
+    TYPEDEF enterito := LONGINT [];
+
+    ##-------FALTA DE NOMBRE------------
+    TYPEDEF  := LONGINT [-10,10];
+
+    ##-------FALTA DE TIPO------------
+    TYPEDEF enterito :=  [-10,10];
+
+    ##----------------------------------TEMA 15: REPEAT WHILE--------------------------------------
+    ##----------------REPEAT WHILE COMPLETO----------------
+    REPEAT BEGIN
+    HEX := HEX +1;
+    END
+    WHILE (HEX <10);
+
+    ##----------------REPEAT WHILE SIN PARENTESIS----------------
+    REPEAT BEGIN
+    HEX := HEX + 2;
+    END
+    WHILE HEX < 20;
+
+    ##----------------REPEAT WHILE SIN CUERPO----------------
+    repeat
+    while (x > 30);
+
+    ##----------------------------------TEMA 17: ASIGNACION MULTIPLE--------------------------------
+
+    a,b,c := 1+d, e, f+5;
+
+    ##a b, c := 4, a, c+1;
+
+    ##a,b,c := 4, a c+1;
+
+    ##----------------------------------TEMA 20: STRUCT---------------------------------------------
+    ##---------------COMPLETO -------------
+    OUTF({TYPEDEF Struct  <LONGINT,DOUBLE,DOUBLE> (
+        a,
+        b,
+        c,
+    ) s1;});
+
+    ##-------FALTA DE STRUCT -------------
+    TYPEDEF <LONGINT,DOUBLE, LONGINT>(
+        a,
+    ) s2;
+    ##-------FALTA DE <> -----------------
+    TYPEDEF STRUCT LONGINT,DOUBLE, LONGINT(
+            a,
+        ) s2;
+
+    ##-------FALTA DE ID AL FINAL-------------
+         TYPEDEF STRUCT<LONGINT,DOUBLE, LONGINT>(
+             a,
+         );
+
+    ##-------INVOCACION STRUCT -------------
+        s1 x, y, z;
+        x.a := 8;
+        x := y;
+        int := y.b;
+
+    ##----------------------------------TEMA 23: ETIQUETA-----------------------------------------
+    IF(HEX > 10) THEN begin
+        HEX := HEX + 2;
+        IF (HEX > 10) THEN
+        BEGIN
+            HEX:= HEX+2;
+            GOTO afuera@;
+        END
+        end_if;
+        afuera@
+    end
+    end_if;
+
+    ##--------------------------------TEMA 25: CONVERSION EXPLICITA--------------------------------
+    a := TOD (a);
+    a := TOD ( );
+
 
 END
-
