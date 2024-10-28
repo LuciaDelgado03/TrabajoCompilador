@@ -1,7 +1,8 @@
 %{
 import java.io.*;
-
+import java.util.Stack;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 %}
         //declaracion de tokens a recibir del Analizador Lexico
 %token IF THEN ELSE BEGIN END END_IF OUTF TYPEDEF FUN RET STRING REPEAT WHILE GOTO ID LONGINT HEXA CML DOUBLE TOD STRUCT ASIGNACION DISTINTO MENOR_IGUAL MAYOR_IGUAL ETIQUETA
@@ -35,14 +36,25 @@ sentencia						: sentencia_declaracion
 sentencia_declaracion			: tipo lista_variables ";" {/*System.out.println($2);*/}
 							    | tipo lista_variables {yyerror("ERROR, Falta ; en la sentencia de declaracion en la linea: " + lector.getNroLinea());}
 						    	| declaracion_funcion
-						    	| TYPEDEF ID ASIGNACION tipo "[" subrango "]" ";" {System.out.println("Declaracion de Subtipo");}
+						    	| TYPEDEF ID ASIGNACION tipo "[" subrango "]" ";" {System.out.println("Declaracion de Subtipo");
+																						DatosTablaSimbolos datos = lector.tablaSimbolos.getDato($2.sval);
+																						datos.setTipo($4.sval);
+																						datos.setUso("Nombre de Subtipo");
+																						datos.setAmbito(ambitoActual);
+																						lector.tablaSimbolos.setDato(datos, $2.sval);
+						    														}
 						    	| TYPEDEF ID ASIGNACION tipo "[" subrango ";" {yyerror("ERROR, Falta de ']' en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION tipo subrango  "]" ";" {yyerror("ERROR, Falta de '[' en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION tipo  subrango  ";" {yyerror("ERROR, Falta de llaves '[]' en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION tipo "[" "]" ";" {yyerror("ERROR, Falta de rango en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ASIGNACION tipo "[" subrango "]" ";" {yyerror("ERROR, Falta nombre del tipo definido en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF ID ASIGNACION "[" subrango "]" ";" {yyerror("ERROR, Falta el tipo base en la linea: " + lector.getNroLinea());}
-						    	| TYPEDEF STRUCT "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {System.out.println("Declaracion de Struct");}
+						    	| TYPEDEF STRUCT "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {System.out.println("Declaracion de Struct";)}
+						    																				//DatosTablaSimbolos datos = lector.tablaSimbolos.getDato($10.sval);
+																											//.setUso("Nombre de Struct");
+																											//datos.setAmbito(ambitoActual);
+																											//lector.tablaSimbolos.setDato(datos, $10.sval);
+						    																			//}
 						    	| TYPEDEF STRUCT lista_tipos  "(" lista_variables "," ")" ID ";" {yyerror("ERROR, Falta <> en la linea: " + lector.getNroLinea());}
 						    	| TYPEDEF "<" lista_tipos ">" "(" lista_variables "," ")" ID ";" {yyerror("ERROR, Falta la palabra STRUCT en la linea: " + lector.getNroLinea());}
                                 | TYPEDEF STRUCT "<" lista_tipos ">"  "(" lista_variables "," ")"  ";" {yyerror("ERROR, Falta ID al final de la declaracion en la linea: " + lector.getNroLinea());}
@@ -52,7 +64,15 @@ subrango 						: factor "," factor
                                 | factor factor {yyerror("ERROR, Falta ',' entre los digitos del subrango en la linea: " + lector.getNroLinea());}
                                 ;
 
-declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {System.out.println("Declaracion de Funcion");}
+declaracion_funcion				: tipo FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {System.out.println("Declaracion de Funcion");
+																											//datos funcion
+																											ambitoActual = ambitoActual+":$3;
+																											DatosTablaSimbolos datos = lector.tablaSimbolos.getDato($3.sval);
+																											datos.setTipo($1.sval);
+																											datos.setUso("Nombre de Funcion");
+																											datos.setAmbito(ambitoActual);
+																											lector.tablaSimbolos.setDato(datos, $3.sval);
+																										}
                                 | tipo FUN ID "(" parametro ")" BEGIN cuerpo END {yyerror("ERROR, Falta sentencia return en la linea: " + lector.getNroLinea());}
                                 | FUN ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta la declaracion del tipo de la FUN en la linea: " + lector.getNroLinea());}
                                 | tipo  ID "(" parametro ")" BEGIN cuerpo RET "(" expresion ")" ";" END {yyerror("ERROR, Falta la declaracion de la palabra reservada FUN en la linea: " + lector.getNroLinea());}
@@ -78,7 +98,7 @@ sentencia_ejecucion				: asignacion
                                 | CML
 							    ;
 
-sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";" {System.out.println("Declaracion REPEAT-WHILE");}
+sentencia_while                 : REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")" ";" {System.out.println("Declaracion REPEAT-WHILE");}//datos funcion;
                                 | REPEAT bloque_sentencia_ejecutable  "(" condicion ")" ";" {yyerror("ERROR, falta palabra WHILE en la linea: " + lector.getNroLinea());}
                                 | REPEAT bloque_sentencia_ejecutable WHILE "(" condicion ")"  {yyerror("ERROR, falta palabra ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | REPEAT bloque_sentencia_ejecutable WHILE "(" ")" ";" {yyerror("ERROR, falta la condicion del WHILE en la linea: " + lector.getNroLinea());}
@@ -98,7 +118,12 @@ sentencia_print					: OUTF "(" CML ")" ";" //{System.out.println($3.sval);}
                                 | OUTF "(" error ")" ";" {yyerror("ERROR, tipo invalido como parametro para la sentencia OUTF en la linea: " + lector.getNroLinea());}
                                 ;
 
-parametro						: tipo ID
+parametro						: tipo ID {//datos parametro
+											DatosTablaSimbolos datos = lector.tablaSimbolos.getDato($2.sval);
+											datos.setTipo($1.sval);
+											datos.setUso("Nombre de Parametro");
+											datos.setAmbito(ambitoActual);
+											lector.tablaSimbolos.setDato(datos, $2.sval);}
                             	| tipo {yyerror("ERROR, falta declaracion de TIPO o NOMBRE en el parametro de la linea: " + lector.getNroLinea());}
                                 ;
 
@@ -114,29 +139,41 @@ lista_sentencias                : lista_sentencias sentencia_ejecucion
                                 | sentencia_ejecucion
                                 ;
 
-condicion_if 					: IF "(" condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" {System.out.println("Declaracion de IF");}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
-                                | IF "(" condicion ")" bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR, Falta THEN luego de la condicion en la linea: " + lector.getNroLinea());}
-                                | IF "(" ")" THEN bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta de Condicion en la linea: " + lector.getNroLinea());}
+cuerpo_then 			: bloque_sentencia_ejecutable
+						;
+
+cuerpo_else 			: bloque_sentencia_ejecutable
+						;
+
+condicion_if 			: IF "(" condicion ")" THEN cuerpo_then END_IF ";"
+												{System.out.println("Declaracion de IF");
+													int posicion = pila.pop();
+													Apilar();
+													polaca.set(posicion);
+
+												}
+                                | IF "(" condicion ")" THEN cuerpo_then ELSE cuerpo_else END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
+                               /* | IF "(" condicion ")" cuerpo_then END_IF ";" {yyerror("ERROR, Falta THEN luego de la condicion en la linea: " + lector.getNroLinea());}
+                                | IF "(" ")" THEN cuerpo_then END_IF ";" {yyerror("ERROR,falta de Condicion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN error END_IF ";" {yyerror("ERROR,falta el bloque ejecutable en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN cuerpo_then ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
                                 | IF "(" condicion ")" THEN bloque_sentencia_ejecutable error {yyerror("ERROR,falta ; al final de la declaracion del bloque IF en la linea: " + lector.getNroLinea());}
-                                | IF THEN bloque_sentencia_ejecutable END_IF error {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable  bloque_sentencia_ejecutable END_IF ";"  {yyerror("ERROR, falta ELSE luego de la sentencias de ejecucion en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE  END_IF ";" {yyerror("ERROR, falta el bloque ejecutable en el ELSE en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN ELSE bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR, falta el bloque ejecutable en el IF en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
-                                | IF condicion THEN bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta de parentesis en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion  THEN bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta un parentesis ')' en la linea: " + lector.getNroLinea());}
-                                | IF  condicion ")" THEN bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta un parentesis '(' en la linea: " + lector.getNroLinea());}
-                                | IF "(" condicion  THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta un parentesis ')' "); }
-                                | IF condicion ")" THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta un parentesis '(' "); }
-                                | IF condicion THEN bloque_sentencia_ejecutable ELSE bloque_sentencia_ejecutable END_IF ";" {yyerror("ERROR,falta un parentesis '()' "); }
+                                | IF THEN cuerpo_then END_IF error {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN cuerpo_then  cuerpo_else END_IF ";"  {yyerror("ERROR, falta ELSE luego de la sentencias de ejecucion en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN cuerpo_then ELSE cuerpo_else END_IF {yyerror("ERROR,falta ';' al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN cuerpo_then ELSE  END_IF ";" {yyerror("ERROR, falta el bloque ejecutable en el ELSE en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN ELSE cuerpo_else END_IF ";" {yyerror("ERROR, falta el bloque ejecutable en el IF en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion ")" THEN cuerpo_then ELSE cuerpo_else ";" {yyerror("ERROR,falta END_IF al final de la declaracion en la linea: " + lector.getNroLinea());}
+                                | IF condicion THEN cuerpo_then END_IF ";" {yyerror("ERROR,falta de parentesis en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion  THEN cuerpo_then END_IF ";" {yyerror("ERROR,falta un parentesis ')' en la linea: " + lector.getNroLinea());}
+                                | IF  condicion ")" THEN cuerpo_then END_IF ";" {yyerror("ERROR,falta un parentesis '(' en la linea: " + lector.getNroLinea());}
+                                | IF "(" condicion  THEN cuerpo_then ELSE cuerpo_else END_IF ";" {yyerror("ERROR,falta un parentesis ')' "); }
+                                | IF condicion ")" THEN cuerpo_then ELSE cuerpo_else END_IF ";" {yyerror("ERROR,falta un parentesis '(' "); }
+                                | IF condicion THEN cuerpo_then ELSE cuerpo_else END_IF ";" {yyerror("ERROR,falta un parentesis '()' "); }
                                 | IF "(" condicion ")" THEN sentencia_ejecucion END_IF ";"
-                                | IF "(" condicion ")" THEN sentencia_ejecucion ELSE bloque_sentencia_ejecutable END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
-                                | IF "(" condicion ")" THEN bloque_sentencia_ejecutable ELSE sentencia_ejecucion END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
-                                | IF "(" condicion ")" THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
+                                | IF "(" condicion ")" THEN sentencia_ejecucion ELSE cuerpo_else END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
+                                | IF "(" condicion ")" THEN cuerpo_then ELSE sentencia_ejecucion END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}
+                                | IF "(" condicion ")" THEN sentencia_ejecucion ELSE sentencia_ejecucion END_IF ";"  {System.out.println("Declaracion de IF,ELSE");}*/
                                 %prec LOWER_THAN_ELSE
                                 ;
 
@@ -145,12 +182,16 @@ condicion						:  expresion comparador expresion
                                 ;
 
 asignacion                      : lista_variables ASIGNACION lista_expresiones ';' {$$ = $3;} /*TODO: verificar que ambos lados tengan la misma cantidad de componentes*/
-                                ;
+								; //TODO: COMO GUARDO QUE LAS VARIABLES SON DE USO NOMBRE VARIABLE Y EL TIPO VINCULADO CON LA LISTA DE EXPRESIONES
 
-expresion						: expresion "+" termino 		{$$.ival = $1.ival + $3.ival;}
-						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;}
-						    	| expresion "+" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
-						    	| expresion "-" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
+expresion						: expresion "+" termino 		{$$.ival = $1.ival + $3.ival;
+																 agregarTokenPolaca("+");}
+						    	| expresion "-" termino		{$$.ival = $1.ival - $3.ival;
+						    								 agregarTokenPolaca("-");}
+						    	| expresion "+" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());
+						    								 agregarTokenPolaca("+");}
+						    	| expresion "-" "+" termino {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());
+						    								 agregarTokenPolaca("-");}
 						    	//| expresion termino		{yyerror("ERROR, falta de operador en la linea: " + lector.getNroLinea());}
 						    	| "+" termino {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
 						    	| expresion "+" {yyerror("ERROR, falta de operando en la linea: " + lector.getNroLinea());}
@@ -161,8 +202,8 @@ expresion						: expresion "+" termino 		{$$.ival = $1.ival + $3.ival;}
 						    	;
 
 
-termino							: termino "*" factor
-                                | termino "/" factor
+termino							: termino "*" factor {agregarTokenPolaca("*");}
+                                | termino "/" factor {agregarTokenPolaca("/");}
                                 | termino "*" "*" factor {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
                                 | termino "*" "/" factor {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
                                 | termino "/" "/" factor {yyerror("ERROR, hay 2 operadores en la linea: " + lector.getNroLinea());}
@@ -175,8 +216,8 @@ termino							: termino "*" factor
                                 //| error {yyerror("ERROR, mal escrita la expresion en la linea: " + lector.getNroLinea());}
                                 ;
 
-
-factor							: invocacion_funcion	//{$$ = $1;}
+//agregar token a la polaca
+factor				: invocacion_funcion	//{$$ = $1;}
                                 |ID	%prec '('  /* Precedencia menor que la de invocación de función */ {$$ = $1;}
                                 | id_compuesta
                                 | LONGINT 	    {
@@ -187,12 +228,14 @@ factor							: invocacion_funcion	//{$$ = $1;}
                                                     }
                                                     int token =   this.LONGINT;
                                                     lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
+                                                    agregarTokenPolaca($1.sval);
                                                 }
                                 | "-" LONGINT	{
                                                     $$ = $2; //TODO: posible error
                                                     String lexema = '-'+ $2.sval;
                                                     int token =   this.LONGINT;
-                                                    lector.tablaSimbolos.addToken(val_peek(0).sval,token,"LONGINT");
+                                                    lector.tablaSimbolos.addToken(lexema,token,"LONGINT");
+                                                    agregarTokenPolaca(lexema);
                                                 }
 
                                 | HEXA		    {
@@ -242,7 +285,7 @@ factor							: invocacion_funcion	//{$$ = $1;}
                                                       } catch (NumberFormatException e) {
                                                         yyerror("Formato de número inválido.");
                                                       }
-
+													agregarTokenPolaca($1.sval);
                                                 }
                                 |"-" DOUBLE     {
                                                     $$ = $2;
@@ -277,7 +320,7 @@ factor							: invocacion_funcion	//{$$ = $1;}
 lista_variables					: lista_variables "," ID
                                 | lista_variables "," id_compuesta
                                 | id_compuesta
-                                | ID {/*System.out.println($1.sval);*/}
+                                | ID
                                 //| lista_variables  ID {yyerror("ERROR, falta ',' en la lista ");}
                                 //| lista_variables  id_compuesta {yyerror("ERROR, falta ',' en la lista ");}
                                 //| error {yyerror("ERROR, mal escrita la lista de variables en la linea: "+ lector.getNroLinea());}
@@ -317,9 +360,19 @@ void yyerror(String mensaje) {
   System.out.println(ANSI_RED + mensaje + ANSI_RESET);
 
 }
-
+String ambitoActual = "main";
 AnalizadorLexico lector;
-
+public static ArrayList<String> polaca = new ArrayList<>();
+public static ArrayList<String> posicionDePolaca = new ArrayList<>();
+public static Stack<Integer> pila = new Stack<>(); //para bifuraciones en while/if algun otro
 int yylex(){
     return lector.yylex();
+}
+public static void agregarTokenPolaca(String lexema){
+	System.out.println(lexema);
+	polaca.add(lexema);
+}
+
+public static void agregarCheckpoint(){
+	pila.push(polaca.size()); //guardamos el checkpoint en caso de una difurcacion
 }

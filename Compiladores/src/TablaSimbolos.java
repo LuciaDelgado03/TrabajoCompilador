@@ -15,11 +15,13 @@ public class TablaSimbolos {
         this.archivoSimbolos = archivo;
         this.tabla = addTokenTXT();
     }
-    public Map<String,DatosTablaSimbolos> addTokenTXT(){
+    public Map<String, DatosTablaSimbolos> addTokenTXT() {
         Map<String, DatosTablaSimbolos> map = new HashMap<>();
-        String filePath = archivoSimbolos; // Cambia esta ruta por la ubicación correcta del archivo
+        String filePath = archivoSimbolos; // Ruta del archivo
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        // Usar InputStream para leer el archivo
+        try (InputStream inputStream = getClass().getResourceAsStream("/" + archivoSimbolos);
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // Usar split con límite -1 para capturar todos los elementos, incluyendo los vacíos
@@ -55,7 +57,7 @@ public class TablaSimbolos {
     }
 
     public void imprimir(){
-        this.tabla.forEach((key, value) -> System.out.println(key + " : " + value));
+        this.tabla.forEach((key, value) -> System.out.println(key + " : Token: " + value.getToken() + " Tipo: " + value.getTipo() + " Ambito: " + value.getAmbito() + " Uso: " + value.getUso()));
     }
 
     public void addToken(String Lexema,Integer identificador, String tipo) {
@@ -65,6 +67,25 @@ public class TablaSimbolos {
             this.tabla.put(Lexema,datos);
         }
     }
+
+    public DatosTablaSimbolos getDato(String lexema){
+        //recorro la tabla para buscar el lexema
+        for (Map.Entry<String , DatosTablaSimbolos> entry : tabla.entrySet()) {
+            if ((entry.getKey().equals(lexema)) || (entry.getKey().equalsIgnoreCase(lexema))) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public void setDato(DatosTablaSimbolos dato, String lexema){
+        for (Map.Entry<String , DatosTablaSimbolos> entry : tabla.entrySet()) {
+            if ((entry.getKey().equals(lexema)) || (entry.getKey().equalsIgnoreCase(lexema))) {
+                entry.getValue().seVuelve(dato);
+            }
+        }
+    }
+
 
     public int obtenerToken(String lexema) {
         for (Map.Entry<String , DatosTablaSimbolos> entry : tabla.entrySet()) {

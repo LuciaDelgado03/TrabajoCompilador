@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
 public class AnalizadorLexico {
     private LectorDeTexto lector;
     public TablaSimbolos tablaSimbolos;
@@ -13,13 +17,13 @@ public class AnalizadorLexico {
     private Parser parser;
 
     public AnalizadorLexico(Parser par, String archEjecutable) {
-        String Path = "Compiladores/out/production/Compiladores/TablaSimbolos.txt";
+        String Path = "TablaSimbolos.txt";
         this.parser = par;
         TablaSimbolos TS = new TablaSimbolos(Path);
         this.tablaSimbolos = TS;
         this.lector = new LectorDeTexto(archEjecutable);
-        String matrizTransiciones = "Compiladores/out/production/Compiladores/matrizTransicion.txt";
-        String matrizAccionesSemanticas = "Compiladores/out/production/Compiladores/MatrizDeAccionesSemanticas.txt";
+        String matrizTransiciones = "matrizTransicion.txt";
+        String matrizAccionesSemanticas = "MatrizDeAccionesSemanticas.txt";
         this.matrizSemantica = leerArchivoComoMatriz(matrizAccionesSemanticas);
         this.matrizTransicion = leerArchivoComoMatriz(matrizTransiciones);
     }
@@ -197,18 +201,28 @@ public class AnalizadorLexico {
         }
         int token = tablaSimbolos.determinarTokenValor(cadena.toString());
         parser.yylval= new ParserVal(cadena.toString());
-        //System.out.print(" cadena: " + ANSI_BLUE + cadena.toString() + ANSI_RESET + " Token: " + ANSI_BLUE + token + ANSI_RESET);
         System.out.print( ANSI_GREEN + cadena.toString()  + ANSI_BLUE + " ("  + token +  ") "+ ANSI_RESET );
+        //System.out.print(" cadena: " + ANSI_BLUE + cadena.toString() + ANSI_RESET + " Token: " + ANSI_BLUE + token + ANSI_RESET);
+        //System.out.print(cadena.toString()  + " ("  + token +  ") " );
 
         return token;
 
     }
 
 
-    public static int[][] leerArchivoComoMatriz(String rutaArchivo) {
+    public int[][] leerArchivoComoMatriz(String nombreArchivo) {
         int[][] matriz = null;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+        // Usar getResourceAsStream para acceder al archivo dentro del .jar
+        try (InputStream inputStream = getClass().getResourceAsStream("/" + nombreArchivo);
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+
+            // Verificar si el archivo fue encontrado
+            if (inputStream == null) {
+                System.out.println("No se encontró el archivo: " + nombreArchivo);
+                return null; // Salir si no se encuentra el archivo
+            }
+
             // Leer todas las líneas del archivo
             String linea;
             int numFilas = 0;
@@ -225,8 +239,8 @@ public class AnalizadorLexico {
             matriz = new int[numFilas][numColumnas];
 
             // Volver al principio del archivo para llenar la matriz
-            br.close();
-            try (BufferedReader br2 = new BufferedReader(new FileReader(rutaArchivo))) {
+            br.close(); // Cerramos el BufferedReader de arriba
+            try (BufferedReader br2 = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + nombreArchivo)))) {
                 int filaActual = 0;
 
                 while ((linea = br2.readLine()) != null) {
@@ -244,6 +258,7 @@ public class AnalizadorLexico {
 
         return matriz;
     }
+
 
 
 }

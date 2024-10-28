@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class LectorDeTexto {
     private BufferedReader br;
@@ -9,12 +10,19 @@ public class LectorDeTexto {
     private int columna;
     private boolean saltoDeLineaPendiente;
 
+    // Constructor modificado para usar InputStream
     public LectorDeTexto(String nombreArchivo) {
-        try {
-            br = new BufferedReader(new FileReader(nombreArchivo));
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Cargar el archivo desde el jar usando getResourceAsStream
+        InputStream inputStream = getClass().getResourceAsStream("/" + nombreArchivo);
+
+        // Verificar si el archivo fue encontrado
+        if (inputStream == null) {
+            System.out.println("No se encontró el archivo: " + nombreArchivo);
+            return; // Salir del constructor si el archivo no se encuentra
         }
+
+        br = new BufferedReader(new InputStreamReader(inputStream));
+
         this.nroLinea = 0;
         this.getNuevaLinea();
         columna = 0;
@@ -37,6 +45,7 @@ public class LectorDeTexto {
             e.printStackTrace();
         }
     }
+
     public void cerrarArchivo() {
         try {
             if (br != null) {
@@ -48,11 +57,11 @@ public class LectorDeTexto {
     }
 
     public char nuevoCaracter() {
-            // Si hay un salto de línea pendiente, devolverlo primero
+        // Si hay un salto de línea pendiente, devolverlo primero
         if (saltoDeLineaPendiente) {
             saltoDeLineaPendiente = false;
             return '\n'; // Devolvemos el salto de línea explícitamente
-            }
+        }
         if ((linea == null) || (columna >= linea.length())) {
             if (this.hayLineas()) {
                 this.getNuevaLinea();
@@ -60,21 +69,19 @@ public class LectorDeTexto {
                 return '\n';
             } else {
                 System.out.println("fin de archivo");
-                return '?'; //caracter de fin
+                return '?'; // Caracter de fin
             }
         }
-        //System.out.println("linea:" + this.linea);
-        char caracter = linea.charAt(columna);
 
+        char caracter = linea.charAt(columna);
         columna++;
-        //System.out.println("lectorLexico:"+ caracter);
         return caracter;
     }
 
-    public void retrocederCaracter(){
-        //TODO: si estoy en la linea y retrocede en la primera tengo que volver a la linea anterior?
-        if(columna > 0)
-        this.columna--;
+    public void retrocederCaracter() {
+        if (columna > 0) {
+            this.columna--;
+        }
     }
 
     public boolean hayLineas() {
@@ -90,4 +97,3 @@ public class LectorDeTexto {
         return true; // Si hay más líneas, retornamos true
     }
 }
-
