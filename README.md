@@ -1,6 +1,6 @@
 # Compilador en Java 
 
-Este repositorio contiene un **compilador modular y funcional desarrollado desde cero** como parte de la formación en Ingeniería de Sistemas (UNICEN). El sistema toma un código fuente escrito en un lenguaje estructurado de diseño específico, realiza el análisis léxico, sintáctico y semántico, genera código intermedio mediante notación postfija (polaca inversa) y finalmente produce **código máquina ejecutable (Assembler Intel x86 de 32 bits)** para procesadores Pentium.
+Este repositorio contiene un **compilador modular y funcional desarrollado desde cero** como parte de la formación en Ingeniería de Sistemas (UNICEN) desarrollado en el marco de la materia Diseño de Compiladores I. El sistema toma un código fuente escrito en un lenguaje estructurado de diseño específico, realiza el análisis léxico, sintáctico y semántico, genera código intermedio mediante notación postfija (polaca inversa) y finalmente produce **código máquina ejecutable (Assembler Intel x86 de 32 bits)** para procesadores Pentium.
 
 El proyecto fue diseñado y construido de forma equitativa y colaborativa en un equipo de 3 integrantes, participando todos activamente en cada fase de la arquitectura de software de base.
 
